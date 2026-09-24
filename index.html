@@ -32,7 +32,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .intro button:active{transform:translateY(5px)}
 @keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 
-.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:120px}
+.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:140px;margin-bottom:20px}
 .progress{display:flex;gap:2px;justify-content:center;margin-bottom:8px;width:100%}
 .progress .star{font-size:18px;filter:grayscale(1) opacity(.25);transition:all .4s}
 .progress .star.done{filter:none;transform:scale(1.2)}
@@ -61,7 +61,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .shape .label{position:absolute;bottom:8px;left:0;right:0;font-size:13px;font-weight:900;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-transform:uppercase;z-index:3;text-align:center;pointer-events:none}
 .shapes.g6 .shape .label{font-size:10px}
 
-.bear-runner{position:fixed;z-index:20;width:100px;height:120px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 8px 12px rgba(60,30,10,.35));opacity:.92;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
+.bear-runner{position:fixed;z-index:20;width:100px;height:120px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 8px 12px rgba(60,30,10,.35));opacity:.95;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
 .bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
 .bear-runner .pose-img{display:none}
 .bear-runner .pose-img.active{display:block}
@@ -97,9 +97,10 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 
 .learn{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
 .learn.on{display:flex}
-.learn-wrap{position:relative;max-width:500px;width:100%;margin-bottom:80px}
+.learn-wrap{position:relative;max-width:500px;width:100%;margin-bottom:150px}
 .learn-box{background:#fff;border-radius:32px;padding:22px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.3);position:relative;z-index:10}
-.learn-bear{position:absolute;bottom:-90px;left:50%;transform:translateX(-50%);width:130px;height:150px;z-index:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.5));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center}
+/* МИШКА В МОДАЛКЕ — ФИКСИРОВАН ВНИЗУ ЭКРАНА */
+.learn-bear{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);width:120px;height:140px;z-index:510;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center;pointer-events:none}
 .learn-bear img{width:100%;height:100%;object-fit:contain;display:block}
 .learn-bear .pose-img{display:none}
 .learn-bear .pose-img.active{display:block}
@@ -159,7 +160,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
   <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
 </div>
 
-<div class="bear-runner idle" id="bearRunner" style="left:20px;top:5px">
+<div class="bear-runner idle" id="bearRunner" style="left:20px;top:140px">
   <div class="bear-bubble" id="bearBubble">Привет!</div>
   <div class="bear-pointer">👇</div>
   <img class="pose-img active" data-pose="idle" src="images/bear_idle.png" alt="">
@@ -206,12 +207,12 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
       <div class="learn-name" id="learnName">КРАСНЫЙ</div>
       <div class="learn-rhyme" id="learnRhyme">Стишок</div>
     </div>
-    <div class="learn-bear" id="learnBear">
-      <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
-      <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
-      <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
-      <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
-    </div>
+  </div>
+  <div class="learn-bear" id="learnBear">
+    <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
+    <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
+    <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
+    <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
   </div>
 </div>
 
@@ -372,11 +373,15 @@ function bearTeleport(x,y) {
 }
 function bearRunTo(x,y) { bear.style.left=x+'px'; bear.style.top=y+'px'; }
 
+// ====== БЕЗОПАСНЫЕ ГРАНИЦЫ ЭКРАНА ======
 function clamp(x, y) {
   const w = window.innerWidth, h = window.innerHeight;
+  // Ниже статус-бара и верхней части, выше нижнего края
+  const MIN_Y = 100;
+  const MAX_Y = h - BEAR_H - 80;
   return {
-    x: Math.max(5, Math.min(w - BEAR_W - 5, x)),
-    y: Math.max(5, Math.min(h - BEAR_H - 5, y))
+    x: Math.max(10, Math.min(w - BEAR_W - 10, x)),
+    y: Math.max(MIN_Y, Math.min(MAX_Y, y))
   };
 }
 
@@ -421,14 +426,17 @@ function bearPointTo(element) {
   }
 }
 
+// ====== ПРОГУЛКА — ВСЕГДА В ВИДИМОЙ ЗОНЕ ======
 function bearWalkSpot() {
   const w = window.innerWidth;
   const h = window.innerHeight;
+  // Верхняя полоса: 110-140px от верха (ниже прогресс-бара)
+  // Нижняя полоса: чуть выше нижнего края, чтобы был виден
+  const TOP_ZONE = 110 + Math.random() * 30;
+  const BOTTOM_ZONE = h - BEAR_H - 80 - Math.random() * 20;
   atTop = !atTop;
-  let y;
-  if (atTop) y = 8 + Math.random() * 20;
-  else y = h - BEAR_H - 8 - Math.random() * 20;
-  const x = 10 + Math.random() * (w - BEAR_W - 20);
+  const y = atTop ? TOP_ZONE : BOTTOM_ZONE;
+  const x = 20 + Math.random() * (w - BEAR_W - 40);
   return clamp(x, y);
 }
 
@@ -494,20 +502,18 @@ function bearDanceMove() {
   }, 1300);
 }
 
-// ====== РАЗБЛОКИРОВКА АУДИО — ВАЖНО ДЛЯ ТЕЛЕФОНА ======
+// ====== РАЗБЛОКИРОВКА АУДИО ======
 function unlockAudio() {
   try {
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!window._ctx) window._ctx = new Ctx();
     if (window._ctx.state === 'suspended') window._ctx.resume();
-    // Беззвучный тон разблокирует Web Audio
     const o = window._ctx.createOscillator();
     const g = window._ctx.createGain();
     g.gain.value = 0.0001;
     o.connect(g); g.connect(window._ctx.destination);
     o.start(); o.stop(window._ctx.currentTime + 0.02);
   } catch(e){}
-  // Разблокируем speechSynthesis тихой фразой
   if ('speechSynthesis' in window) {
     try {
       const u = new SpeechSynthesisUtterance('раз');
@@ -517,7 +523,6 @@ function unlockAudio() {
       speechSynthesis.speak(u);
     } catch(e){}
   }
-  // Разблокируем HTML5 Audio беззвучным файлом
   try {
     if (!window._silentAudio) {
       window._silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
@@ -527,7 +532,7 @@ function unlockAudio() {
   } catch(e){}
 }
 
-// ====== ВОСПРОИЗВЕДЕНИЕ MP3 ======
+// ====== MP3 С FALLBACK ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (musicTimer) { pauseMusic(); musicPausedBySpeech = true; }
@@ -555,7 +560,6 @@ function playMp3(mp3, fb, cb) {
         setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true);
       }).catch(fallback);
     }
-    // Если через 800 мс mp3 всё ещё "не играет" — fallback
     setTimeout(() => {
       if (failed) return;
       if (a.paused || a.currentTime === 0) fallback();
@@ -563,7 +567,6 @@ function playMp3(mp3, fb, cb) {
   } catch(e) { fallback(); }
 }
 
-// ====== СИНТЕЗ РЕЧИ ======
 function sayVoiceOnly(text, cb) {
   if (!soundOn) { if(cb) cb(); return; }
   if (!('speechSynthesis' in window)) { if(cb) cb(); return; }
@@ -591,7 +594,6 @@ function sayVoiceOnly(text, cb) {
   } catch(e){ restore(); if(cb) cb(); }
 }
 
-// ====== МУЗЫКА ======
 const NOTE={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY=[['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS=340;
@@ -663,7 +665,6 @@ function checkImage(name){
     setTimeout(()=>r(false),400);
   });
 }
-
 async function findBearImages() {
   const poses = ['idle','walk_1','walk_2','happy','heart','sad','sleep','sign','honey','wave','blink','dance','think','wow','yawn','glasses','backpack','strong'];
   const checks = poses.map(async (p) => {
@@ -695,30 +696,28 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 const ENC=['enc_1.mp3','enc_2.mp3','enc_3.mp3'];
 
-// ====== СТАРТ ИГРЫ — ВСЁ РАЗБЛОКИРУЕТСЯ ЗДЕСЬ ======
+// ====== СТАРТ: СНАЧАЛА ЗДОРОВАЕМСЯ, ПОТОМ ИГРА ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
-  // РАЗБЛОКИРУЕМ ВСЁ АУДИО внутри этого клика
   unlockAudio();
   started = true;
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
-  bearTeleport(20, 5);
+  bearTeleport(20, 140);
   bearFallFrom();
-  setTimeout(newRound, 1200);
-  // Проверки — в фоне
   findBearImages().then(found => {
     setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
-  // ЗАПУСКАЕМ МУЗЫКУ СРАЗУ внутри клика
+  // Музыка тихо на фоне
   if (musicOn) startMusic();
-  // Приветствие — с небольшой задержкой
-  setTimeout(() => {
-    const helloText = 'Привет! Я — Мишка! Давай поиграем!';
-    bearSays(helloText);
-    playMp3('hello.mp3', helloText);
-  }, 500);
+  // ПРИВЕТСТВИЕ — ждём пока договорит, только потом игра
+  const helloText = 'Привет! Я — Мишка! Давай поиграем!';
+  bearSays(helloText);
+  playMp3('hello.mp3', helloText, () => {
+    // Активируем раунд ТОЛЬКО после полного окончания приветствия
+    setTimeout(newRound, 400);
+  });
 }
 
 function newRound() {
@@ -900,7 +899,7 @@ function restartGame() {
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   unlockAudio();
   if (musicOn && !musicTimer) startMusic();
-  bearTeleport(20, 5);
+  bearTeleport(20, 140);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
   bearSays(rt);
@@ -969,7 +968,6 @@ drawProgress();
 document.getElementById('musicBtn').textContent = settings.musicOn ? '🎵' : '🔕';
 document.getElementById('soundBtn').textContent = settings.soundOn ? '🔊' : '🔇';
 
-// Загрузка голосов — по первому касанию
 document.body.addEventListener('touchstart', () => { loadVoices(); }, {once:true});
 document.body.addEventListener('click', () => { loadVoices(); }, {once:true});
 </script>
