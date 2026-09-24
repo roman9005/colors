@@ -70,7 +70,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 @keyframes bearBreathe2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.02)}}
 .bear-runner.walking{animation:bearWalkBob .5s ease-in-out infinite}
 @keyframes bearWalkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.bear-runner.falling{animation:bearFall 1.4s cubic-bezier(.5,.05,.5,1) forwards}
+.bear-runner.falling{animation:bearFall 1.2s cubic-bezier(.5,.05,.5,1) forwards}
 @keyframes bearFall{0%{transform:translateY(-200vh) rotate(0) scale(.4);opacity:0}15%{opacity:1}40%{transform:translateY(-60vh) rotate(-180deg) scale(.8)}70%{transform:translateY(-15vh) rotate(-360deg) scale(1)}85%{transform:translateY(20px) rotate(-520deg) scale(1.1)}95%{transform:translateY(-15px) rotate(-580deg) scale(1.05)}100%{transform:translateY(0) rotate(-600deg) scale(1)}}
 .bear-runner.landed{animation:bearLand .5s ease}
 @keyframes bearLand{0%{transform:scale(1.2,.7)}50%{transform:scale(.85,1.15)}100%{transform:scale(1)}}
@@ -82,8 +82,6 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 @keyframes bearSadAnim{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-15deg) scale(.9)}50%{transform:rotate(0) scale(.92)}75%{transform:rotate(15deg) scale(.9)}}
 .bear-runner.win{animation:bearWinSpin 1s ease-in-out infinite;z-index:901}
 @keyframes bearWinSpin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(360deg) scale(1.2)}100%{transform:rotate(720deg) scale(1)}}
-.bear-runner.sleeping{animation:bearSleepBob 4s ease-in-out infinite}
-@keyframes bearSleepBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-3px) rotate(3deg)}}
 .bear-runner.talking{animation:bearTalk .4s ease-in-out infinite}
 @keyframes bearTalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .bear-runner.thinking{animation:bearThink 2s ease-in-out infinite}
@@ -97,15 +95,16 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 @keyframes pointerDown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
 .bear-runner.pointing .bear-pointer{opacity:1}
 
+/* МОДАЛКА ОБУЧЕНИЯ — мишка СНИЗУ ПО ЦЕНТРУ */
 .learn{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
 .learn.on{display:flex}
-.learn-wrap{position:relative;max-width:500px;width:100%}
+.learn-wrap{position:relative;max-width:500px;width:100%;margin-bottom:80px}
 .learn-box{background:#fff;border-radius:32px;padding:22px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.3);position:relative;z-index:10}
-.learn-bear{position:absolute;bottom:-30px;right:-30px;width:140px;height:160px;z-index:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.4));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center}
+.learn-bear{position:absolute;bottom:-90px;left:50%;transform:translateX(-50%);width:130px;height:150px;z-index:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.5));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center}
 .learn-bear img{width:100%;height:100%;object-fit:contain;display:block}
 .learn-bear .pose-img{display:none}
 .learn-bear .pose-img.active{display:block}
-@keyframes learnBearPose{0%{transform:translateY(0) rotate(-3deg)}100%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes learnBearPose{0%{transform:translateX(-50%) translateY(0) rotate(-3deg)}100%{transform:translateX(-50%) translateY(-8px) rotate(3deg)}}
 .learn-color-band{width:100%;height:14px;border-radius:8px;margin-bottom:14px}
 .learn-items{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:nowrap}
 .learn-item{flex:1;aspect-ratio:1/1;border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.25)}
@@ -202,17 +201,17 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 
 <div class="learn" id="learnModal">
   <div class="learn-wrap">
-    <div class="learn-bear" id="learnBear">
-      <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
-      <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
-      <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
-      <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
-    </div>
     <div class="learn-box">
       <div class="learn-color-band" id="learnBand"></div>
       <div class="learn-items" id="learnItems"></div>
       <div class="learn-name" id="learnName">КРАСНЫЙ</div>
       <div class="learn-rhyme" id="learnRhyme">Стишок</div>
+    </div>
+    <div class="learn-bear" id="learnBear">
+      <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
+      <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
+      <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
+      <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
     </div>
   </div>
 </div>
@@ -305,6 +304,7 @@ let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkT
 let walkFrame=1;
 let isHinting = false;
 let atTop = true;
+let musicPausedBySpeech = false;
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
@@ -373,20 +373,17 @@ function bearFallFrom() {
       setPose('idle');
       startBearWalk();
       startBlinking();
-    }, 500);
-  }, 1300);
+    }, 400);
+  }, 1200);
 }
 
-// ПОДСКАЗКА — мишка СТОИТ В ЦЕНТРЕ карточки пока не нажмут
 function bearPointTo(element) {
   isHinting = true;
-  // Жёстко останавливаем все таймеры прогулки
   stopBearWalk();
   stopBlinking();
   stopWalkFrames();
   clearTimeout(thinkTimer);
   clearTimeout(runTimer);
-  // Очищаем классы и ставим "показывает"
   bearClearClasses();
   bear.classList.add('front','pointing');
   setPose('sign');
@@ -395,8 +392,7 @@ function bearPointTo(element) {
     const x = r.left + r.width / 2 - BEAR_W / 2;
     const y = r.top + r.height / 2 - BEAR_H / 2;
     const p = clamp(x, y);
-    bearRunTo(p.x, p.y);
-    // Держим мишку на месте — перезапускаем позицию каждые 500 мс
+    bearTeleport(p.x, p.y);
     if (window._hintHoldInterval) clearInterval(window._hintHoldInterval);
     window._hintHoldInterval = setInterval(() => {
       if (!isHinting) { clearInterval(window._hintHoldInterval); return; }
@@ -405,11 +401,9 @@ function bearPointTo(element) {
   }
 }
 
-// ПРОГУЛКА — мишка ЧЕРЕДУЕТ верх и низ
 function bearWalkSpot() {
   const w = window.innerWidth;
   const h = window.innerHeight;
-  // Чередуем: то сверху, то снизу
   atTop = !atTop;
   let y;
   if (atTop) {
@@ -456,14 +450,14 @@ function bearHappyMove() {
       setPose('idle');
       startBearWalk();
       startBlinking();
-    }, 1100);
-  }, 1200);
+    }, 1000);
+  }, 1100);
 }
 function bearSadMove() {
   bearClearClasses();
   bear.classList.add('sad');
   setPose('sad');
-  setTimeout(() => { bear.classList.remove('sad'); startBearWalk(); startBlinking(); }, 1300);
+  setTimeout(() => { bear.classList.remove('sad'); startBearWalk(); startBlinking(); }, 1200);
 }
 function bearThinkMode() {
   if (!bearImages.think || locked || isHinting) return;
@@ -479,8 +473,8 @@ function bearDanceMove() {
   setPose('dance');
   setTimeout(() => {
     if (bearImages.strong) setPose('strong');
-    setTimeout(() => { if (bearImages.honey) setPose('honey'); }, 1000);
-  }, 1500);
+    setTimeout(() => { if (bearImages.honey) setPose('honey'); }, 900);
+  }, 1300);
 }
 
 function unlockAudio() {
@@ -490,22 +484,45 @@ function unlockAudio() {
     if (window._ctx.state === 'suspended') window._ctx.resume();
   } catch(e){}
 }
+
+// ====== ЗВУК — с паузой музыки ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
+  if (musicTimer) { pauseMusic(); musicPausedBySpeech = true; }
   if (currentAudio) { try{ currentAudio.pause(); }catch(e){} currentAudio=null; }
   let failed=false;
-  const fallback = () => { if(failed) return; failed=true; if(fb) sayVoiceOnly(fb,cb); else if(cb) cb(); };
+  const restore = () => {
+    if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
+  };
+  const fallback = () => {
+    if(failed) return;
+    failed=true;
+    restore();
+    if(fb) sayVoiceOnly(fb,cb);
+    else if(cb) cb();
+  };
   try {
     const a = new Audio('sounds/'+mp3);
     a.volume=1.0; currentAudio=a;
     a.onerror=fallback;
-    a.onended=()=>{ if(cb) cb(); };
+    a.onended=()=>{ restore(); if(cb) cb(); };
     const p=a.play();
-    if (p && typeof p.then==='function') p.then(()=>setStatus('▶ '+mp3,'rgba(0,120,0,.9)',true)).catch(fallback);
+    if (p && typeof p.then==='function') {
+      p.then(()=>setStatus('▶ '+mp3,'rgba(0,120,0,.9)',true)).catch(fallback);
+    } else {
+      // Safari без Promise — mp3 играет
+      setStatus('▶ '+mp3,'rgba(0,120,0,.9)',true);
+    }
   } catch(e){ fallback(); }
 }
+
 function sayVoiceOnly(text, cb) {
   if (!soundOn || !('speechSynthesis' in window)) { if(cb) cb(); return; }
+  const wasPlaying = !!musicTimer;
+  if (wasPlaying) { pauseMusic(); musicPausedBySpeech = true; }
+  const restore = () => {
+    if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
+  };
   try {
     if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
     setTimeout(() => {
@@ -514,12 +531,12 @@ function sayVoiceOnly(text, cb) {
       const v=speechSynthesis.getVoices().find(x=>x.lang && x.lang.toLowerCase().startsWith('ru'));
       if(v) u.voice=v;
       let done=false;
-      const fin=()=>{ if(done) return; done=true; if(cb) cb(); };
+      const fin=()=>{ if(done) return; done=true; restore(); if(cb) cb(); };
       u.onend=fin; u.onerror=fin;
-      setTimeout(fin,12000);
+      setTimeout(fin,10000);
       speechSynthesis.speak(u);
-    }, 80);
-  } catch(e){ if(cb) cb(); }
+    }, 50);
+  } catch(e){ restore(); if(cb) cb(); }
 }
 
 const NOTE={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
@@ -549,7 +566,7 @@ function toggleMusic(){ unlockAudio(); musicOn=!musicOn; settings.musicOn=musicO
 
 function setStatus(m,bg,autoHide){ const el=document.getElementById('status'); el.textContent=m; el.style.background=bg||'rgba(0,0,0,.85)'; el.classList.remove('hide'); if(autoHide){ clearTimeout(statusTimer); statusTimer=setTimeout(()=>el.classList.add('hide'),2500);} }
 function drawProgress(){ const p=document.getElementById('progress'); p.innerHTML=''; for(let i=0;i<ROUNDS;i++){ const s=document.createElement('span'); s.className='star'+(i<round?' done':''); s.textContent='⭐'; p.appendChild(s);} }
-function checkImage(name){ return new Promise(r=>{ const img=new Image(); img.onload=()=>r(true); img.onerror=()=>r(false); img.src='images/'+name; setTimeout(()=>r(false),2000); }); }
+function checkImage(name){ return new Promise(r=>{ const img=new Image(); img.onload=()=>r(true); img.onerror=()=>r(false); img.src='images/'+name; setTimeout(()=>r(false),600); }); }
 
 async function findBearImages() {
   const poses = ['idle','walk_1','walk_2','happy','heart','sad','sleep','sign','honey','wave','blink','dance','think','wow','yawn','glasses','backpack','strong'];
@@ -571,27 +588,32 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 const ENC=['enc_1.mp3','enc_2.mp3','enc_3.mp3'];
 
+// БЫСТРЫЙ СТАРТ
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
+  unlockAudio();
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
-  playMp3('hello.mp3', helloText, () => {
-    setTimeout(startGame, 200);
-  });
+  // Запускаем игру ПАРАЛЛЕЛЬНО с озвучкой приветствия
+  startGame();
+  // Приветствие отдельно — не блокирует старт
+  playMp3('hello.mp3', helloText);
 }
 
 async function startGame() {
   started = true;
   unlockAudio();
-  if (musicOn) setTimeout(()=>startMusic(), 150);
-  const found = await findBearImages();
-  await checkAllImages();
-  setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 5);
   bearFallFrom();
-  setTimeout(newRound, 1500);
+  // Показываем 1-й вопрос быстро
+  setTimeout(newRound, 1400);
+  // Проверку картинок запускаем в фоне
+  findBearImages().then(found => {
+    setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
+  });
+  checkAllImages();
 }
 
 function newRound() {
@@ -617,7 +639,7 @@ function newRound() {
     b.onclick = (e) => handleClick(c, b, e);
     box.appendChild(b);
   });
-  setTimeout(() => playMp3(target.file, 'Найди ' + target.name + '!'), 300);
+  setTimeout(() => playMp3(target.file, 'Найди ' + target.name + '!'), 250);
   startHintTimer();
   if (!runTimer && !locked && !isHinting) startBearWalk();
   clearTimeout(thinkTimer);
@@ -692,9 +714,9 @@ function startHintTimer() {
         bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '!';
         bearSays(hint);
-        setTimeout(() => sayVoiceOnly('Вот ' + target.name + '! Нажми сюда!'), 600);
+        setTimeout(() => sayVoiceOnly('Вот ' + target.name + '! Нажми сюда!'), 500);
       }
-    }, 800);
+    }, 700);
   }, settings.timeMs);
 }
 function stopHint() {
@@ -775,7 +797,7 @@ function restartGame() {
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
   bearSays(rt);
-  playMp3('lets_go.mp3', rt, () => { setTimeout(newRound, 1000); });
+  playMp3('lets_go.mp3', rt, () => { setTimeout(newRound, 800); });
 }
 
 function toggleSound() {
@@ -832,6 +854,12 @@ function setVol(v,btn){ settings.vol=v; if(v===0){ musicOn=false; pauseMusic(); 
 drawProgress();
 document.getElementById('musicBtn').textContent = settings.musicOn ? '🎵' : '🔕';
 document.getElementById('soundBtn').textContent = settings.soundOn ? '🔊' : '🔇';
+
+// Голоса подгружаем заранее
+if ('speechSynthesis' in window) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
 </script>
 
 </body>
