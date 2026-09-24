@@ -32,7 +32,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .intro button:active{transform:translateY(5px)}
 @keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 
-.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10}
+.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:100px}
 .progress{display:flex;gap:2px;justify-content:center;margin-bottom:8px;width:100%}
 .progress .star{font-size:18px;filter:grayscale(1) opacity(.25);transition:all .4s}
 .progress .star.done{filter:none;transform:scale(1.2)}
@@ -61,11 +61,12 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .shape .label{position:absolute;bottom:8px;left:0;right:0;font-size:13px;font-weight:900;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-transform:uppercase;z-index:3;text-align:center;pointer-events:none}
 .shapes.g6 .shape .label{font-size:10px}
 
-.bear-runner{position:fixed;z-index:20;width:120px;height:140px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 10px 15px rgba(60,30,10,.35));opacity:.9;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
+/* МИШКА - только сверху или снизу, всегда в пределах экрана */
+.bear-runner{position:fixed;z-index:20;width:110px;height:130px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 8px 12px rgba(60,30,10,.35));opacity:.92;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
 .bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
 .bear-runner .pose-img{display:none}
 .bear-runner .pose-img.active{display:block}
-.bear-runner.front{z-index:800;opacity:1}
+.bear-runner.front{z-index:900;opacity:1}
 .bear-runner.idle{animation:bearBreathe2 2.5s ease-in-out infinite}
 @keyframes bearBreathe2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.02)}}
 .bear-runner.walking{animation:bearWalkBob .5s ease-in-out infinite}
@@ -74,15 +75,13 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 @keyframes bearFall{0%{transform:translateY(-200vh) rotate(0) scale(.4);opacity:0}15%{opacity:1}40%{transform:translateY(-60vh) rotate(-180deg) scale(.8)}70%{transform:translateY(-15vh) rotate(-360deg) scale(1)}85%{transform:translateY(20px) rotate(-520deg) scale(1.1)}95%{transform:translateY(-15px) rotate(-580deg) scale(1.05)}100%{transform:translateY(0) rotate(-600deg) scale(1)}}
 .bear-runner.landed{animation:bearLand .5s ease}
 @keyframes bearLand{0%{transform:scale(1.2,.7)}50%{transform:scale(.85,1.15)}100%{transform:scale(1)}}
-.bear-runner.pointing{animation:bearPoint .7s ease-in-out infinite;z-index:801}
+.bear-runner.pointing{animation:bearPoint .7s ease-in-out infinite;z-index:901}
 @keyframes bearPoint{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
-.bear-runner.stick{animation:bearStick 1.5s ease-in-out infinite;z-index:801}
-@keyframes bearStick{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-4px) rotate(-3deg)}75%{transform:translateY(-4px) rotate(3deg)}}
-.bear-runner.happy{animation:bearHappyJump 1.2s ease;z-index:801}
+.bear-runner.happy{animation:bearHappyJump 1.2s ease;z-index:901}
 @keyframes bearHappyJump{0%{transform:translateY(0) scale(1)}15%{transform:translateY(-50px) scale(1.2) rotate(-90deg)}30%{transform:translateY(0) rotate(-180deg)}45%{transform:translateY(-40px) scale(1.15) rotate(-270deg)}60%{transform:translateY(0) rotate(-360deg)}100%{transform:translateY(0) rotate(-360deg)}}
 .bear-runner.sad{animation:bearSadAnim 1.2s ease}
 @keyframes bearSadAnim{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-15deg) scale(.9)}50%{transform:rotate(0) scale(.92)}75%{transform:rotate(15deg) scale(.9)}}
-.bear-runner.win{animation:bearWinSpin 1s ease-in-out infinite;z-index:801}
+.bear-runner.win{animation:bearWinSpin 1s ease-in-out infinite;z-index:901}
 @keyframes bearWinSpin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(360deg) scale(1.2)}100%{transform:rotate(720deg) scale(1)}}
 .bear-runner.sleeping{animation:bearSleepBob 4s ease-in-out infinite}
 @keyframes bearSleepBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-3px) rotate(3deg)}}
@@ -90,17 +89,14 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 @keyframes bearTalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .bear-runner.thinking{animation:bearThink 2s ease-in-out infinite}
 @keyframes bearThink{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
-.bear-runner.dancing{animation:bearDance 1s ease-in-out infinite;z-index:801}
+.bear-runner.dancing{animation:bearDance 1s ease-in-out infinite;z-index:901}
 @keyframes bearDance{0%{transform:rotate(-10deg) scale(1)}25%{transform:translateY(-15px) rotate(10deg) scale(1.05)}50%{transform:rotate(10deg) scale(1)}75%{transform:translateY(-15px) rotate(-10deg) scale(1.05)}100%{transform:rotate(-10deg) scale(1)}}
 .bear-bubble{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#3A1F5C;padding:6px 14px;border-radius:16px;font-size:14px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transition:opacity .3s;z-index:5}
 .bear-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #fff}
 .bear-runner.talking .bear-bubble{opacity:1}
-.bear-pointer{position:absolute;top:-40px;right:-30px;font-size:52px;opacity:0;transition:opacity .3s;animation:pointerDown .6s ease-in-out infinite;z-index:2}
-@keyframes pointerDown{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+.bear-pointer{position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:48px;opacity:0;transition:opacity .3s;animation:pointerDown .6s ease-in-out infinite;z-index:5}
+@keyframes pointerDown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
 .bear-runner.pointing .bear-pointer{opacity:1}
-.bear-stick{position:absolute;top:-10px;right:-95px;width:95px;height:8px;background:linear-gradient(90deg,#8B5A2B,#D89A5C,#8B5A2B);border-radius:4px;opacity:0;transform:rotate(-25deg);transform-origin:left center;transition:opacity .3s;z-index:2}
-.bear-stick::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:16px;height:16px;background:radial-gradient(circle at 35% 30%, #FF6B9D 0%, #C13DDB 100%);border-radius:50%}
-.bear-runner.stick .bear-stick{opacity:1}
 
 .learn{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
 .learn.on{display:flex}
@@ -166,10 +162,9 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
   <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
 </div>
 
-<div class="bear-runner idle" id="bearRunner" style="left:-200px;top:10%">
+<div class="bear-runner idle" id="bearRunner" style="left:20px;top:10px">
   <div class="bear-bubble" id="bearBubble">Привет!</div>
   <div class="bear-pointer">👇</div>
-  <div class="bear-stick"></div>
   <img class="pose-img active" data-pose="idle" src="images/bear_idle.png" alt="">
   <img class="pose-img" data-pose="walk1" src="images/bear_walk_1.png" alt="">
   <img class="pose-img" data-pose="walk2" src="images/bear_walk_2.png" alt="">
@@ -264,7 +259,6 @@ let settings = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) settings={...DEFAULTS,...s}; } catch(e){}
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
 
-// ====== НОВЫЕ СТИШКИ ======
 const COLORS = [
   { name:'красный', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3',
     rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
@@ -310,11 +304,12 @@ let soundOn=true, musicOn=true, locked=false, started=false;
 let currentAudio=null, imageAvailable={}, bearImages={};
 let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkTimer=null, thinkTimer=null;
 let walkFrame=1;
+let isHinting = false;  // Мишка стоит на цвете и ждёт
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
-const BEAR_W = 120, BEAR_H = 140;
+const BEAR_W = 110, BEAR_H = 130;
 
 function setPose(pose) {
   if (!bearImages[pose]) return;
@@ -333,9 +328,9 @@ function stopWalkFrames() { if (walkFrameTimer){ clearInterval(walkFrameTimer); 
 function startBlinking() {
   stopBlinking();
   blinkTimer = setInterval(() => {
-    if (!bearImages.blink || locked) return;
+    if (!bearImages.blink || locked || isHinting) return;
     setPose('blink');
-    setTimeout(() => { if (!locked && started) setPose('idle'); }, 200);
+    setTimeout(() => { if (!locked && started && !isHinting) setPose('idle'); }, 200);
   }, 4000);
 }
 function stopBlinking() { if (blinkTimer){ clearInterval(blinkTimer); blinkTimer=null; } }
@@ -347,7 +342,7 @@ function bearSays(text) {
   setTimeout(() => bear.classList.remove('talking'), 2200);
 }
 function bearClearClasses() {
-  bear.classList.remove('idle','walking','falling','landed','pointing','stick','happy','sad','win','sleeping','talking','front','thinking','dancing');
+  bear.classList.remove('idle','walking','falling','landed','pointing','happy','sad','win','sleeping','talking','front','thinking','dancing');
 }
 function bearTeleport(x,y) {
   bear.style.transition='none';
@@ -356,6 +351,15 @@ function bearTeleport(x,y) {
   bear.style.transition='left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)';
 }
 function bearRunTo(x,y) { bear.style.left=x+'px'; bear.style.top=y+'px'; }
+
+// ====== ОГРАНИЧИТЬ КООРДИНАТЫ ======
+function clamp(x, y) {
+  const w = window.innerWidth, h = window.innerHeight;
+  return {
+    x: Math.max(5, Math.min(w - BEAR_W - 5, x)),
+    y: Math.max(5, Math.min(h - BEAR_H - 5, y))
+  };
+}
 
 // ====== ПАДЕНИЕ ======
 function bearFallFrom() {
@@ -375,70 +379,48 @@ function bearFallFrom() {
   }, 1500);
 }
 
-// ====== ПОДСКАЗКА — мишка СПУСКАЕТСЯ к цвету ======
+// ====== ПОДСКАЗКА — мишка СТОИТ НА ЦВЕТЕ, пока не нажмут ======
 function bearPointTo(element) {
+  isHinting = true;
   bearClearClasses();
   bear.classList.add('front','pointing');
   stopWalkFrames();
+  stopBlinking();
   setPose('sign');
   if (element) {
     const r = element.getBoundingClientRect();
-    // Встаём СЛЕВА или СПРАВА от карточки, не поверх неё
-    let x = r.left - BEAR_W - 10;
-    if (x < 10) x = r.right + 10;
-    // Y — на уровне карточки
-    let y = r.top + r.height / 2 - BEAR_H / 2;
-    // Не выходим за верх/низ
-    y = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, y));
-    bearRunTo(x, y);
-  }
-}
-function bearStickTo(element) {
-  bearClearClasses();
-  bear.classList.add('front','stick');
-  stopWalkFrames();
-  setPose('sign');
-  if (element) {
-    const r = element.getBoundingClientRect();
-    let x = r.left - BEAR_W - 30;
-    let y = r.top + r.height/2 - BEAR_H/2;
-    if (x < 10) x = r.right + 20;
-    y = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, y));
-    bearRunTo(x, y);
+    // Мишка встаёт ПРЯМО НА карточку — центр карточки = центр мишки
+    const x = r.left + r.width / 2 - BEAR_W / 2;
+    const y = r.top + r.height / 2 - BEAR_H / 2;
+    const p = clamp(x, y);
+    bearRunTo(p.x, p.y);
   }
 }
 
-// ====== ПРОГУЛКА ПО ВЕРХУ И НИЗУ ======
+// ====== ПРОГУЛКА ПО ВЕРХУ И НИЗУ (в пределах экрана) ======
 function bearWalkSpot() {
   const w = window.innerWidth;
   const h = window.innerHeight;
-  // Мишка ходит ТОЛЬКО по верху и низу экрана
-  const spots = [
-    // Верхняя полоса (5–12% высоты)
-    { x: w * 0.05, y: h * 0.06 },
-    { x: w * 0.35, y: h * 0.08 },
-    { x: w * 0.65, y: h * 0.06 },
-    { x: w * 0.85, y: h * 0.10 },
-    // Нижняя полоса (82–92% высоты)
-    { x: w * 0.05, y: h * 0.85 },
-    { x: w * 0.35, y: h * 0.88 },
-    { x: w * 0.65, y: h * 0.85 },
-    { x: w * 0.85, y: h * 0.90 }
-  ];
-  const spot = spots[Math.floor(Math.random() * spots.length)];
-  // Ограничиваем координаты, чтобы мишка не выходил за края
-  spot.x = Math.max(5, Math.min(w - BEAR_W - 5, spot.x));
-  spot.y = Math.max(5, Math.min(h - BEAR_H - 5, spot.y));
-  return spot;
+  // Только верхняя или нижняя полоса
+  const isTop = Math.random() < 0.5;
+  let y;
+  if (isTop) {
+    y = 5 + Math.random() * (h * 0.08);  // верх: 5–8% высоты
+  } else {
+    y = h - BEAR_H - 5 - Math.random() * (h * 0.08);  // низ: 85–92%
+  }
+  const x = 5 + Math.random() * (w - BEAR_W - 10);
+  return clamp(x, y);
 }
 
 function startBearWalk() {
+  if (isHinting) return;
   stopBearWalk();
   bearClearClasses();
   bear.classList.add('walking');
   startWalkFrames();
   const walk = () => {
-    if (!started || locked) return;
+    if (!started || locked || isHinting) return;
     if (bearImages.backpack && Math.random() < 0.15) setPose('backpack');
     else startWalkFrames();
     const spot = bearWalkSpot();
@@ -453,14 +435,12 @@ function stopBearWalk() {
 }
 
 function bearHappyMove() {
+  isHinting = false;
   stopBearWalk(); stopBlinking();
   bearClearClasses();
   bear.classList.add('happy','front');
   setPose('happy');
-  // Прыгает на месте — где был
-  const cx = Math.max(5, Math.min(window.innerWidth - BEAR_W - 5, window.innerWidth/2 - BEAR_W/2));
-  const cy = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, window.innerHeight*0.7));
-  bearRunTo(cx, cy);
+  // Прыгает там же где стоял (в верхней или нижней полосе)
   setTimeout(() => {
     if (bearImages.heart) setPose('heart');
     setTimeout(() => {
@@ -478,18 +458,16 @@ function bearSadMove() {
   setTimeout(() => { bear.classList.remove('sad'); startBearWalk(); startBlinking(); }, 1500);
 }
 function bearThinkMode() {
-  if (!bearImages.think || locked) return;
+  if (!bearImages.think || locked || isHinting) return;
   setPose('think');
   bear.classList.add('thinking');
 }
 function bearDanceMove() {
+  isHinting = false;
   stopBearWalk(); stopBlinking();
   bearClearClasses();
   bear.classList.add('dancing','front');
   setPose('dance');
-  const cx = Math.max(5, Math.min(window.innerWidth - BEAR_W - 5, window.innerWidth/2 - BEAR_W/2));
-  const cy = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, window.innerHeight*0.7));
-  bearRunTo(cx, cy);
   setTimeout(() => {
     if (bearImages.strong) setPose('strong');
     setTimeout(() => { if (bearImages.honey) setPose('honey'); }, 1000);
@@ -602,14 +580,15 @@ async function startGame() {
   setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
-  // Мишка падает — стартует сверху
-  bearTeleport(window.innerWidth*0.5 - BEAR_W/2, 10);
+  // Стартовая позиция — сверху, в углу
+  bearTeleport(20, 10);
   bearFallFrom();
   setTimeout(newRound, 2200);
 }
 
 function newRound() {
   stopHint();
+  isHinting = false;
   locked = false;
   target = COLORS[Math.floor(Math.random()*COLORS.length)];
   const count = settings.diff;
@@ -631,10 +610,10 @@ function newRound() {
   });
   setTimeout(() => playMp3(target.file, 'Найди ' + target.name + '!'), 400);
   startHintTimer();
-  if (!runTimer && !locked) startBearWalk();
+  if (!runTimer && !locked && !isHinting) startBearWalk();
   clearTimeout(thinkTimer);
   thinkTimer = setTimeout(() => {
-    if (!locked && started) bearThinkMode();
+    if (!locked && started && !isHinting) bearThinkMode();
   }, 3500);
 }
 
@@ -647,6 +626,7 @@ function repeatQuestion() {
 function handleClick(c, btn, e) {
   if (locked || !started) return;
   stopHint();
+  isHinting = false;
   const rect = btn.getBoundingClientRect();
   const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
   if (c.name === target.name) {
@@ -687,7 +667,7 @@ function startHintTimer() {
   clearTimeout(hintTimer);
   if (!settings.timeMs) return;
   hintTimer = setTimeout(() => {
-    if (locked || !started || !target) return;
+    if (locked || !started || !target || isHinting) return;
     if (bearImages.yawn) setPose('yawn');
     setTimeout(() => {
       if (locked) return;
@@ -761,6 +741,7 @@ function showLearn(c, callback) {
 
 function showWin() {
   stopBearWalk(); stopHint(); stopBlinking();
+  isHinting = false;
   document.getElementById('winScreen').classList.add('on');
   salute();
   bearDanceMove();
@@ -777,7 +758,8 @@ function restartGame() {
   bearClearClasses();
   drawProgress();
   window._wowShown = false;
-  bearTeleport(window.innerWidth*0.5 - BEAR_W/2, 10);
+  isHinting = false;
+  bearTeleport(20, 10);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
   bearSays(rt);
