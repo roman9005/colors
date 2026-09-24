@@ -251,11 +251,17 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 <div class="status" id="status">Готово</div>
 
 <script>
+// ============================================
+// НАСТРОЙКИ
+// ============================================
 const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
 let settings = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) settings={...DEFAULTS,...s}; } catch(e){}
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
 
+// ============================================
+// ЦВЕТА (с полями для всех mp3)
+// ============================================
 const COLORS = [
   { name:'красный', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3', encFile:'enc_red.mp3',
     rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
@@ -295,6 +301,9 @@ const COLORS = [
     items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
 ];
 
+// ============================================
+// ПЕРЕМЕННЫЕ
+// ============================================
 const ROUNDS = 10;
 let score=0, round=0, target=null;
 let soundOn=true, musicOn=true, locked=false, started=false;
@@ -313,6 +322,9 @@ const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
 const BEAR_W = 100, BEAR_H = 120;
 
+// ============================================
+// МИШКА — ПОЗЫ И АНИМАЦИИ
+// ============================================
 function setPose(pose) {
   if (!bearImages[pose]) return;
   bear.querySelectorAll('.pose-img').forEach(img => {
@@ -478,7 +490,9 @@ function bearDanceMove() {
   }, 1300);
 }
 
-// ====== ЕДИНЫЙ AUDIO CONTEXT ======
+// ============================================
+// AUDIO — ОДИН КОНТЕКСТ
+// ============================================
 function getCtx() {
   if (audioCtx) return audioCtx;
   try {
@@ -501,7 +515,9 @@ function unlockAudio() {
   } catch(e){}
 }
 
-// ====== МУЗЫКА ======
+// ============================================
+// МУЗЫКА
+// ============================================
 const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS = 340;
@@ -561,7 +577,9 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ====== MP3 ======
+// ============================================
+// MP3 — ОСНОВНАЯ ОЧЕРЕДЬ (вопросы, похвала, стишки)
+// ============================================
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (currentAudio) {
@@ -597,7 +615,9 @@ function playMp3(mp3, fb, cb) {
   } catch(e) { fallback(); }
 }
 
-// ====== HINT MP3 ======
+// ============================================
+// MP3 — ПОДСКАЗКА hint_<цвет>.mp3
+// ============================================
 function playHintMp3(mp3) {
   if (!soundOn) return;
   if (hintAudio) {
@@ -631,6 +651,9 @@ function playHintMp3(mp3) {
 
 function sayVoiceOnly(text, cb) { if (cb) cb(); }
 
+// ============================================
+// УТИЛИТЫ
+// ============================================
 function setStatus(m,bg,autoHide){
   const el=document.getElementById('status');
   el.textContent=m;
@@ -687,26 +710,28 @@ function shuffle(a){
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 
-// ====== СТАРТ ======
+// ============================================
+// СТАРТ
+// ============================================
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
-  // Разблокировка ВСЕГО звука внутри клика
+  // Разблокировка звука внутри клика
   unlockAudio();
-  const ctx = getCtx();
-  if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
   bearFallFrom();
-  // Музыку запускаем сразу
+  // МУЗЫКА — запускаем сразу
   if (musicOn) {
-    setTimeout(() => { startMusic(); }, 200);
+    setTimeout(() => { startMusic(); }, 100);
   }
+  // Фоновые проверки картинок
   findBearImages().then(found => {
     setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
+  // ПРИВЕТСТВИЕ
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
   playMp3('hello.mp3', null, () => {
@@ -738,6 +763,7 @@ function newRound() {
     box.appendChild(b);
   });
   setTimeout(() => playMp3(target.file), 300);
+  // ЗАПУСКАЕМ ТАЙМЕР ПОДСКАЗКИ
   startHintTimer();
   if (!runTimer && !locked && !isHinting) startBearWalk();
   clearTimeout(thinkTimer);
@@ -788,12 +814,16 @@ function handleClick(c, btn, e) {
     bearSadMove();
     const enc = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(enc);
+    // ОШИБКА — enc_<цвет>.mp3
     playMp3(c.encFile, null, () => {
       startHintTimer();
     });
   }
 }
 
+// ============================================
+// ТАЙМЕР ПОДСКАЗКИ — через settings.timeMs (5/10/15 сек)
+// ============================================
 function startHintTimer() {
   clearTimeout(hintTimer);
   if (!settings.timeMs) return;
@@ -813,6 +843,7 @@ function startHintTimer() {
         bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '! Нажми сюда!';
         bearSays(hint);
+        // ПОДСКАЗКА — hint_<цвет>.mp3
         playHintMp3(target.hintFile);
       }
     }, 700);
