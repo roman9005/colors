@@ -1,255 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Учим цвета с Мишкой</title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:10px;overflow-x:hidden}
-.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.sun{position:absolute;top:6%;right:8%;font-size:70px;animation:sunPulse 4s ease-in-out infinite}
-@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.cloud{position:absolute;font-size:50px;opacity:.85;animation:cloudDrift linear infinite}
-@keyframes cloudDrift{0%{left:-100px}100%{left:110%}}
-.hill{position:absolute;bottom:0;left:0;right:0;height:120px;background:radial-gradient(ellipse at 30% 100%,#7CB342,#558B2F);border-radius:50% 50% 0 0}
-.butterfly{position:absolute;font-size:28px;animation:fly 14s linear infinite;z-index:999;pointer-events:none}
-@keyframes fly{0%{left:-60px;top:15%}50%{top:35%}100%{left:110%;top:25%}}
-
-.intro{position:fixed;inset:0;z-index:400;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
-.intro.off{display:none}
-.intro .sun{position:absolute;top:5%;right:8%;font-size:80px;animation:sunPulse 4s ease-in-out infinite}
-.intro .bear-big{width:220px;height:250px;margin-bottom:16px;position:relative;animation:introWave 1.5s ease-in-out infinite;z-index:2;filter:drop-shadow(0 15px 25px rgba(60,30,10,.4))}
-.intro .bear-big img{width:100%;height:100%;object-fit:contain;display:block}
-@keyframes introWave{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-6px)}}
-.intro h1{font-size:clamp(28px,7vw,48px);color:#fff;margin-bottom:14px;text-shadow:4px 4px 0 rgba(0,0,0,.15);z-index:2}
-.intro p{font-size:clamp(16px,4vw,22px);color:#fff;margin-bottom:28px;font-weight:700;text-shadow:2px 2px 0 rgba(0,0,0,.15);z-index:2}
-.intro button{padding:22px 56px;font-size:clamp(20px,5vw,28px);font-weight:900;color:#FF3D7F;background:#fff;border:none;border-radius:100px;cursor:pointer;font-family:inherit;box-shadow:0 10px 0 rgba(0,0,0,.2);z-index:2;animation:hb 1.8s ease-in-out infinite;touch-action:manipulation}
-.intro button:active{transform:translateY(5px)}
-@keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-
-.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:140px;margin-bottom:20px}
-.progress{display:flex;gap:2px;justify-content:center;margin-bottom:8px;width:100%}
-.progress .star{font-size:18px;filter:grayscale(1) opacity(.25);transition:all .4s}
-.progress .star.done{filter:none;transform:scale(1.2)}
-.top{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
-.score{background:linear-gradient(135deg,#FFD93D,#FFB800);padding:6px 16px;border-radius:30px;font-size:14px;font-weight:800;color:#7A3E00;box-shadow:0 4px 0 #E5A200}
-.top-btns{display:flex;gap:6px}
-.btn-icon{width:40px;height:40px;border-radius:50%;border:none;background:#fff;cursor:pointer;font-size:18px;box-shadow:0 4px 0 rgba(0,0,0,.15);display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation}
-.btn-icon:active{transform:translateY(3px)}
-.bear-say{width:100%;background:linear-gradient(135deg,#FFF9C4,#FFE082);border-radius:20px;padding:10px 16px;margin-bottom:8px;font-size:15px;font-weight:700;color:#7A3E00;text-align:center;box-shadow:0 4px 0 #FFB800;min-height:42px;display:flex;align-items:center;justify-content:center;transition:all .3s}
-.q{font-size:clamp(22px,5vw,32px);font-weight:900;color:#3A1F5C;text-align:center;margin:4px 0 10px;min-height:38px;text-shadow:2px 2px 0 rgba(255,255,255,.9)}
-.repeat{background:linear-gradient(135deg,#4A9EFF,#3ED9C4);color:#fff;border:none;padding:8px 18px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #2A7ECC;margin-bottom:10px;font-family:inherit;touch-action:manipulation}
-.repeat:active{transform:translateY(3px)}
-.shapes{display:grid;gap:12px;width:100%;position:relative;z-index:30}
-.shapes.g2{grid-template-columns:repeat(2,1fr)}
-.shapes.g4{grid-template-columns:repeat(2,1fr)}
-.shapes.g6{grid-template-columns:repeat(3,1fr)}
-.shape{border-radius:24px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .15s,box-shadow .15s;aspect-ratio:1/1;box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),inset 0 -8px 16px rgba(0,0,0,.15),inset 0 8px 16px rgba(255,255,255,.4);overflow:hidden;touch-action:manipulation}
-.shape::before{content:'';position:absolute;top:6%;left:10%;width:35%;height:25%;background:radial-gradient(ellipse,rgba(255,255,255,.6),transparent 70%);border-radius:50%;pointer-events:none}
-.shape:active{transform:translateY(6px)}
-.shape.ok{animation:pulse .7s ease}
-.shape.no{animation:shake .5s ease}
-.shape.hint{animation:hintGlow 1s ease-in-out infinite;z-index:35}
-@keyframes hintGlow{0%,100%{box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25)}50%{box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),0 0 0 6px #FFD700,0 0 30px #FFD700}}
-@keyframes pulse{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.95)}100%{transform:scale(1)}}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px) rotate(-3deg)}40%{transform:translateX(12px) rotate(3deg)}60%{transform:translateX(-8px) rotate(-2deg)}80%{transform:translateX(8px) rotate(2deg)}}
-.shape .label{position:absolute;bottom:8px;left:0;right:0;font-size:13px;font-weight:900;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-transform:uppercase;z-index:3;text-align:center;pointer-events:none}
-.shapes.g6 .shape .label{font-size:10px}
-
-.bear-runner{position:fixed;z-index:20;width:100px;height:120px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 8px 12px rgba(60,30,10,.35));opacity:.95;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
-.bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
-.bear-runner .pose-img{display:none}
-.bear-runner .pose-img.active{display:block}
-.bear-runner.front{z-index:900;opacity:1}
-.bear-runner.idle{animation:bearBreathe2 2.5s ease-in-out infinite}
-@keyframes bearBreathe2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.02)}}
-.bear-runner.walking{animation:bearWalkBob .5s ease-in-out infinite}
-@keyframes bearWalkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.bear-runner.falling{animation:bearFall 1.2s cubic-bezier(.5,.05,.5,1) forwards}
-@keyframes bearFall{0%{transform:translateY(-200vh) rotate(0) scale(.4);opacity:0}15%{opacity:1}40%{transform:translateY(-60vh) rotate(-180deg) scale(.8)}70%{transform:translateY(-15vh) rotate(-360deg) scale(1)}85%{transform:translateY(20px) rotate(-520deg) scale(1.1)}95%{transform:translateY(-15px) rotate(-580deg) scale(1.05)}100%{transform:translateY(0) rotate(-600deg) scale(1)}}
-.bear-runner.landed{animation:bearLand .5s ease}
-@keyframes bearLand{0%{transform:scale(1.2,.7)}50%{transform:scale(.85,1.15)}100%{transform:scale(1)}}
-.bear-runner.pointing{animation:bearPoint .7s ease-in-out infinite;z-index:901}
-@keyframes bearPoint{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
-.bear-runner.happy{animation:bearHappyJump 1.2s ease;z-index:901}
-@keyframes bearHappyJump{0%{transform:translateY(0) scale(1)}15%{transform:translateY(-50px) scale(1.2) rotate(-90deg)}30%{transform:translateY(0) rotate(-180deg)}45%{transform:translateY(-40px) scale(1.15) rotate(-270deg)}60%{transform:translateY(0) rotate(-360deg)}100%{transform:translateY(0) rotate(-360deg)}}
-.bear-runner.sad{animation:bearSadAnim 1.2s ease}
-@keyframes bearSadAnim{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-15deg) scale(.9)}50%{transform:rotate(0) scale(.92)}75%{transform:rotate(15deg) scale(.9)}}
-.bear-runner.win{animation:bearWinSpin 1s ease-in-out infinite;z-index:901}
-@keyframes bearWinSpin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(360deg) scale(1.2)}100%{transform:rotate(720deg) scale(1)}}
-.bear-runner.talking{animation:bearTalk .4s ease-in-out infinite}
-@keyframes bearTalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.bear-runner.thinking{animation:bearThink 2s ease-in-out infinite}
-@keyframes bearThink{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
-.bear-runner.dancing{animation:bearDance 1s ease-in-out infinite;z-index:901}
-@keyframes bearDance{0%{transform:rotate(-10deg) scale(1)}25%{transform:translateY(-15px) rotate(10deg) scale(1.05)}50%{transform:rotate(10deg) scale(1)}75%{transform:translateY(-15px) rotate(-10deg) scale(1.05)}100%{transform:rotate(-10deg) scale(1)}}
-.bear-bubble{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#3A1F5C;padding:6px 14px;border-radius:16px;font-size:14px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transition:opacity .3s;z-index:5}
-.bear-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #fff}
-.bear-runner.talking .bear-bubble{opacity:1}
-.bear-pointer{position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:48px;opacity:0;transition:opacity .3s;animation:pointerDown .6s ease-in-out infinite;z-index:5}
-@keyframes pointerDown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
-.bear-runner.pointing .bear-pointer{opacity:1}
-
-.learn{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
-.learn.on{display:flex}
-.learn-wrap{position:relative;max-width:500px;width:100%;margin-bottom:150px}
-.learn-box{background:#fff;border-radius:32px;padding:22px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.3);position:relative;z-index:10}
-.learn-bear{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);width:120px;height:140px;z-index:510;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center;pointer-events:none}
-.learn-bear img{width:100%;height:100%;object-fit:contain;display:block}
-.learn-bear .pose-img{display:none}
-.learn-bear .pose-img.active{display:block}
-@keyframes learnBearPose{0%{transform:translateX(-50%) translateY(0) rotate(-3deg)}100%{transform:translateX(-50%) translateY(-8px) rotate(3deg)}}
-.learn-color-band{width:100%;height:14px;border-radius:8px;margin-bottom:14px}
-.learn-items{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:nowrap}
-.learn-item{flex:1;aspect-ratio:1/1;border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.25)}
-.learn-item img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
-.learn-item .emoji{font-size:70px}
-.learn-name{font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.learn-rhyme{font-size:16px;color:#5a4636;font-weight:700;line-height:1.4;margin-top:8px;padding:10px;background:#fff9e6;border-radius:12px;border:2px dashed #FFB800}
-
-.win{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#FFE66D,#FF6B9D,#C86DD7);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
-.win.on{display:flex}
-.win h2{font-size:clamp(30px,7vw,50px);color:#fff;margin-bottom:12px;text-shadow:4px 4px 0 rgba(0,0,0,.2);z-index:2}
-.win p{font-size:clamp(16px,4vw,22px);color:#fff;font-weight:700;margin-bottom:18px;z-index:2}
-.win button{padding:18px 44px;font-size:20px;font-weight:900;color:#fff;border:none;border-radius:50px;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#FF3D7F,#C13DDB);box-shadow:0 8px 0 #8B1A5C;z-index:2;touch-action:manipulation}
-.win .stars-big{display:flex;gap:8px;margin-bottom:20px;z-index:2}
-.win .stars-big span{font-size:36px;animation:starBounce .8s ease-in-out infinite}
-@keyframes starBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-.salute{position:fixed;font-size:34px;pointer-events:none;z-index:9998;animation:saluteFly 2.5s ease-out forwards}
-@keyframes saluteFly{0%{transform:translateY(0) scale(.5);opacity:1}100%{transform:translateY(-110vh) scale(1.6) rotate(900deg);opacity:0}}
-.particle{position:fixed;pointer-events:none;z-index:9999;font-size:24px;animation:particleFly 1.5s ease-out forwards}
-@keyframes particleFly{0%{transform:translate(0,0) scale(.3);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(1.5) rotate(720deg);opacity:0}}
-.settings{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px}
-.settings.on{display:flex}
-.settings-box{background:#fff;border-radius:24px;padding:22px;max-width:400px;width:100%}
-.settings-box h3{color:#3A1F5C;font-size:22px;margin-bottom:14px;text-align:center}
-.settings-box label{display:block;color:#5a4636;font-weight:700;font-size:14px;margin:12px 0 6px}
-.settings-box .opt{display:flex;gap:6px;flex-wrap:wrap}
-.settings-box .opt button{flex:1;padding:10px 6px;border-radius:12px;border:2px solid #e8dcc8;background:#fdfaf5;cursor:pointer;font-weight:700;font-size:12px;color:#5a4636;font-family:inherit;touch-action:manipulation}
-.settings-box .opt button.sel{background:#FF3D7F;color:#fff;border-color:#FF3D7F}
-.settings-box .close{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:#6b4226;color:#fff;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;touch-action:manipulation}
-.status{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 14px;border-radius:16px;font-size:11px;font-family:monospace;z-index:300;max-width:94%;text-align:center;transition:opacity .5s}
-.status.hide{opacity:0;pointer-events:none}
-</style>
-</head>
-<body>
-
-<div class="sky">
-  <div class="sun">☀️</div>
-  <div class="cloud" style="top:8%;animation-duration:30s">☁️</div>
-  <div class="cloud" style="top:22%;animation-duration:40s;animation-delay:5s">☁️</div>
-  <div class="cloud" style="top:45%;animation-duration:35s;animation-delay:12s">☁️</div>
-  <div class="butterfly">🦋</div>
-  <div class="butterfly" style="animation-delay:6s">🦋</div>
-  <div class="hill"></div>
-</div>
-
-<div class="intro" id="introScreen">
-  <div class="sun">☀️</div>
-  <div class="bear-big" id="introBear">
-    <img src="images/bear_wave.png" alt="Мишка" onerror="this.src='images/bear_idle.png'">
-  </div>
-  <h1>🌈 Привет!</h1>
-  <p>Я — <b>Мишка</b>!<br>Я учу детей цветам.<br>Давай поиграем вместе!</p>
-  <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
-</div>
-
-<div class="bear-runner idle" id="bearRunner" style="left:20px;top:140px">
-  <div class="bear-bubble" id="bearBubble">Привет!</div>
-  <div class="bear-pointer">👇</div>
-  <img class="pose-img active" data-pose="idle" src="images/bear_idle.png" alt="">
-  <img class="pose-img" data-pose="walk1" src="images/bear_walk_1.png" alt="">
-  <img class="pose-img" data-pose="walk2" src="images/bear_walk_2.png" alt="">
-  <img class="pose-img" data-pose="happy" src="images/bear_happy.png" alt="">
-  <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
-  <img class="pose-img" data-pose="sad" src="images/bear_sad.png" alt="">
-  <img class="pose-img" data-pose="sleep" src="images/bear_sleep.png" alt="">
-  <img class="pose-img" data-pose="sign" src="images/bear_sign.png" alt="">
-  <img class="pose-img" data-pose="honey" src="images/bear_honey.png" alt="">
-  <img class="pose-img" data-pose="wave" src="images/bear_wave.png" alt="">
-  <img class="pose-img" data-pose="blink" src="images/bear_blink.png" alt="">
-  <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
-  <img class="pose-img" data-pose="think" src="images/bear_think.png" alt="">
-  <img class="pose-img" data-pose="wow" src="images/bear_wow.png" alt="">
-  <img class="pose-img" data-pose="yawn" src="images/bear_yawn.png" alt="">
-  <img class="pose-img" data-pose="glasses" src="images/bear_glasses.png" alt="">
-  <img class="pose-img" data-pose="backpack" src="images/bear_backpack.png" alt="">
-  <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
-</div>
-
-<div class="frame">
-  <div class="progress" id="progress"></div>
-  <div class="top">
-    <div class="score">⭐ Счёт: <span id="score">0</span></div>
-    <div class="top-btns">
-      <button class="btn-icon" id="musicBtn" onclick="toggleMusic()">🎵</button>
-      <button class="btn-icon" id="soundBtn" onclick="toggleSound()">🔊</button>
-      <button class="btn-icon" onclick="openSettings()">⚙</button>
-    </div>
-  </div>
-  <div class="bear-say" id="bearSay">Привет! Я — Мишка!</div>
-  <div class="q" id="question">Нажми ▶ ИГРАТЬ</div>
-  <button class="repeat" onclick="repeatQuestion()">🔁 Повторить</button>
-  <div class="shapes" id="shapes"></div>
-</div>
-
-<div class="learn" id="learnModal">
-  <div class="learn-wrap">
-    <div class="learn-box">
-      <div class="learn-color-band" id="learnBand"></div>
-      <div class="learn-items" id="learnItems"></div>
-      <div class="learn-name" id="learnName">КРАСНЫЙ</div>
-      <div class="learn-rhyme" id="learnRhyme">Стишок</div>
-    </div>
-  </div>
-  <div class="learn-bear" id="learnBear">
-    <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
-    <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
-    <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
-    <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
-  </div>
-</div>
-
-<div class="win" id="winScreen">
-  <h2>МОЛОДЕЦ!</h2>
-  <div class="stars-big"><span>⭐</span><span>⭐</span><span>⭐</span></div>
-  <p id="winText">Ты выучил все цвета!</p>
-  <button onclick="restartGame()">🎮 Играть снова</button>
-</div>
-
-<div class="settings" id="settingsScreen">
-  <div class="settings-box">
-    <h3>⚙ Настройки</h3>
-    <label>Сложность:</label>
-    <div class="opt" id="optDiff">
-      <button data-val="2" onclick="setDiff(2,this)">Легко (2)</button>
-      <button data-val="4" onclick="setDiff(4,this)" class="sel">Средне (4)</button>
-      <button data-val="6" onclick="setDiff(6,this)">Сложно (6)</button>
-    </div>
-    <label>⏱ Подсказка через:</label>
-    <div class="opt" id="optTime">
-      <button data-val="5000" onclick="setTime(5000,this)">5 сек</button>
-      <button data-val="10000" onclick="setTime(10000,this)" class="sel">10 сек</button>
-      <button data-val="15000" onclick="setTime(15000,this)">15 сек</button>
-    </div>
-    <label>🎵 Громкость музыки:</label>
-    <div class="opt" id="optVol">
-      <button data-val="0" onclick="setVol(0,this)">Выкл</button>
-      <button data-val="0.05" onclick="setVol(0.05,this)">Тихо</button>
-      <button data-val="0.12" onclick="setVol(0.12,this)" class="sel">Средне</button>
-      <button data-val="0.2" onclick="setVol(0.2,this)">Громко</button>
-    </div>
-    <button class="close" onclick="closeSettings()">✕ Закрыть</button>
-  </div>
-</div>
-
-<div class="status" id="status">Готово</div>
-
 <script>
 const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
 let settings = {...DEFAULTS};
@@ -304,9 +52,8 @@ let walkFrame=1;
 let isHinting = false;
 let atTop = true;
 let hintAudio = null;
-let musicCtx = null;
-let musicGainNode = null;
 let musicTimer = null;
+let musicGainNode = null;
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
@@ -478,28 +225,55 @@ function bearDanceMove() {
   }, 1300);
 }
 
-// ====== МУЗЫКА ЧЕРЕЗ Web Audio ======
+// ====== АУДИО КОНТЕКСТ (единый) ======
+let audioCtx = null;
+function getAudioCtx() {
+  if (audioCtx) return audioCtx;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(e){}
+  return audioCtx;
+}
+
+function unlockAudio() {
+  const ctx = getAudioCtx();
+  if (ctx) {
+    if (ctx.state === 'suspended') ctx.resume();
+    // Слышимый щелчок — гарантирует разблокировку на iOS
+    try {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      g.gain.value = 0.05;
+      o.frequency.value = 440;
+      o.connect(g); g.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime + 0.05);
+    } catch(e){}
+  }
+}
+
+// ====== МУЗЫКА ======
 const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS = 340;
 
-function ensureMusicCtx() {
-  if (musicCtx) return;
-  try {
-    musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-    musicGainNode = musicCtx.createGain();
-    musicGainNode.gain.value = settings.vol;
-    musicGainNode.connect(musicCtx.destination);
-  } catch(e) {}
+function ensureMusicGain() {
+  const ctx = getAudioCtx();
+  if (!ctx || musicGainNode) return;
+  musicGainNode = ctx.createGain();
+  musicGainNode.gain.value = settings.vol;
+  musicGainNode.connect(ctx.destination);
 }
 
 function playMusicNote(freq, dur) {
-  if (!musicOn || !freq || !musicCtx) return;
-  if (musicGainNode) musicGainNode.gain.value = settings.vol;
-  const now = musicCtx.currentTime;
+  const ctx = getAudioCtx();
+  if (!musicOn || !freq || !ctx) return;
+  ensureMusicGain();
+  if (!musicGainNode) return;
+  musicGainNode.gain.value = settings.vol;
+  const now = ctx.currentTime;
   const d = dur * BEAT_MS / 1000;
-  const o = musicCtx.createOscillator();
-  const g = musicCtx.createGain();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
   o.type = 'triangle';
   o.frequency.value = freq;
   g.gain.setValueAtTime(0.0001, now);
@@ -511,9 +285,10 @@ function playMusicNote(freq, dur) {
 
 function startMusic() {
   if (!musicOn || musicTimer || settings.vol === 0) return;
-  ensureMusicCtx();
-  if (!musicCtx) return;
-  if (musicCtx.state === 'suspended') musicCtx.resume();
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+  ensureMusicGain();
   let i = 0;
   const next = () => {
     if (!musicOn) { musicTimer = null; return; }
@@ -538,22 +313,7 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ====== РАЗБЛОКИРОВКА АУДИО ======
-function unlockAudio() {
-  try {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!window._ctx) window._ctx = new Ctx();
-    if (window._ctx.state === 'suspended') window._ctx.resume();
-    const o = window._ctx.createOscillator();
-    const g = window._ctx.createGain();
-    g.gain.value = 0.02;
-    o.frequency.value = 440;
-    o.connect(g); g.connect(window._ctx.destination);
-    o.start(); o.stop(window._ctx.currentTime + 0.03);
-  } catch(e){}
-}
-
-// ====== MP3 (общая очередь) ======
+// ====== MP3 (главная очередь) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (currentAudio) {
@@ -589,12 +349,18 @@ function playMp3(mp3, fb, cb) {
   } catch(e) { fallback(); }
 }
 
-// ====== MP3 для ПОДСКАЗОК (отдельная функция) ======
+// ====== HINT MP3 (отдельная очередь) ======
 function playHintMp3(mp3) {
   if (!soundOn) return;
+  // Останавливаем предыдущий hint если есть
   if (hintAudio) {
     try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
     hintAudio = null;
+  }
+  // Останавливаем главную очередь mp3 если играет
+  if (currentAudio) {
+    try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
+    currentAudio = null;
   }
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
@@ -678,16 +444,13 @@ const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 // ====== СТАРТ ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
-  // Разблокируем ВСЁ в клике
   unlockAudio();
-  ensureMusicCtx();
-  if (musicCtx && musicCtx.state === 'suspended') musicCtx.resume();
   started = true;
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
   bearFallFrom();
-  // Музыку запускаем СРАЗУ
+  // Музыку запускаем сразу
   if (musicOn) startMusic();
   // Фоновые проверки
   findBearImages().then(found => {
@@ -776,8 +539,7 @@ function handleClick(c, btn, e) {
     bearSadMove();
     const enc = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(enc);
-    // Играем enc_<цвет>.mp3
-    playMp3(c.encFile || ('enc_' + target.nameEn + '.mp3'), null, () => {
+    playMp3(c.encFile, null, () => {
       startHintTimer();
     });
   }
@@ -802,8 +564,8 @@ function startHintTimer() {
         bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '! Нажми сюда!';
         bearSays(hint);
-        // Играем hint_<цвет>.mp3 через ОТДЕЛЬНУЮ функцию
-        playHintMp3(target.hintFile || ('hint_' + target.nameEn + '.mp3'));
+        // Играем hint_<цвет>.mp3
+        playHintMp3(target.hintFile);
       }
     }, 700);
   }, settings.timeMs);
@@ -953,6 +715,3 @@ drawProgress();
 document.getElementById('musicBtn').textContent = settings.musicOn ? '🎵' : '🔕';
 document.getElementById('soundBtn').textContent = settings.soundOn ? '🔊' : '🔇';
 </script>
-
-</body>
-</html>
