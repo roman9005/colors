@@ -257,40 +257,40 @@ try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) se
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
 
 const COLORS = [
-  { name:'красный', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3',
+  { name:'красный', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3', encFile:'enc_red.mp3',
     rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
     items:[{e:'🍎',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🐞',f:'img_red_2.jpg'},{e:'🔥',f:'img_red_3.jpg'}] },
-  { name:'синий', nameEn:'blue', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3',
+  { name:'синий', nameEn:'blue', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', hintFile:'hint_blue.mp3', encFile:'enc_blue.mp3',
     rhyme:'Синее море — ширь без края, синяя волна бежит, играя!',
     items:[{e:'🎈',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🌌',f:'img_blue_2.jpg'},{e:'🌊',f:'img_blue_3.jpg'}] },
-  { name:'жёлтый', nameEn:'yellow', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3',
+  { name:'жёлтый', nameEn:'yellow', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', hintFile:'hint_yellow.mp3', encFile:'enc_yellow.mp3',
     rhyme:'Жёлтое солнце светит нам, жёлтый одуванчик — тут и там!',
     items:[{e:'🍌',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐤',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
-  { name:'зелёный', nameEn:'green', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3',
+  { name:'зелёный', nameEn:'green', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', hintFile:'hint_green.mp3', encFile:'enc_green.mp3',
     rhyme:'Зелёная трава — мягко и свежо, зелёный огурец — вкусно, хорошо!',
     items:[{e:'🥒',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🌲',f:'img_green_2.jpg'},{e:'🌿',f:'img_green_3.jpg'}] },
-  { name:'оранжевый', nameEn:'orange', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3',
+  { name:'оранжевый', nameEn:'orange', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', hintFile:'hint_orange.mp3', encFile:'enc_orange.mp3',
     rhyme:'Оранжевый апельсин — сочный и яркий, оранжевая морковка — вкусный подарок!',
     items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🦊',f:'img_orange_2.jpg'},{e:'🥕',f:'img_orange_3.jpg'}] },
-  { name:'фиолетовый', nameEn:'purple', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3',
+  { name:'фиолетовый', nameEn:'purple', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', hintFile:'hint_purple.mp3', encFile:'enc_purple.mp3',
     rhyme:'Фиолетовая слива — сладкий секрет, фиолетовый баклажан — вот это цвет!',
     items:[{e:'🍇',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'🍆',f:'img_purple_2.jpg'},{e:'🍑',f:'img_purple_3.jpg'}] },
-  { name:'розовый', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3',
+  { name:'розовый', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', hintFile:'hint_pink.mp3', encFile:'enc_pink.mp3',
     rhyme:'Розовая свинка хрюкает: «Хрю!», розовый бантик — я его люблю!',
     items:[{e:'🌸',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'🐷',f:'img_pink_2.jpg'},{e:'🍡',f:'img_pink_3.jpg'}] },
-  { name:'голубой', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3',
+  { name:'голубой', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', hintFile:'hint_lightblue.mp3', encFile:'enc_lightblue.mp3',
     rhyme:'Голубой ручеёк поёт: «Жур-жур!», голубой цветок — как маленький узор!',
     items:[{e:'☕',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'🏞️',f:'img_lightblue_2.jpg'},{e:'💧',f:'img_lightblue_3.jpg'}] },
-  { name:'коричневый', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3',
+  { name:'коричневый', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', hintFile:'hint_brown.mp3', encFile:'enc_brown.mp3',
     rhyme:'Коричневый мишка — плюшевый друг, коричневый шоколад — сладкий вокруг!',
     items:[{e:'🐻',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'🍫',f:'img_brown_2.jpg'},{e:'🍄',f:'img_brown_3.jpg'}] },
-  { name:'чёрный', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3',
+  { name:'чёрный', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', hintFile:'hint_black.mp3', encFile:'enc_black.mp3',
     rhyme:'Чёрный пингвин шагает вперёд, чёрный уголёк тихонько ждёт!',
     items:[{e:'🐱',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'🐧',f:'img_black_2.jpg'},{e:'⚫',f:'img_black_3.jpg'}] },
-  { name:'белый', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3',
+  { name:'белый', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', hintFile:'hint_white.mp3', encFile:'enc_white.mp3',
     rhyme:'Белый снег кружится — лёгкий полёт, белое молоко — тёплый уют!',
     items:[{e:'🐰',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'🍬',f:'img_white_2.jpg'},{e:'❄️',f:'img_white_3.jpg'}] },
-  { name:'серый', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3',
+  { name:'серый', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', hintFile:'hint_gray.mp3', encFile:'enc_gray.mp3',
     rhyme:'Серый слоник топает: «Топ-топ!», серый зайчонок смотрит: «Оп-оп!»',
     items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
 ];
@@ -303,8 +303,10 @@ let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkT
 let walkFrame=1;
 let isHinting = false;
 let atTop = true;
-let hintAudio = null;      // отдельный аудио для подсказок
-let musicAudioLoop = null; // отдельный Audio-элемент для музыки
+let hintAudio = null;
+let musicCtx = null;
+let musicGainNode = null;
+let musicTimer = null;
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
@@ -476,6 +478,66 @@ function bearDanceMove() {
   }, 1300);
 }
 
+// ====== МУЗЫКА ЧЕРЕЗ Web Audio ======
+const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
+const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
+const BEAT_MS = 340;
+
+function ensureMusicCtx() {
+  if (musicCtx) return;
+  try {
+    musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+    musicGainNode = musicCtx.createGain();
+    musicGainNode.gain.value = settings.vol;
+    musicGainNode.connect(musicCtx.destination);
+  } catch(e) {}
+}
+
+function playMusicNote(freq, dur) {
+  if (!musicOn || !freq || !musicCtx) return;
+  if (musicGainNode) musicGainNode.gain.value = settings.vol;
+  const now = musicCtx.currentTime;
+  const d = dur * BEAT_MS / 1000;
+  const o = musicCtx.createOscillator();
+  const g = musicCtx.createGain();
+  o.type = 'triangle';
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.linearRampToValueAtTime(1, now + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + d);
+  o.connect(g); g.connect(musicGainNode);
+  o.start(now); o.stop(now + d);
+}
+
+function startMusic() {
+  if (!musicOn || musicTimer || settings.vol === 0) return;
+  ensureMusicCtx();
+  if (!musicCtx) return;
+  if (musicCtx.state === 'suspended') musicCtx.resume();
+  let i = 0;
+  const next = () => {
+    if (!musicOn) { musicTimer = null; return; }
+    const [n, d] = MELODY[i];
+    playMusicNote(NOTE[n], d);
+    musicTimer = setTimeout(next, d * BEAT_MS);
+    i = (i + 1) % MELODY.length;
+  };
+  next();
+}
+
+function pauseMusic() {
+  if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
+}
+
+function toggleMusic() {
+  unlockAudio();
+  musicOn = !musicOn;
+  settings.musicOn = musicOn;
+  saveSettings();
+  document.getElementById('musicBtn').textContent = musicOn ? '🎵' : '🔕';
+  if (musicOn) startMusic(); else pauseMusic();
+}
+
 // ====== РАЗБЛОКИРОВКА АУДИО ======
 function unlockAudio() {
   try {
@@ -484,38 +546,25 @@ function unlockAudio() {
     if (window._ctx.state === 'suspended') window._ctx.resume();
     const o = window._ctx.createOscillator();
     const g = window._ctx.createGain();
-    g.gain.value = 0.01;
-    o.frequency.value = 220;
+    g.gain.value = 0.02;
+    o.frequency.value = 440;
     o.connect(g); g.connect(window._ctx.destination);
-    o.start(); o.stop(window._ctx.currentTime + 0.05);
-  } catch(e){}
-  // Разблокировка HTML5 Audio через тихий пустой буфер
-  try {
-    if (!window._silentAudio) {
-      window._silentAudio = new Audio();
-      window._silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQQAAAAAAA==';
-      window._silentAudio.volume = 0.01;
-    }
-    const pp = window._silentAudio.play();
-    if (pp && typeof pp.then === 'function') pp.catch(()=>{});
+    o.start(); o.stop(window._ctx.currentTime + 0.03);
   } catch(e){}
 }
 
-// ====== MP3 (основная очередь) ======
+// ====== MP3 (общая очередь) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (currentAudio) {
     try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
     currentAudio = null;
   }
-  if (musicAudioLoop) {
-    try { musicAudioLoop.pause(); } catch(e){}
-  }
+  const wasMusic = !!musicTimer;
+  if (wasMusic) pauseMusic();
   let failed = false;
   const restore = () => {
-    if (musicAudioLoop && musicOn) {
-      try { musicAudioLoop.play(); } catch(e){}
-    }
+    if (wasMusic && musicOn && !musicTimer) startMusic();
   };
   const fallback = () => {
     if(failed) return;
@@ -531,9 +580,7 @@ function playMp3(mp3, fb, cb) {
     a.onended = () => { restore(); if(cb) cb(); };
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => {
-        setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true);
-      }).catch(fallback);
+      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
     }
     setTimeout(() => {
       if (failed) return;
@@ -542,103 +589,35 @@ function playMp3(mp3, fb, cb) {
   } catch(e) { fallback(); }
 }
 
-// ====== HINT MP3 — отдельная функция, не трогает основную очередь ======
+// ====== MP3 для ПОДСКАЗОК (отдельная функция) ======
 function playHintMp3(mp3) {
   if (!soundOn) return;
   if (hintAudio) {
     try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
     hintAudio = null;
   }
-  if (musicAudioLoop) {
-    try { musicAudioLoop.pause(); } catch(e){}
-  }
+  const wasMusic = !!musicTimer;
+  if (wasMusic) pauseMusic();
   try {
     const a = new Audio('sounds/' + mp3);
     a.volume = 1.0;
     hintAudio = a;
-    const resumeMusic = () => {
+    const resume = () => {
       hintAudio = null;
-      if (musicAudioLoop && musicOn) {
-        try { musicAudioLoop.play(); } catch(e){}
-      }
+      if (wasMusic && musicOn && !musicTimer) startMusic();
     };
-    a.onerror = resumeMusic;
-    a.onended = resumeMusic;
+    a.onerror = resume;
+    a.onended = resume;
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(resumeMusic);
+      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(resume);
     }
   } catch(e) {
-    if (musicAudioLoop && musicOn) {
-      try { musicAudioLoop.play(); } catch(e){}
-    }
+    if (wasMusic && musicOn) startMusic();
   }
 }
 
 function sayVoiceOnly(text, cb) { if (cb) cb(); }
-
-// ====== МУЗЫКА — через HTML5 Audio + Web Audio ======
-// Генерируем простую мелодию через Web Audio API, но запускаем через AudioContext
-const NOTE={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
-const MELODY=[['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
-const BEAT_MS=340;
-let musicTimer=null, musicGainNode=null;
-
-function ensureMusicGain(){
-  if(musicGainNode||!window._ctx) return;
-  musicGainNode=window._ctx.createGain();
-  musicGainNode.gain.value=settings.vol;
-  musicGainNode.connect(window._ctx.destination);
-}
-function playMusicNote(freq,dur){
-  if(!musicOn||!freq||!window._ctx) return;
-  ensureMusicGain();
-  if(musicGainNode) musicGainNode.gain.value=settings.vol;
-  const now=window._ctx.currentTime; const d=dur*BEAT_MS/1000;
-  const o=window._ctx.createOscillator(); const g=window._ctx.createGain();
-  o.type='triangle'; o.frequency.value=freq;
-  g.gain.setValueAtTime(0.0001,now);
-  g.gain.linearRampToValueAtTime(1,now+0.03);
-  g.gain.exponentialRampToValueAtTime(0.0001,now+d);
-  o.connect(g); g.connect(musicGainNode);
-  o.start(now); o.stop(now+d);
-}
-
-// Музыкальный «маркер» — пустой Audio для обхода блокировки
-function ensureMusicAudioLoop() {
-  if (musicAudioLoop) return;
-  musicAudioLoop = new Audio();
-  musicAudioLoop.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQQAAAAAAA==';
-  musicAudioLoop.loop = true;
-  musicAudioLoop.volume = 0.01;  // беззвучный — просто держит разблокировку
-}
-
-function startMusic(){
-  if(!musicOn||musicTimer||!window._ctx||settings.vol===0) return;
-  ensureMusicAudioLoop();
-  if (musicAudioLoop) { try { musicAudioLoop.play(); } catch(e){} }
-  let i=0;
-  const next=()=>{
-    if(!musicOn){musicTimer=null;return;}
-    const [n,d]=MELODY[i];
-    playMusicNote(NOTE[n],d);
-    musicTimer=setTimeout(next,d*BEAT_MS);
-    i=(i+1)%MELODY.length;
-  };
-  next();
-}
-function pauseMusic(){
-  if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}
-  if (musicAudioLoop) { try { musicAudioLoop.pause(); } catch(e){} }
-}
-function toggleMusic(){
-  unlockAudio();
-  musicOn=!musicOn;
-  settings.musicOn=musicOn;
-  saveSettings();
-  document.getElementById('musicBtn').textContent=musicOn?'🎵':'🔕';
-  if(musicOn) startMusic(); else pauseMusic();
-}
 
 function setStatus(m,bg,autoHide){
   const el=document.getElementById('status');
@@ -699,18 +678,23 @@ const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 // ====== СТАРТ ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
+  // Разблокируем ВСЁ в клике
   unlockAudio();
+  ensureMusicCtx();
+  if (musicCtx && musicCtx.state === 'suspended') musicCtx.resume();
   started = true;
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
   bearFallFrom();
+  // Музыку запускаем СРАЗУ
+  if (musicOn) startMusic();
+  // Фоновые проверки
   findBearImages().then(found => {
     setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
-  // Музыку запускаем СРАЗУ — теперь через Web Audio
-  if (musicOn) startMusic();
+  // Приветствие
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
   playMp3('hello.mp3', null, () => {
@@ -792,7 +776,8 @@ function handleClick(c, btn, e) {
     bearSadMove();
     const enc = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(enc);
-    playMp3('enc_' + target.nameEn + '.mp3', null, () => {
+    // Играем enc_<цвет>.mp3
+    playMp3(c.encFile || ('enc_' + target.nameEn + '.mp3'), null, () => {
       startHintTimer();
     });
   }
@@ -818,7 +803,7 @@ function startHintTimer() {
         const hint = 'Вот ' + target.name + '! Нажми сюда!';
         bearSays(hint);
         // Играем hint_<цвет>.mp3 через ОТДЕЛЬНУЮ функцию
-        playHintMp3('hint_' + target.nameEn + '.mp3');
+        playHintMp3(target.hintFile || ('hint_' + target.nameEn + '.mp3'));
       }
     }, 700);
   }, settings.timeMs);
