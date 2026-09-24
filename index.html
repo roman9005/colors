@@ -61,7 +61,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .shape .label{position:absolute;bottom:8px;left:0;right:0;font-size:13px;font-weight:900;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-transform:uppercase;z-index:3;text-align:center;pointer-events:none}
 .shapes.g6 .shape .label{font-size:10px}
 
-.bear-runner{position:fixed;z-index:20;width:130px;height:150px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 10px 15px rgba(60,30,10,.35));opacity:.92;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
+.bear-runner{position:fixed;z-index:20;width:120px;height:140px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 10px 15px rgba(60,30,10,.35));opacity:.9;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
 .bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
 .bear-runner .pose-img{display:none}
 .bear-runner .pose-img.active{display:block}
@@ -166,7 +166,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
   <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
 </div>
 
-<div class="bear-runner idle" id="bearRunner" style="left:calc(50% - 65px);top:45%">
+<div class="bear-runner idle" id="bearRunner" style="left:-200px;top:10%">
   <div class="bear-bubble" id="bearBubble">Привет!</div>
   <div class="bear-pointer">👇</div>
   <div class="bear-stick"></div>
@@ -264,19 +264,44 @@ let settings = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) settings={...DEFAULTS,...s}; } catch(e){}
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
 
+// ====== НОВЫЕ СТИШКИ ======
 const COLORS = [
-  { name:'красный', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', rhyme:'Красный — это яблоко, божья коровка, костёр!', items:[{e:'🍎',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🐞',f:'img_red_2.jpg'},{e:'🔥',f:'img_red_3.jpg'}] },
-  { name:'синий', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', rhyme:'Синий — это шарик, небо и волна!', items:[{e:'🎈',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🌌',f:'img_blue_2.jpg'},{e:'🌊',f:'img_blue_3.jpg'}] },
-  { name:'жёлтый', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', rhyme:'Жёлтый у нас банан, цыплёнок и лимон!', items:[{e:'🍌',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐤',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
-  { name:'зелёный', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', rhyme:'Зелёный — ёлка и трава, зелёный — огурец всегда!', items:[{e:'🥒',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🌲',f:'img_green_2.jpg'},{e:'🌿',f:'img_green_3.jpg'}] },
-  { name:'оранжевый', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', rhyme:'Оранжевый — лиса и апельсин, морковка, мандарин!', items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🦊',f:'img_orange_2.jpg'},{e:'🥕',f:'img_orange_3.jpg'}] },
-  { name:'фиолетовый', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', rhyme:'Фиолетовым бывает слива и спелый виноград!', items:[{e:'🍇',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'🍆',f:'img_purple_2.jpg'},{e:'🍑',f:'img_purple_3.jpg'}] },
-  { name:'розовый', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', rhyme:'Розовый — цветочек и свинка, зефирка-малинка!', items:[{e:'🌸',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'🐷',f:'img_pink_2.jpg'},{e:'🍡',f:'img_pink_3.jpg'}] },
-  { name:'голубой', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', rhyme:'Голубой — это чашка и река!', items:[{e:'☕',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'🏞️',f:'img_lightblue_2.jpg'},{e:'💧',f:'img_lightblue_3.jpg'}] },
-  { name:'коричневый', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', rhyme:'Коричневый — мишка и шоколад!', items:[{e:'🐻',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'🍫',f:'img_brown_2.jpg'},{e:'🍄',f:'img_brown_3.jpg'}] },
-  { name:'чёрный', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', rhyme:'Чёрный — котик и пингвин, уголёк один!', items:[{e:'🐱',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'🐧',f:'img_black_2.jpg'},{e:'⚫',f:'img_black_3.jpg'}] },
-  { name:'белый', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', rhyme:'Белый — зайчик, сахар, снег!', items:[{e:'🐰',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'🍬',f:'img_white_2.jpg'},{e:'❄️',f:'img_white_3.jpg'}] },
-  { name:'серый', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', rhyme:'Серый — слоник и волчок!', items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
+  { name:'красный', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3',
+    rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
+    items:[{e:'🍎',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🐞',f:'img_red_2.jpg'},{e:'🔥',f:'img_red_3.jpg'}] },
+  { name:'синий', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3',
+    rhyme:'Синее море — ширь без края, синяя волна бежит, играя!',
+    items:[{e:'🎈',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🌌',f:'img_blue_2.jpg'},{e:'🌊',f:'img_blue_3.jpg'}] },
+  { name:'жёлтый', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3',
+    rhyme:'Жёлтое солнце светит нам, жёлтый одуванчик — тут и там!',
+    items:[{e:'🍌',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐤',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
+  { name:'зелёный', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3',
+    rhyme:'Зелёная трава — мягко и свежо, зелёный огурец — вкусно, хорошо!',
+    items:[{e:'🥒',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🌲',f:'img_green_2.jpg'},{e:'🌿',f:'img_green_3.jpg'}] },
+  { name:'оранжевый', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3',
+    rhyme:'Оранжевый апельсин — сочный и яркий, оранжевая морковка — вкусный подарок!',
+    items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🦊',f:'img_orange_2.jpg'},{e:'🥕',f:'img_orange_3.jpg'}] },
+  { name:'фиолетовый', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3',
+    rhyme:'Фиолетовая слива — сладкий секрет, фиолетовый баклажан — вот это цвет!',
+    items:[{e:'🍇',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'🍆',f:'img_purple_2.jpg'},{e:'🍑',f:'img_purple_3.jpg'}] },
+  { name:'розовый', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3',
+    rhyme:'Розовая свинка хрюкает: «Хрю!», розовый бантик — я его люблю!',
+    items:[{e:'🌸',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'🐷',f:'img_pink_2.jpg'},{e:'🍡',f:'img_pink_3.jpg'}] },
+  { name:'голубой', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3',
+    rhyme:'Голубой ручеёк поёт: «Жур-жур!», голубой цветок — как маленький узор!',
+    items:[{e:'☕',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'🏞️',f:'img_lightblue_2.jpg'},{e:'💧',f:'img_lightblue_3.jpg'}] },
+  { name:'коричневый', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3',
+    rhyme:'Коричневый мишка — плюшевый друг, коричневый шоколад — сладкий вокруг!',
+    items:[{e:'🐻',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'🍫',f:'img_brown_2.jpg'},{e:'🍄',f:'img_brown_3.jpg'}] },
+  { name:'чёрный', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3',
+    rhyme:'Чёрный пингвин шагает вперёд, чёрный уголёк тихонько ждёт!',
+    items:[{e:'🐱',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'🐧',f:'img_black_2.jpg'},{e:'⚫',f:'img_black_3.jpg'}] },
+  { name:'белый', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3',
+    rhyme:'Белый снег кружится — лёгкий полёт, белое молоко — тёплый уют!',
+    items:[{e:'🐰',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'🍬',f:'img_white_2.jpg'},{e:'❄️',f:'img_white_3.jpg'}] },
+  { name:'серый', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3',
+    rhyme:'Серый слоник топает: «Топ-топ!», серый зайчонок смотрит: «Оп-оп!»',
+    items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
 ];
 
 const ROUNDS = 10;
@@ -289,7 +314,7 @@ let walkFrame=1;
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
-const BEAR_W = 130, BEAR_H = 150;
+const BEAR_W = 120, BEAR_H = 140;
 
 function setPose(pose) {
   if (!bearImages[pose]) return;
@@ -332,6 +357,7 @@ function bearTeleport(x,y) {
 }
 function bearRunTo(x,y) { bear.style.left=x+'px'; bear.style.top=y+'px'; }
 
+// ====== ПАДЕНИЕ ======
 function bearFallFrom() {
   bearClearClasses();
   bear.classList.add('falling','front');
@@ -348,6 +374,8 @@ function bearFallFrom() {
     }, 600);
   }, 1500);
 }
+
+// ====== ПОДСКАЗКА — мишка СПУСКАЕТСЯ к цвету ======
 function bearPointTo(element) {
   bearClearClasses();
   bear.classList.add('front','pointing');
@@ -355,7 +383,14 @@ function bearPointTo(element) {
   setPose('sign');
   if (element) {
     const r = element.getBoundingClientRect();
-    bearRunTo(r.left + r.width/2 - BEAR_W/2, r.top + r.height/2 - BEAR_H/2);
+    // Встаём СЛЕВА или СПРАВА от карточки, не поверх неё
+    let x = r.left - BEAR_W - 10;
+    if (x < 10) x = r.right + 10;
+    // Y — на уровне карточки
+    let y = r.top + r.height / 2 - BEAR_H / 2;
+    // Не выходим за верх/низ
+    y = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, y));
+    bearRunTo(x, y);
   }
 }
 function bearStickTo(element) {
@@ -365,25 +400,38 @@ function bearStickTo(element) {
   setPose('sign');
   if (element) {
     const r = element.getBoundingClientRect();
-    const x = r.left - BEAR_W - 20;
-    const y = r.top + r.height/2 - BEAR_H/2;
-    if (x < 10) bearRunTo(r.right + 10, y);
-    else bearRunTo(x, y);
+    let x = r.left - BEAR_W - 30;
+    let y = r.top + r.height/2 - BEAR_H/2;
+    if (x < 10) x = r.right + 20;
+    y = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, y));
+    bearRunTo(x, y);
   }
 }
-function bearHideSpot() {
-  const box = document.getElementById('shapes');
-  if (!box) return { x: 0, y: 0 };
-  const r = box.getBoundingClientRect();
+
+// ====== ПРОГУЛКА ПО ВЕРХУ И НИЗУ ======
+function bearWalkSpot() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  // Мишка ходит ТОЛЬКО по верху и низу экрана
   const spots = [
-    { x: r.left - BEAR_W + 40, y: r.top + r.height * 0.3 },
-    { x: r.right - 40, y: r.top + r.height * 0.3 },
-    { x: r.left + r.width * 0.5 - BEAR_W/2, y: r.bottom - BEAR_H * 0.4 },
-    { x: r.left + r.width * 0.15, y: r.bottom - BEAR_H * 0.5 },
-    { x: r.right - r.width * 0.15 - BEAR_W, y: r.bottom - BEAR_H * 0.5 }
+    // Верхняя полоса (5–12% высоты)
+    { x: w * 0.05, y: h * 0.06 },
+    { x: w * 0.35, y: h * 0.08 },
+    { x: w * 0.65, y: h * 0.06 },
+    { x: w * 0.85, y: h * 0.10 },
+    // Нижняя полоса (82–92% высоты)
+    { x: w * 0.05, y: h * 0.85 },
+    { x: w * 0.35, y: h * 0.88 },
+    { x: w * 0.65, y: h * 0.85 },
+    { x: w * 0.85, y: h * 0.90 }
   ];
-  return spots[Math.floor(Math.random() * spots.length)];
+  const spot = spots[Math.floor(Math.random() * spots.length)];
+  // Ограничиваем координаты, чтобы мишка не выходил за края
+  spot.x = Math.max(5, Math.min(w - BEAR_W - 5, spot.x));
+  spot.y = Math.max(5, Math.min(h - BEAR_H - 5, spot.y));
+  return spot;
 }
+
 function startBearWalk() {
   stopBearWalk();
   bearClearClasses();
@@ -393,7 +441,7 @@ function startBearWalk() {
     if (!started || locked) return;
     if (bearImages.backpack && Math.random() < 0.15) setPose('backpack');
     else startWalkFrames();
-    const spot = bearHideSpot();
+    const spot = bearWalkSpot();
     bearRunTo(spot.x, spot.y);
     runTimer = setTimeout(walk, 3000 + Math.random() * 2000);
   };
@@ -403,13 +451,15 @@ function stopBearWalk() {
   if (runTimer) { clearTimeout(runTimer); runTimer = null; }
   stopWalkFrames();
 }
+
 function bearHappyMove() {
   stopBearWalk(); stopBlinking();
   bearClearClasses();
   bear.classList.add('happy','front');
   setPose('happy');
-  const cx = window.innerWidth/2 - BEAR_W/2;
-  const cy = window.innerHeight/2 - BEAR_H/2;
+  // Прыгает на месте — где был
+  const cx = Math.max(5, Math.min(window.innerWidth - BEAR_W - 5, window.innerWidth/2 - BEAR_W/2));
+  const cy = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, window.innerHeight*0.7));
   bearRunTo(cx, cy);
   setTimeout(() => {
     if (bearImages.heart) setPose('heart');
@@ -437,8 +487,8 @@ function bearDanceMove() {
   bearClearClasses();
   bear.classList.add('dancing','front');
   setPose('dance');
-  const cx = window.innerWidth/2 - BEAR_W/2;
-  const cy = window.innerHeight/2 - BEAR_H/2;
+  const cx = Math.max(5, Math.min(window.innerWidth - BEAR_W - 5, window.innerWidth/2 - BEAR_W/2));
+  const cy = Math.max(5, Math.min(window.innerHeight - BEAR_H - 5, window.innerHeight*0.7));
   bearRunTo(cx, cy);
   setTimeout(() => {
     if (bearImages.strong) setPose('strong');
@@ -552,11 +602,9 @@ async function startGame() {
   setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
-  setTimeout(() => {
-    setPose('idle');
-    bearTeleport(window.innerWidth/2 - BEAR_W/2, window.innerHeight*0.45);
-    bearFallFrom();
-  }, 800);
+  // Мишка падает — стартует сверху
+  bearTeleport(window.innerWidth*0.5 - BEAR_W/2, 10);
+  bearFallFrom();
   setTimeout(newRound, 2200);
 }
 
@@ -651,10 +699,7 @@ function startHintTimer() {
       });
       if (targetBtn) {
         targetBtn.classList.add('hint');
-        const r = targetBtn.getBoundingClientRect();
-        const spaceL = r.left - BEAR_W, spaceR = window.innerWidth - r.right - BEAR_W;
-        if (spaceL > 20 || spaceR > 20) bearPointTo(targetBtn);
-        else bearStickTo(targetBtn);
+        bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '!';
         bearSays(hint);
         setTimeout(() => sayVoiceOnly('Вот ' + target.name + '! Нажми сюда!'), 600);
@@ -732,7 +777,7 @@ function restartGame() {
   bearClearClasses();
   drawProgress();
   window._wowShown = false;
-  bearTeleport(window.innerWidth/2 - BEAR_W/2, window.innerHeight*0.45);
+  bearTeleport(window.innerWidth*0.5 - BEAR_W/2, 10);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
   bearSays(rt);
