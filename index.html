@@ -303,8 +303,8 @@ let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkT
 let walkFrame=1;
 let isHinting = false;
 let atTop = true;
-let musicPausedBySpeech = false;
-let hintAudio = null;
+let hintAudio = null;      // отдельный аудио для подсказок
+let musicAudioLoop = null; // отдельный Audio-элемент для музыки
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
@@ -484,31 +484,38 @@ function unlockAudio() {
     if (window._ctx.state === 'suspended') window._ctx.resume();
     const o = window._ctx.createOscillator();
     const g = window._ctx.createGain();
-    g.gain.value = 0.0001;
+    g.gain.value = 0.01;
+    o.frequency.value = 220;
     o.connect(g); g.connect(window._ctx.destination);
-    o.start(); o.stop(window._ctx.currentTime + 0.02);
+    o.start(); o.stop(window._ctx.currentTime + 0.05);
   } catch(e){}
+  // Разблокировка HTML5 Audio через тихий пустой буфер
   try {
     if (!window._silentAudio) {
-      window._silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
-      window._silentAudio.volume = 0.001;
+      window._silentAudio = new Audio();
+      window._silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQQAAAAAAA==';
+      window._silentAudio.volume = 0.01;
     }
-    window._silentAudio.play().catch(()=>{});
+    const pp = window._silentAudio.play();
+    if (pp && typeof pp.then === 'function') pp.catch(()=>{});
   } catch(e){}
 }
 
-// ====== MP3 — БЕЗ СИСТЕМНОГО ГОЛОСА ======
+// ====== MP3 (основная очередь) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
-  // Останавливаем предыдущий
   if (currentAudio) {
     try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
     currentAudio = null;
   }
-  if (musicTimer) { pauseMusic(); musicPausedBySpeech = true; }
+  if (musicAudioLoop) {
+    try { musicAudioLoop.pause(); } catch(e){}
+  }
   let failed = false;
   const restore = () => {
-    if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
+    if (musicAudioLoop && musicOn) {
+      try { musicAudioLoop.play(); } catch(e){}
+    }
   };
   const fallback = () => {
     if(failed) return;
@@ -535,47 +542,48 @@ function playMp3(mp3, fb, cb) {
   } catch(e) { fallback(); }
 }
 
-// ====== ОТДЕЛЬНАЯ ФУНКЦИЯ ДЛЯ HINT (без остановки других звуков) ======
+// ====== HINT MP3 — отдельная функция, не трогает основную очередь ======
 function playHintMp3(mp3) {
   if (!soundOn) return;
-  // Останавливаем только hint-звук, если был
   if (hintAudio) {
     try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
     hintAudio = null;
   }
-  // Приостанавливаем музыку
-  if (musicTimer) { pauseMusic(); musicPausedBySpeech = true; }
+  if (musicAudioLoop) {
+    try { musicAudioLoop.pause(); } catch(e){}
+  }
   try {
-    const a = new Audio('sounds/'+mp3);
+    const a = new Audio('sounds/' + mp3);
     a.volume = 1.0;
     hintAudio = a;
-    a.onerror = () => {
-      if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
-    };
-    a.onended = () => {
+    const resumeMusic = () => {
       hintAudio = null;
-      if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
+      if (musicAudioLoop && musicOn) {
+        try { musicAudioLoop.play(); } catch(e){}
+      }
     };
+    a.onerror = resumeMusic;
+    a.onended = resumeMusic;
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(() => {
-        if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
-      });
+      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(resumeMusic);
     }
   } catch(e) {
-    if (musicPausedBySpeech && musicOn) { musicPausedBySpeech = false; startMusic(); }
+    if (musicAudioLoop && musicOn) {
+      try { musicAudioLoop.play(); } catch(e){}
+    }
   }
 }
 
-// ====== ЗАГЛУШКА ======
-function sayVoiceOnly(text, cb) {
-  if (cb) cb();
-}
+function sayVoiceOnly(text, cb) { if (cb) cb(); }
 
+// ====== МУЗЫКА — через HTML5 Audio + Web Audio ======
+// Генерируем простую мелодию через Web Audio API, но запускаем через AudioContext
 const NOTE={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY=[['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS=340;
 let musicTimer=null, musicGainNode=null;
+
 function ensureMusicGain(){
   if(musicGainNode||!window._ctx) return;
   musicGainNode=window._ctx.createGain();
@@ -595,8 +603,20 @@ function playMusicNote(freq,dur){
   o.connect(g); g.connect(musicGainNode);
   o.start(now); o.stop(now+d);
 }
+
+// Музыкальный «маркер» — пустой Audio для обхода блокировки
+function ensureMusicAudioLoop() {
+  if (musicAudioLoop) return;
+  musicAudioLoop = new Audio();
+  musicAudioLoop.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQQAAAAAAA==';
+  musicAudioLoop.loop = true;
+  musicAudioLoop.volume = 0.01;  // беззвучный — просто держит разблокировку
+}
+
 function startMusic(){
   if(!musicOn||musicTimer||!window._ctx||settings.vol===0) return;
+  ensureMusicAudioLoop();
+  if (musicAudioLoop) { try { musicAudioLoop.play(); } catch(e){} }
   let i=0;
   const next=()=>{
     if(!musicOn){musicTimer=null;return;}
@@ -607,7 +627,10 @@ function startMusic(){
   };
   next();
 }
-function pauseMusic(){ if(musicTimer){clearTimeout(musicTimer);musicTimer=null;} }
+function pauseMusic(){
+  if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}
+  if (musicAudioLoop) { try { musicAudioLoop.pause(); } catch(e){} }
+}
 function toggleMusic(){
   unlockAudio();
   musicOn=!musicOn;
@@ -686,6 +709,7 @@ function startGameFromIntro() {
     setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
+  // Музыку запускаем СРАЗУ — теперь через Web Audio
   if (musicOn) startMusic();
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
@@ -793,7 +817,7 @@ function startHintTimer() {
         bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '! Нажми сюда!';
         bearSays(hint);
-        // Играем hint_<цвет>.mp3 БЕЗ ЗАДЕРЖКИ
+        // Играем hint_<цвет>.mp3 через ОТДЕЛЬНУЮ функцию
         playHintMp3('hint_' + target.nameEn + '.mp3');
       }
     }, 700);
