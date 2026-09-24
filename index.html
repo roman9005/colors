@@ -236,8 +236,8 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
     <label>⏱ Подсказка через:</label>
     <div class="opt" id="optTime">
       <button data-val="5000" onclick="setTime(5000,this)">5 сек</button>
-      <button data-val="8000" onclick="setTime(8000,this)" class="sel">8 сек</button>
-      <button data-val="12000" onclick="setTime(12000,this)">12 сек</button>
+      <button data-val="10000" onclick="setTime(10000,this)" class="sel">10 сек</button>
+      <button data-val="15000" onclick="setTime(15000,this)">15 сек</button>
     </div>
     <label>🎵 Громкость музыки:</label>
     <div class="opt" id="optVol">
@@ -253,7 +253,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 <div class="status" id="status">Готово</div>
 
 <script>
-const DEFAULTS = { diff: 4, timeMs: 8000, vol: 0.12, musicOn: true, soundOn: true };
+const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
 let settings = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) settings={...DEFAULTS,...s}; } catch(e){}
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
@@ -380,10 +380,15 @@ function bearFallFrom() {
 // ПОДСКАЗКА — мишка СТОИТ В ЦЕНТРЕ карточки пока не нажмут
 function bearPointTo(element) {
   isHinting = true;
+  // Жёстко останавливаем все таймеры прогулки
+  stopBearWalk();
+  stopBlinking();
+  stopWalkFrames();
+  clearTimeout(thinkTimer);
+  clearTimeout(runTimer);
+  // Очищаем классы и ставим "показывает"
   bearClearClasses();
   bear.classList.add('front','pointing');
-  stopWalkFrames();
-  stopBlinking();
   setPose('sign');
   if (element) {
     const r = element.getBoundingClientRect();
@@ -391,6 +396,12 @@ function bearPointTo(element) {
     const y = r.top + r.height / 2 - BEAR_H / 2;
     const p = clamp(x, y);
     bearRunTo(p.x, p.y);
+    // Держим мишку на месте — перезапускаем позицию каждые 500 мс
+    if (window._hintHoldInterval) clearInterval(window._hintHoldInterval);
+    window._hintHoldInterval = setInterval(() => {
+      if (!isHinting) { clearInterval(window._hintHoldInterval); return; }
+      bearRunTo(p.x, p.y);
+    }, 500);
   }
 }
 
@@ -402,10 +413,8 @@ function bearWalkSpot() {
   atTop = !atTop;
   let y;
   if (atTop) {
-    // Верхняя полоса — под звёздочками
     y = 8 + Math.random() * 20;
   } else {
-    // Нижняя полоса — в самом низу
     y = h - BEAR_H - 8 - Math.random() * 20;
   }
   const x = 10 + Math.random() * (w - BEAR_W - 20);
@@ -435,6 +444,7 @@ function stopBearWalk() {
 
 function bearHappyMove() {
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   stopBearWalk(); stopBlinking();
   bearClearClasses();
   bear.classList.add('happy','front');
@@ -462,6 +472,7 @@ function bearThinkMode() {
 }
 function bearDanceMove() {
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   stopBearWalk(); stopBlinking();
   bearClearClasses();
   bear.classList.add('dancing','front');
@@ -560,12 +571,10 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 const ENC=['enc_1.mp3','enc_2.mp3','enc_3.mp3'];
 
-// ПРИВЕТСТВИЕ — ОДИН РАЗ, только через mp3 (или fallback)
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
-  // Одна озвучка — через mp3 hello.mp3 или системным голосом
   playMp3('hello.mp3', helloText, () => {
     setTimeout(startGame, 200);
   });
@@ -588,6 +597,7 @@ async function startGame() {
 function newRound() {
   stopHint();
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   locked = false;
   target = COLORS[Math.floor(Math.random()*COLORS.length)];
   const count = settings.diff;
@@ -626,6 +636,7 @@ function handleClick(c, btn, e) {
   if (locked || !started) return;
   stopHint();
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   const rect = btn.getBoundingClientRect();
   const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
   if (c.name === target.name) {
@@ -741,6 +752,7 @@ function showLearn(c, callback) {
 function showWin() {
   stopBearWalk(); stopHint(); stopBlinking();
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   document.getElementById('winScreen').classList.add('on');
   salute();
   bearDanceMove();
@@ -758,6 +770,7 @@ function restartGame() {
   drawProgress();
   window._wowShown = false;
   isHinting = false;
+  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   bearTeleport(20, 5);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
