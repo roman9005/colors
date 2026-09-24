@@ -303,10 +303,18 @@ let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkT
 let walkFrame=1;
 let isHinting = false;
 let atTop = true;
-let hintAudio = null;
 let audioCtx = null;
 let musicTimer = null;
 let musicGainNode = null;
+
+// МУЗЫКАЛЬНЫЙ ПЛЕЕР — один Audio, чтобы не блокировался
+let musicPlayer = null;
+
+// HINT-ПЛЕЕР — один Audio для всех подсказок
+let hintPlayer = null;
+
+// ENC-ПЛЕЕР — один Audio для ошибок с цветом
+let encPlayer = null;
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
@@ -478,6 +486,9 @@ function bearDanceMove() {
   }, 1300);
 }
 
+// ============================================
+// AUDIO CONTEXT ДЛЯ МУЗЫКИ
+// ============================================
 function getCtx() {
   if (audioCtx) return audioCtx;
   try {
@@ -486,20 +497,52 @@ function getCtx() {
   return audioCtx;
 }
 
-function unlockAudio() {
+// ============================================
+// ИНИЦИАЛИЗАЦИЯ ВСЕХ ПЛЕЕРОВ — ВНУТРИ КЛИКА
+// ============================================
+const SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQQAAAAAAA==';
+
+function initPlayers() {
+  // Инициализация Web Audio
   const ctx = getCtx();
-  if (!ctx) return;
-  if (ctx.state === 'suspended') ctx.resume();
-  try {
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    g.gain.value = 0.001;
-    o.frequency.value = 220;
-    o.connect(g); g.connect(ctx.destination);
-    o.start(); o.stop(ctx.currentTime + 0.05);
-  } catch(e){}
+  if (ctx) {
+    if (ctx.state === 'suspended') ctx.resume();
+    try {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      g.gain.value = 0.001;
+      o.frequency.value = 220;
+      o.connect(g); g.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime + 0.05);
+    } catch(e){}
+  }
+
+  // Создаём и разблокируем hint-плеер
+  if (!hintPlayer) {
+    hintPlayer = new Audio();
+    hintPlayer.volume = 1.0;
+    try {
+      hintPlayer.src = SILENT_WAV;
+      const p1 = hintPlayer.play();
+      if (p1 && p1.then) p1.then(() => hintPlayer.pause()).catch(()=>{});
+    } catch(e){}
+  }
+
+  // Создаём и разблокируем enc-плеер
+  if (!encPlayer) {
+    encPlayer = new Audio();
+    encPlayer.volume = 1.0;
+    try {
+      encPlayer.src = SILENT_WAV;
+      const p2 = encPlayer.play();
+      if (p2 && p2.then) p2.then(() => encPlayer.pause()).catch(()=>{});
+    } catch(e){}
+  }
 }
 
+// ============================================
+// МУЗЫКА (Web Audio)
+// ============================================
 const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS = 340;
@@ -550,8 +593,23 @@ function pauseMusic() {
   if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
 }
 
+// Возобновление музыки с задержкой — если она играла
+let _musicWasPlaying = false;
+function rememberMusic() {
+  _musicWasPlaying = !!musicTimer;
+  if (_musicWasPlaying) pauseMusic();
+}
+function resumeMusic() {
+  if (_musicWasPlaying && musicOn && !musicTimer) {
+    setTimeout(() => {
+      if (musicOn && !musicTimer) startMusic();
+    }, 150);
+  }
+  _musicWasPlaying = false;
+}
+
 function toggleMusic() {
-  unlockAudio();
+  initPlayers();
   musicOn = !musicOn;
   settings.musicOn = musicOn;
   saveSettings();
@@ -559,22 +617,21 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
+// ============================================
+// MP3 — ОБЫЧНЫЙ ЗВУК (вопросы, стишки, похвала)
+// ============================================
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (currentAudio) {
     try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
     currentAudio = null;
   }
-  const wasMusic = !!musicTimer;
-  if (wasMusic) pauseMusic();
+  rememberMusic();
   let failed = false;
-  const restore = () => {
-    if (wasMusic && musicOn && !musicTimer) startMusic();
-  };
   const fallback = () => {
     if(failed) return;
     failed = true;
-    restore();
+    resumeMusic();
     if(cb) cb();
   };
   try {
@@ -582,56 +639,92 @@ function playMp3(mp3, fb, cb) {
     a.volume = 1.0;
     currentAudio = a;
     a.onerror = fallback;
-    a.onended = () => { restore(); if(cb) cb(); };
+    // Страховка: если onended не сработал за 12 сек
+    const safety = setTimeout(() => {
+      if (currentAudio === a) {
+        console.warn('mp3 timeout:', mp3);
+        resumeMusic();
+      }
+    }, 12000);
+    a.onended = () => {
+      clearTimeout(safety);
+      resumeMusic();
+      if(cb) cb();
+    };
     const p = a.play();
     if (p && typeof p.then === 'function') {
       p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
     }
-    setTimeout(() => {
-      if (failed) return;
-      if (a.readyState === 0) fallback();
-    }, 3000);
   } catch(e) { fallback(); }
 }
 
 // ============================================
-// ПОДСКАЗКА — через ЕДИНЫЙ playMp3
+// HINT MP3 — через ОТДЕЛЬНЫЙ переиспользуемый плеер
 // ============================================
 function playHintMp3(mp3) {
   if (!soundOn) return;
-  if (hintAudio) {
-    try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
-    hintAudio = null;
-  }
-  const wasMusic = !!musicTimer;
-  if (wasMusic) pauseMusic();
+  if (!hintPlayer) initPlayers();
+  if (!hintPlayer) return;
+
+  rememberMusic();
+
   try {
-    const a = new Audio('sounds/' + mp3);
-    a.volume = 1.0;
-    hintAudio = a;
-    const resume = () => {
-      hintAudio = null;
-      if (wasMusic && musicOn && !musicTimer) startMusic();
-    };
-    a.onerror = () => { console.warn('hint error:', mp3); resume(); };
-    a.onended = resume;
-    const p = a.play();
+    hintPlayer.pause();
+    hintPlayer.currentTime = 0;
+    hintPlayer.src = 'sounds/' + mp3;
+    hintPlayer.volume = 1.0;
+    hintPlayer.onended = () => { resumeMusic(); };
+    hintPlayer.onerror = () => { console.warn('hint error:', mp3); resumeMusic(); };
+    const p = hintPlayer.play();
     if (p && typeof p.then === 'function') {
       p.then(() => {
         setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true);
         console.log('HINT PLAYING:', mp3);
       }).catch(e => {
         console.warn('hint play error:', e);
-        resume();
+        resumeMusic();
       });
     }
   } catch(e) {
     console.warn('hint exception:', e);
-    if (wasMusic && musicOn) startMusic();
+    resumeMusic();
   }
 }
 
-function sayVoiceOnly(text, cb) { if (cb) cb(); }
+// ============================================
+// ENC MP3 — через ОТДЕЛЬНЫЙ переиспользуемый плеер
+// ============================================
+function playEncMp3(mp3, cb) {
+  if (!soundOn) { if (cb) cb(); return; }
+  if (!encPlayer) initPlayers();
+  if (!encPlayer) {
+    if(cb) cb();
+    return;
+  }
+
+  rememberMusic();
+
+  try {
+    encPlayer.pause();
+    encPlayer.currentTime = 0;
+    encPlayer.src = 'sounds/' + mp3;
+    encPlayer.volume = 1.0;
+    const finish = () => { resumeMusic(); if(cb) cb(); };
+    encPlayer.onended = finish;
+    encPlayer.onerror = () => { console.warn('enc error:', mp3); finish(); };
+    const p = encPlayer.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(e => {
+        console.warn('enc play error:', e);
+        finish();
+      });
+    }
+  } catch(e) {
+    console.warn('enc exception:', e);
+    resumeMusic();
+    if(cb) cb();
+  }
+}
 
 function setStatus(m,bg,autoHide){
   const el=document.getElementById('status');
@@ -690,43 +783,17 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 
 // ============================================
-// СТАРТ — с прогревом hint-файлов
+// СТАРТ
 // ============================================
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
-  unlockAudio();
+  initPlayers();
   started = true;
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
   bearFallFrom();
-  if (musicOn) {
-    setTimeout(() => { startMusic(); }, 100);
-  }
-
-  // ============================================
-  // ПРОГРЕВ ВСЕХ HINT-ФАЙЛОВ — ВНУТРИ КЛИКА!
-  // Это разрешает браузеру играть их через 10 секунд
-  // ============================================
-  console.log('Прогреваю hint-файлы...');
-  COLORS.forEach(c => {
-    try {
-      const a = new Audio('sounds/' + c.hintFile);
-      a.volume = 0.01;
-      const p = a.play();
-      if (p && typeof p.then === 'function') {
-        p.then(() => {
-          // Прогрели успешно — останавливаем и делаем громким
-          setTimeout(() => {
-            try { a.pause(); a.currentTime = 0; a.volume = 1.0; } catch(e){}
-          }, 50);
-        }).catch(() => {
-          console.warn('Не удалось прогреть:', c.hintFile);
-        });
-      }
-    } catch(e){}
-  });
-
+  if (musicOn) startMusic();
   findBearImages().then(found => {
     setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
@@ -771,7 +838,7 @@ function newRound() {
 }
 
 function repeatQuestion() {
-  unlockAudio();
+  initPlayers();
   if (!started || !target) return;
   playMp3(target.file);
 }
@@ -812,7 +879,7 @@ function handleClick(c, btn, e) {
     bearSadMove();
     const enc = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(enc);
-    playMp3(c.encFile, null, () => {
+    playEncMp3(c.encFile, () => {
       startHintTimer();
     });
   }
@@ -837,7 +904,7 @@ function startHintTimer() {
         bearPointTo(targetBtn);
         const hint = 'Вот ' + target.name + '! Нажми сюда!';
         bearSays(hint);
-        console.log('Играю подсказку:', target.hintFile);
+        console.log('HINT:', target.hintFile);
         playHintMp3(target.hintFile);
       }
     }, 700);
@@ -917,7 +984,7 @@ function restartGame() {
   window._wowShown = false;
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
-  unlockAudio();
+  initPlayers();
   if (musicOn && !musicTimer) startMusic();
   bearTeleport(20, 140);
   bearFallFrom();
@@ -933,8 +1000,9 @@ function toggleSound() {
   document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
   if (!soundOn) {
     if (currentAudio) { try{ currentAudio.pause(); }catch(e){} }
-    if (hintAudio) { try{ hintAudio.pause(); }catch(e){} }
-  } else unlockAudio();
+    if (hintPlayer) { try{ hintPlayer.pause(); }catch(e){} }
+    if (encPlayer) { try{ encPlayer.pause(); }catch(e){} }
+  } else initPlayers();
 }
 
 function explode(x, y, type) {
