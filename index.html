@@ -566,7 +566,7 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ====== MP3 ======
+// ====== MP3 (Audio из пула + снятие muted) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
 
@@ -725,34 +725,6 @@ function startGameFromIntro() {
   if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
 
-  // Прогрев всех звуков — muted=true гарантирует тишину
-  if (!hintPoolPrimed) {
-    hintPoolPrimed = true;
-    const allSounds = [];
-    COLORS.forEach(c => {
-      allSounds.push(c.file, c.hintFile, c.rhymeFile, c.encFile);
-    });
-    PRAISE.forEach(p => allSounds.push(p));
-    allSounds.push('hello.mp3', 'win.mp3', 'lets_go.mp3');
-
-    allSounds.forEach(f => {
-      try {
-        const a = new Audio();
-        a.preload = 'auto';
-        a.src = 'sounds/' + f;
-        a.muted = true;
-        hintAudioPool[f] = a;
-        const p = a.play();
-        if (p && typeof p.then === 'function') {
-          p.then(() => {
-            a.pause();
-            a.currentTime = 0;
-          }).catch(() => {});
-        }
-      } catch(e) {}
-    });
-  }
-
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
@@ -763,15 +735,48 @@ function startGameFromIntro() {
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
 
-  // ✏️ Задержка 2000 → 500 мс — мишка здоровается почти сразу
-  setTimeout(() => {
-    const helloText = 'Привет! Я — Мишка! Давай поиграем!';
-    bearSays(helloText);
-    playMp3('hello.mp3', null, () => {
-      if (musicOn) startMusic();
-      setTimeout(newRound, 400);
+  // ✏️ Мишка здоровается СРАЗУ — без setTimeout, без задержки
+  const helloText = 'Привет! Я — Мишка! Давай поиграем!';
+  bearSays(helloText);
+  playMp3('hello.mp3', null, () => {
+    if (musicOn) startMusic();
+    setTimeout(newRound, 400);
+  });
+
+  // ✏️ Прогрев звуков — ПОРЦИЯМИ по 4 файла каждые 40 мс,
+  // чтобы не блокировать главный поток и не тормозить hello.mp3
+  if (!hintPoolPrimed) {
+    hintPoolPrimed = true;
+    const allSounds = [];
+    COLORS.forEach(c => {
+      allSounds.push(c.file, c.hintFile, c.rhymeFile, c.encFile);
     });
-  }, 500);
+    PRAISE.forEach(p => allSounds.push(p));
+    allSounds.push('win.mp3', 'lets_go.mp3');
+
+    let idx = 0;
+    function prime() {
+      const end = Math.min(idx + 4, allSounds.length);
+      for (; idx < end; idx++) {
+        try {
+          const a = new Audio();
+          a.preload = 'auto';
+          a.src = 'sounds/' + allSounds[idx];
+          a.muted = true;
+          hintAudioPool[allSounds[idx]] = a;
+          const p = a.play();
+          if (p && typeof p.then === 'function') {
+            p.then(() => {
+              a.pause();
+              a.currentTime = 0;
+            }).catch(() => {});
+          }
+        } catch(e) {}
+      }
+      if (idx < allSounds.length) setTimeout(prime, 40);
+    }
+    prime();
+  }
 }
 
 function newRound() {
