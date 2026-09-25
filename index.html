@@ -566,11 +566,10 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ====== MP3 (ИСПРАВЛЕНО: убран 3-сек таймаут, Audio берётся из пула) ======
+// ====== MP3 (Audio из пула + снятие muted) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
 
-  // Останавливаем все предыдущие голоса
   if (hintAudio) {
     try { hintAudio.pause(); } catch(e){}
     hintAudio = null;
@@ -595,17 +594,16 @@ function playMp3(mp3, fb, cb) {
   };
 
   try {
-    // Берём прогретый Audio из пула — он уже загружен, readyState=4
     let a = hintAudioPool[mp3];
     if (!a) {
       a = new Audio('sounds/' + mp3);
       a.preload = 'auto';
       hintAudioPool[mp3] = a;
     }
-    // Сброс в начало и включение звука (в пуле он мог быть на volume 0)
     try {
       a.pause();
       a.currentTime = 0;
+      a.muted = false;      // ← снимаем mute
       a.volume = 1.0;
     } catch(e) {}
     currentAudio = a;
@@ -615,11 +613,10 @@ function playMp3(mp3, fb, cb) {
     if (p && typeof p.then === 'function') {
       p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(finish);
     }
-    // ❌ Удалён блок setTimeout с readyState — именно он ломал первый запуск
   } catch(e) { finish(); }
 }
 
-// ====== HINT MP3 ======
+// ====== HINT MP3 (тоже снимаем muted) ======
 function playHintMp3(mp3) {
   if (!soundOn) return;
   if (currentAudio) {
@@ -650,6 +647,7 @@ function playHintMp3(mp3) {
   try {
     a.pause();
     a.currentTime = 0;
+    a.muted = false;      // ← снимаем mute
     a.volume = 1.0;
   } catch(e) {}
   const p = a.play();
@@ -727,7 +725,7 @@ function startGameFromIntro() {
   if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
 
-  // Прогрев всех звуков на громкости 0
+  // Прогрев всех звуков — muted=true гарантирует тишину
   if (!hintPoolPrimed) {
     hintPoolPrimed = true;
     const allSounds = [];
@@ -742,14 +740,14 @@ function startGameFromIntro() {
         const a = new Audio();
         a.preload = 'auto';
         a.src = 'sounds/' + f;
-        a.volume = 0;
+        a.muted = true;      // ← muted, не volume=0
         hintAudioPool[f] = a;
         const p = a.play();
         if (p && typeof p.then === 'function') {
           p.then(() => {
             a.pause();
             a.currentTime = 0;
-            // volume оставляем 0 — playMp3 сам выставит 1.0 перед игрой
+            // muted оставляем true — playMp3 снимет сам
           }).catch(() => {});
         }
       } catch(e) {}
@@ -766,7 +764,7 @@ function startGameFromIntro() {
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
 
-  // Через 2 секунды — мишка здоровается. Только после hello → музыка и первый раунд.
+  // Через 2 сек — мишка здоровается. Только после hello → музыка и первый раунд.
   setTimeout(() => {
     const helloText = 'Привет! Я — Мишка! Давай поиграем!';
     bearSays(helloText);
