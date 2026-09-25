@@ -37,7 +37,7 @@
   .shape:active{transform:translateY(6px)}
   .shape.ok{animation:pulse .7s ease}
   .shape.no{animation:shake .5s ease}
-  .shape.hint{box-shadow:0 0 0 6px #FFD700, 0 0 30px #FFD700 !important;animation:pulseHint 1s ease-in-out infinite}
+  .shape.hint{box-shadow:0 0 0 6px #FFD700,0 0 30px #FFD700;animation:pulseHint 1s ease-in-out infinite}
   @keyframes pulseHint{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
   @keyframes pulse{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.95)}100%{transform:scale(1)}}
@@ -45,7 +45,7 @@
   .shape[data-white="1"]{border:3px solid #ccc}
 
   .bear-runner{position:fixed;z-index:20;width:100px;height:120px;pointer-events:none;transform-origin:center bottom;opacity:.98;transition:left 1s ease,top 1s ease;left:20px;top:140px}
-  .bear-runner img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 10px rgba(60,30,10,.35))}
+  .bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
   .bear-runner.idle img{animation:bearBreathe 2.5s ease-in-out infinite}
   @keyframes bearBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
   .bear-runner.sad img{animation:bearSad 1.2s ease}
@@ -54,8 +54,6 @@
   @keyframes bearPoint{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
   .bear-runner.happy img{animation:bearHappy 1.4s ease}
   @keyframes bearHappy{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-40px) scale(1.15)}60%{transform:translateY(0) scale(1)}80%{transform:translateY(-15px) scale(1.05)}100%{transform:translateY(0) scale(1)}}
-  .bear-runner.walking img{animation:bearWalk .5s ease-in-out infinite}
-  @keyframes bearWalk{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
 
   .settings{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px}
   .settings.on{display:flex}
@@ -119,9 +117,9 @@
     <label>🎵 Громкость музыки:</label>
     <div class="opt" id="optVol">
       <button data-val="0" onclick="setVol(0,this)">Выкл</button>
-      <button data-val="0.08" onclick="setVol(0.08,this)">Тихо</button>
-      <button data-val="0.15" onclick="setVol(0.15,this)" class="sel">Средне</button>
-      <button data-val="0.25" onclick="setVol(0.25,this)">Громко</button>
+      <button data-val="0.05" onclick="setVol(0.05,this)">Тихо</button>
+      <button data-val="0.12" onclick="setVol(0.12,this)" class="sel">Средне</button>
+      <button data-val="0.2" onclick="setVol(0.2,this)">Громко</button>
     </div>
     <button class="close" onclick="closeSettings()">✕ Закрыть</button>
   </div>
@@ -129,9 +127,9 @@
 
 <script>
 // ============================================================
-//  НАСТРОЙКИ (сверху, чтобы были доступны везде)
+//  НАСТРОЙКИ — сверху
 // ============================================================
-const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.15, soundOn: true, musicOn: true };
+const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
 let settings = { ...DEFAULTS };
 try {
   const s = JSON.parse(localStorage.getItem('igra_nastr') || 'null');
@@ -148,19 +146,18 @@ let musicOn = settings.musicOn;
 //  ЦВЕТА
 // ============================================================
 const COLORS = [
-  { name:'красный',    hex:'#FF1744', file:'q_red.mp3',       hintFile:'hint_red.mp3',       encFile:'enc_red.mp3' },
-  { name:'синий',      hex:'#1565FF', file:'q_blue.mp3',      hintFile:'hint_blue.mp3',      encFile:'enc_blue.mp3' },
-  { name:'зелёный',    hex:'#00C853', file:'q_green.mp3',     hintFile:'hint_green.mp3',     encFile:'enc_green.mp3' },
-  { name:'жёлтый',     hex:'#FFD600', file:'q_yellow.mp3',    hintFile:'hint_yellow.mp3',    encFile:'enc_yellow.mp3' },
-  { name:'фиолетовый', hex:'#9C27FF', file:'q_purple.mp3',    hintFile:'hint_purple.mp3',    encFile:'enc_purple.mp3' },
-  { name:'оранжевый',  hex:'#FF6D00', file:'q_orange.mp3',    hintFile:'hint_orange.mp3',    encFile:'enc_orange.mp3' },
-  { name:'розовый',    hex:'#FF1493', file:'q_pink.mp3',      hintFile:'hint_pink.mp3',      encFile:'enc_pink.mp3' },
-  { name:'коричневый', hex:'#8D4A22', file:'q_brown.mp3',     hintFile:'hint_brown.mp3',     encFile:'enc_brown.mp3' },
-  { name:'чёрный',     hex:'#111111', file:'q_black.mp3',     hintFile:'hint_black.mp3',     encFile:'enc_black.mp3' },
-  { name:'белый',      hex:'#FFFFFF', file:'q_white.mp3',     hintFile:'hint_white.mp3',     encFile:'enc_white.mp3' }
+  { name:'красный',    hex:'#FF1744', file:'q_red.mp3',    hintFile:'hint_red.mp3',    encFile:'enc_red.mp3' },
+  { name:'синий',      hex:'#1565FF', file:'q_blue.mp3',   hintFile:'hint_blue.mp3',   encFile:'enc_blue.mp3' },
+  { name:'зелёный',    hex:'#00C853', file:'q_green.mp3',  hintFile:'hint_green.mp3',  encFile:'enc_green.mp3' },
+  { name:'жёлтый',     hex:'#FFD600', file:'q_yellow.mp3', hintFile:'hint_yellow.mp3', encFile:'enc_yellow.mp3' },
+  { name:'фиолетовый', hex:'#9C27FF', file:'q_purple.mp3', hintFile:'hint_purple.mp3', encFile:'enc_purple.mp3' },
+  { name:'оранжевый',  hex:'#FF6D00', file:'q_orange.mp3', hintFile:'hint_orange.mp3', encFile:'enc_orange.mp3' },
+  { name:'розовый',    hex:'#FF1493', file:'q_pink.mp3',   hintFile:'hint_pink.mp3',   encFile:'enc_pink.mp3' },
+  { name:'коричневый', hex:'#8D4A22', file:'q_brown.mp3',  hintFile:'hint_brown.mp3',  encFile:'enc_brown.mp3' },
+  { name:'чёрный',     hex:'#111111', file:'q_black.mp3',  hintFile:'hint_black.mp3',  encFile:'enc_black.mp3' },
+  { name:'белый',      hex:'#FFFFFF', file:'q_white.mp3',  hintFile:'hint_white.mp3',  encFile:'enc_white.mp3' }
 ];
-
-const PRAISE = ['praise_1.mp3', 'praise_2.mp3', 'praise_3.mp3', 'praise_4.mp3'];
+const PRAISE = ['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 const ROUNDS = 10;
 
 // ============================================================
@@ -169,7 +166,6 @@ const ROUNDS = 10;
 let score = 0, round = 0, locked = false, started = false;
 let target = null, opts = [];
 let hintTimer = null, hintRepeatTimer = null;
-let walkTimer = null;
 let isHinting = false;
 let currentVoice = null;
 let currentHintVoice = null;
@@ -187,12 +183,9 @@ const el = {
 };
 
 // ============================================================
-//  AUDIO CONTEXT + ФОНОВАЯ МУЗЫКА
+//  ФОНОВАЯ МУЗЫКА (простая, синтезом)
 // ============================================================
-let audioCtx = null;
-let musicGainNode = null;
-let musicTimer = null;
-let musicWatchdog = null;
+let audioCtx = null, musicGainNode = null, musicTimer = null;
 
 function getCtx() {
   if (!audioCtx) {
@@ -213,8 +206,7 @@ function ensureMusicGain() {
   return musicGainNode;
 }
 
-// Простая весёлая мелодия
-const NOTE = { C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880.00, B5:987.77, R:0 };
+const NOTE = { C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880.00, R:0 };
 const MELODY = [
   ['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],
   ['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],
@@ -256,53 +248,46 @@ function startMusic() {
     i = (i + 1) % MELODY.length;
   };
   next();
-  // Страховка: если через 2 сек музыка не заиграла — перезапуск
-  clearTimeout(musicWatchdog);
-  musicWatchdog = setTimeout(() => {
-    if (musicOn && !musicTimer && started) startMusic();
-  }, 2000);
 }
 
 function pauseMusic() {
   if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
-  clearTimeout(musicWatchdog);
-  musicWatchdog = null;
 }
 
 // ============================================================
-//  УНИВЕРСАЛЬНОЕ ВОСПРОИЗВЕДЕНИЕ MP3
-//  Пауза музыки → играет голос → возобновление музыки
+//  ВОСПРОИЗВЕДЕНИЕ MP3
+//  Ключевое: перед проигрыванием — пауза музыки.
+//  После окончания — возобновление.
 // ============================================================
-function playVoice(mp3, onEnd, isHintVoice) {
+function playVoice(mp3, onEnd, isHint) {
   if (!soundOn) { if (onEnd) onEnd(); return; }
 
-  // Останавливаем предыдущий голос
-  const prev = isHintVoice ? currentHintVoice : currentVoice;
+  // Останавливаем предыдущий голос того же типа
+  const prev = isHint ? currentHintVoice : currentVoice;
   if (prev) {
     try { prev.pause(); prev.currentTime = 0; } catch (e) {}
   }
 
-  // Пауза музыки
+  // Пауза музыки на время голоса
   const wasMusicPlaying = !!musicTimer;
   if (wasMusicPlaying) pauseMusic();
 
-  // Возобновление музыки после голоса
   const resumeMusic = () => {
     if (wasMusicPlaying && musicOn && !musicTimer) {
-      setTimeout(() => { if (musicOn && !musicTimer && started) startMusic(); }, 120);
+      setTimeout(() => { if (musicOn && !musicTimer && started) startMusic(); }, 150);
     }
   };
 
   try {
     const audio = new Audio('sounds/' + mp3);
     audio.volume = 1.0;
-    if (isHintVoice) currentHintVoice = audio; else currentVoice = audio;
+    if (isHint) currentHintVoice = audio; else currentVoice = audio;
 
     let done = false;
     const finish = () => {
       if (done) return;
       done = true;
-      if (isHintVoice) currentHintVoice = null; else currentVoice = null;
+      if (isHint) currentHintVoice = null; else currentVoice = null;
       resumeMusic();
       if (onEnd) onEnd();
     };
@@ -310,10 +295,8 @@ function playVoice(mp3, onEnd, isHintVoice) {
     audio.onerror = finish;
     audio.onended = finish;
     const p = audio.play();
-    if (p && typeof p.then === 'function') {
-      p.catch(() => { finish(); });
-    }
-    // Таймаут — если файл не проигрался за 5 сек, считаем что "закончил"
+    if (p && typeof p.then === 'function') p.catch(() => finish());
+    // Страховка на случай, если MP3 отсутствует
     setTimeout(() => { if (!done && audio.readyState === 0) finish(); }, 5000);
   } catch (e) {
     resumeMusic();
@@ -325,7 +308,7 @@ function playVoice(mp3, onEnd, isHintVoice) {
 //  ПОЗЫ МИШКИ
 // ============================================================
 function setBearPose(pose, img) {
-  el.bear.classList.remove('idle', 'happy', 'sad', 'pointing', 'walking');
+  el.bear.classList.remove('idle','happy','sad','pointing');
   if (pose) el.bear.classList.add(pose);
   if (img) el.bearImg.src = 'images/' + img;
 }
@@ -336,46 +319,14 @@ function bearSay(text, mp3, isHint) {
 }
 
 // ============================================================
-//  ХОДЬБА МИШКИ
-// ============================================================
-function startBearWalk() {
-  stopBearWalk();
-  if (!started || locked || isHinting) return;
-  const walk = () => {
-    if (!started || locked || isHinting) return;
-    const w = window.innerWidth, h = window.innerHeight;
-    const x = 20 + Math.random() * (w - 140);
-    const y = Math.random() < 0.5
-      ? 100 + Math.random() * 60
-      : h - 260 + Math.random() * 40;
-    el.bear.style.left = x + 'px';
-    el.bear.style.top = y + 'px';
-    setBearPose('walking', 'bear_walk_1.png');
-    walkTimer = setTimeout(() => {
-      el.bearImg.src = 'images/bear_walk_2.png';
-      walkTimer = setTimeout(() => {
-        if (!locked && !isHinting) setBearPose('idle', 'bear_idle.png');
-        walkTimer = setTimeout(walk, 2000 + Math.random() * 1500);
-      }, 400);
-    }, 1200);
-  };
-  walkTimer = setTimeout(walk, 500);
-}
-
-function stopBearWalk() {
-  if (walkTimer) { clearTimeout(walkTimer); walkTimer = null; }
-}
-
-// ============================================================
 //  ПОДСКАЗКА — мишка идёт к правильной кнопке
 // ============================================================
 function moveBearToButton(btn) {
   const r = btn.getBoundingClientRect();
-  const bearW = 100, bearH = 120;
-  let x = r.left + r.width / 2 - bearW / 2;
-  let y = r.top - bearH - 10;
-  x = Math.max(10, Math.min(window.innerWidth - bearW - 10, x));
-  y = Math.max(70, Math.min(window.innerHeight - bearH - 10, y));
+  let x = r.left + r.width / 2 - 50;
+  let y = r.top - 130;
+  x = Math.max(10, Math.min(window.innerWidth - 110, x));
+  y = Math.max(70, Math.min(window.innerHeight - 130, y));
   el.bear.style.left = x + 'px';
   el.bear.style.top = y + 'px';
 }
@@ -383,32 +334,25 @@ function moveBearToButton(btn) {
 function showHint() {
   if (locked || !started || !target || isHinting) return;
 
-  const buttons = el.shapes.querySelectorAll('.shape');
   let targetBtn = null;
-  buttons.forEach(b => {
+  el.shapes.querySelectorAll('.shape').forEach(b => {
     const lbl = b.querySelector('.label');
     if (lbl && lbl.textContent === target.name) targetBtn = b;
   });
   if (!targetBtn) return;
 
   isHinting = true;
-  stopBearWalk();
   setBearPose('pointing', 'bear_sign.png');
   targetBtn.classList.add('hint');
   moveBearToButton(targetBtn);
 
   const hintText = 'Вот ' + target.name + '! Жми сюда!';
   el.sayBox.textContent = '🐻 ' + hintText;
-
-  // Играем hint_<цвет>.mp3 — голос мишки
   playVoice(target.hintFile, null, true);
 
-  // Повтор подсказки каждые 5 секунд, пока ребёнок не нажмёт
   if (hintRepeatTimer) clearInterval(hintRepeatTimer);
   hintRepeatTimer = setInterval(() => {
-    if (locked || !isHinting) {
-      clearInterval(hintRepeatTimer); hintRepeatTimer = null; return;
-    }
+    if (locked || !isHinting) { clearInterval(hintRepeatTimer); hintRepeatTimer = null; return; }
     el.sayBox.textContent = '🐻 ' + hintText;
     moveBearToButton(targetBtn);
     playVoice(target.hintFile, null, true);
@@ -422,7 +366,7 @@ function stopHint() {
     try { currentHintVoice.pause(); currentHintVoice.currentTime = 0; } catch (e) {}
     currentHintVoice = null;
   }
-  document.querySelectorAll('#shapes .shape').forEach(b => b.classList.remove('hint'));
+  el.shapes.querySelectorAll('.shape').forEach(b => b.classList.remove('hint'));
   isHinting = false;
 }
 
@@ -439,20 +383,13 @@ function startHintTimer() {
 //  ИГРОВОЙ ЦИКЛ
 // ============================================================
 function startGame() {
-  score = 0;
-  round = 0;
-  started = true;
-  locked = false;
-
-  // Разблокировка звука по клику
+  score = 0; round = 0; started = true; locked = false;
   getCtx();
-
   el.intro.classList.add('off');
   setBearPose('idle', 'bear_idle.png');
   el.bear.style.left = '20px';
   el.bear.style.top = '140px';
 
-  // Приветствие + старт музыки после
   playVoice('hello.mp3', () => {
     if (musicOn) setTimeout(() => startMusic(), 200);
     setTimeout(newRound, 400);
@@ -464,7 +401,7 @@ function newRound() {
   locked = true;
 
   if (round >= ROUNDS) {
-    // ПОБЕДА
+    // Победа
     el.q.textContent = '🎉 Ты выучил все цвета! 🎉';
     el.shapes.innerHTML = '';
     el.sayBox.textContent = '🐻 Ура! Мы всё выучили!';
@@ -476,10 +413,7 @@ function newRound() {
   round++;
   el.score.textContent = 'Счёт: ' + score + ' / ' + ROUNDS;
 
-  // Выбираем правильный цвет
   target = COLORS[Math.floor(Math.random() * COLORS.length)];
-
-  // Собираем варианты
   const count = Math.min(settings.diff, COLORS.length);
   opts = [target];
   let guard = 0;
@@ -489,11 +423,9 @@ function newRound() {
   }
   opts.sort(() => Math.random() - 0.5);
 
-  // Вопрос
   el.q.textContent = 'Найди цвет: «' + target.name.toUpperCase() + '»!';
   el.sayBox.textContent = '🐻 Найди ' + target.name + '!';
 
-  // Кнопки
   el.shapes.className = 'shapes g' + count;
   el.shapes.innerHTML = '';
   opts.forEach(c => {
@@ -511,9 +443,11 @@ function newRound() {
 
   locked = false;
   setBearPose('idle', 'bear_idle.png');
-  startBearWalk();
+  // Возвращаем мишку на место
+  el.bear.style.left = '20px';
+  el.bear.style.top = '140px';
 
-  // Озвучиваем вопрос + таймер подсказки
+  // Озвучиваем вопрос; таймер подсказки запустим, когда мишка закончит говорить
   playVoice(target.file, () => {
     if (!locked && !isHinting) startHintTimer();
   });
@@ -521,14 +455,8 @@ function newRound() {
 
 function handleAnswer(color, btnEl) {
   if (locked) return;
-
-  // Если мишка как раз подсказывает — остановим подсказку
   if (isHinting) stopHint();
   clearTimeout(hintTimer);
-
-  const rect = btnEl.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
 
   if (color.name === target.name) {
     // ========== ПРАВИЛЬНО ==========
@@ -547,15 +475,9 @@ function handleAnswer(color, btnEl) {
         newRound();
       }, 400);
     });
-
-    // Через 3 сек на всякий случай продолжаем — если MP3 не сработал
-    setTimeout(() => {
-      if (locked && !isHinting && round === ROUNDS - (ROUNDS - round)) {
-        // no-op
-      }
-    }, 4000);
   } else {
     // ========== НЕПРАВИЛЬНО ==========
+    // Играем enc_<правильный цвет>.mp3 — «Ничего страшного! Ищи красный!»
     locked = true;
     btnEl.classList.add('no');
     setTimeout(() => btnEl.classList.remove('no'), 600);
@@ -563,12 +485,10 @@ function handleAnswer(color, btnEl) {
     setBearPose('sad', 'bear_sad.png');
     el.sayBox.textContent = '🐻 Ничего страшного! Ищем ' + target.name + '!';
 
-    // Играем enc_<target>.mp3 — запись «Ничего страшного! Ищи красный» (правильного цвета!)
     playVoice(target.encFile, () => {
       setBearPose('idle', 'bear_idle.png');
-      // Подсветим правильную кнопку
-      const buttons = el.shapes.querySelectorAll('.shape');
-      buttons.forEach(b => {
+      // Подсветим правильную кнопку на 2 секунды
+      el.shapes.querySelectorAll('.shape').forEach(b => {
         const lbl = b.querySelector('.label');
         if (lbl && lbl.textContent === target.name) {
           b.classList.add('hint');
@@ -576,7 +496,7 @@ function handleAnswer(color, btnEl) {
         }
       });
       locked = false;
-      // Перезапускаем таймер подсказки
+      // Перезапускаем таймер — если ребёнок опять долго думает
       startHintTimer();
     });
   }
@@ -644,7 +564,7 @@ function setVol(v, btn) {
 }
 
 // ============================================================
-//  ИНИЦИАЛИЗАЦИЯ UI (активные кнопки настроек)
+//  ИНИЦИАЛИЗАЦИЯ
 // ============================================================
 document.querySelectorAll('#optDiff button').forEach(b => {
   const n = parseInt(b.dataset.val, 10);
