@@ -86,7 +86,6 @@
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
   @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
 
-  /* ====== МИШКА ====== */
   #bearRunner {
     position: fixed; width: 100px; height: 120px; z-index: 50;
     pointer-events: none;
@@ -95,21 +94,8 @@
   #bearRunner .pose-img {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: contain; opacity: 0; transition: opacity .18s;
-    display: none;
   }
-  #bearRunner .pose-img.loaded { display: block; }
   #bearRunner .pose-img.active { opacity: 1; }
-
-  /* Эмодзи-заглушка, если картинок нет */
-  #bearEmoji {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 80px; line-height: 1;
-    transition: transform .3s;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,.2));
-  }
-  #bearEmoji.hidden { display: none; }
-
   #bearRunner.falling { animation: fall .4s ease-in; }
   @keyframes fall { from { transform: translateY(-30px) scale(.9); } to { transform: translateY(0) scale(1); } }
   #bearRunner.talking { animation: bob .35s ease infinite; }
@@ -251,15 +237,10 @@
 <div id="question">Нажми «Старт»</div>
 <div id="shapes" class="shapes g3"></div>
 
-<!-- ================= МИШКА ================= -->
 <div id="bearRunner">
   <div id="bearBubble">Привет!</div>
   <div id="bearSay" style="display:none"></div>
 
-  <!-- Заглушка, если картинок нет -->
-  <div id="bearEmoji">🐻</div>
-
-  <!-- Позы (будут показаны, если файлы найдутся) -->
   <img class="pose-img" data-pose="idle"     src="images/bear_idle.png"     alt="">
   <img class="pose-img" data-pose="walk1"    src="images/bear_walk_1.png"   alt="">
   <img class="pose-img" data-pose="walk2"    src="images/bear_walk_2.png"   alt="">
@@ -423,7 +404,6 @@ let hintRepeatTimer = null;
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
-const bearEmoji = document.getElementById('bearEmoji');
 const BEAR_W = 100, BEAR_H = 120;
 
 // ============================================================
@@ -453,46 +433,11 @@ if ('speechSynthesis' in window) {
 //  АНИМАЦИЯ МИШКИ
 // ============================================================
 function setPose(pose) {
-  // Если картинок нет — управляем эмодзи через CSS-класс
-  if (!bearImages[pose]) {
-    // Показываем эмодзи-заглушку с разными "позами" через transform
-    if (bearEmoji && !bearEmoji.classList.contains('hidden')) {
-      applyEmojiPose(pose);
-    }
-    return;
-  }
+  if (!bearImages[pose]) return;
   bear.querySelectorAll('.pose-img').forEach(img => {
-    img.classList.toggle('active', img.dataset.pose === pose && img.classList.contains('loaded'));
+    img.classList.toggle('active', img.dataset.pose === pose);
   });
 }
-
-function applyEmojiPose(pose) {
-  // Простые визуальные эффекты для эмодзи
-  const map = {
-    idle:     { transform: 'scale(1)',            content: '🐻' },
-    walk1:    { transform: 'scale(1) rotate(-4deg)', content: '🐻' },
-    walk2:    { transform: 'scale(1) rotate(4deg)',  content: '🐻' },
-    happy:    { transform: 'scale(1.15) translateY(-6px)', content: '🐻' },
-    heart:    { transform: 'scale(1.2)',          content: '🐻' },
-    sad:      { transform: 'scale(.95) translateY(4px)', content: '😢' },
-    sleep:    { transform: 'scale(1)',            content: '😴' },
-    sign:     { transform: 'scale(1.1) translateY(-6px)', content: '🐻' },
-    honey:    { transform: 'scale(1.1)',          content: '🍯' },
-    wave:     { transform: 'scale(1.1) rotate(6deg)', content: '🐻' },
-    blink:    { transform: 'scale(1)',            content: '🐻' },
-    dance:    { transform: 'scale(1.1) rotate(-8deg)', content: '🐻' },
-    think:    { transform: 'scale(1) rotate(-6deg)', content: '🤔' },
-    wow:      { transform: 'scale(1.15)',         content: '😲' },
-    yawn:     { transform: 'scale(1.05)',         content: '🥱' },
-    glasses:  { transform: 'scale(1.05)',         content: '😎' },
-    backpack: { transform: 'scale(1.05)',         content: '🎒' },
-    strong:   { transform: 'scale(1.15)',         content: '💪' }
-  };
-  const s = map[pose] || map.idle;
-  bearEmoji.textContent = s.content;
-  bearEmoji.style.transform = s.transform;
-}
-
 function startWalkFrames() {
   stopWalkFrames();
   walkFrameTimer = setInterval(() => {
@@ -876,24 +821,7 @@ async function findBearImages() {
     return ok ? 1 : 0;
   });
   const results = await Promise.all(checks);
-  const found = results.reduce((a, b) => a + b, 0);
-
-  // Показываем / скрываем эмодзи-заглушку
-  if (bearEmoji) {
-    if (found > 0) {
-      bearEmoji.classList.add('hidden');
-      // Показываем только реально загруженные картинки
-      bear.querySelectorAll('.pose-img').forEach(img => {
-        const pose = img.dataset.pose;
-        if (bearImages[pose]) img.classList.add('loaded');
-      });
-    } else {
-      // Ни одной картинки — оставляем эмодзи, ставим idle
-      bearEmoji.classList.remove('hidden');
-      applyEmojiPose('idle');
-    }
-  }
-  return found;
+  return results.reduce((a, b) => a + b, 0);
 }
 async function checkAllImages() {
   const checks = [];
@@ -925,16 +853,17 @@ function startGameFromIntro() {
   if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
   started = true;
 
-  // Сначала показываем мишку и запускаем падение,
-  // параллельно грузим картинки
-  setPose('idle');
-  bearTeleport(20, 140);
-  bearFallFrom();
-
   findBearImages().then(found => {
     setStatus('🐻 Мишек: ' + found + '/18', found >= 9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
+    if (bearImages.wave) setPose('wave');
+    else setPose('idle');
+    bearTeleport(20, 140);
+    bearFallFrom();
     if (musicOn) setTimeout(() => startMusic(), 250);
   }).catch(() => {
+    setPose('idle');
+    bearTeleport(20, 140);
+    bearFallFrom();
     if (musicOn) setTimeout(() => startMusic(), 250);
   });
 
@@ -1131,46 +1060,38 @@ function showLearn(c, callback) {
   nameEl.style.color = c.hex;
   rhymeEl.textContent = c.rhyme;
 
-  // Мишка в обучающем окне — эмодзи или картинки
   learnBear.innerHTML = '';
-  const anyBearImg = ['happy','heart','dance','strong','idle'].some(p => bearImages[p]);
-  if (anyBearImg) {
-    ['happy','heart','dance','strong','idle'].forEach(p => {
-      if (!bearImages[p]) return;
-      const img = document.createElement('img');
-      img.className = 'pose-img active';
-      img.src = 'images/bear_' + p + '.png';
-      learnBear.appendChild(img);
-    });
-  } else {
-    const em = document.createElement('div');
-    em.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;';
-    em.textContent = '🐻';
-    learnBear.appendChild(em);
-  }
+  ['happy','heart','dance','strong','idle'].forEach(p => {
+    if (!bearImages[p]) return;
+    const img = document.createElement('img');
+    img.className = 'pose-img';
+    img.dataset.pose = p;
+    img.src = 'images/bear_' + p + '.png';
+    learnBear.appendChild(img);
+  });
 
   modal.classList.add('on');
 
   const poses = ['happy','heart','dance','strong'].filter(p => bearImages[p]);
-  let cycle = null;
-  if (poses.length > 0) {
-    let lp = 0;
+  if (poses.length === 0) poses.push('idle');
+  let lp = 0;
+  if (poses[0]) {
     learnBear.querySelectorAll('.pose-img').forEach(img => {
       img.classList.toggle('active', img.dataset.pose === poses[0]);
     });
-    cycle = setInterval(() => {
-      if (!modal.classList.contains('on')) { clearInterval(cycle); return; }
-      lp = (lp + 1) % poses.length;
-      learnBear.querySelectorAll('.pose-img').forEach(img => {
-        img.classList.toggle('active', img.dataset.pose === poses[lp]);
-      });
-    }, 1800);
   }
+  const cycle = setInterval(() => {
+    if (!modal.classList.contains('on')) { clearInterval(cycle); return; }
+    lp = (lp + 1) % poses.length;
+    learnBear.querySelectorAll('.pose-img').forEach(img => {
+      img.classList.toggle('active', img.dataset.pose === poses[lp]);
+    });
+  }, 1800);
 
   setTimeout(() => {
     playMp3(c.rhymeFile, c.rhyme, () => {
       setTimeout(() => {
-        if (cycle) clearInterval(cycle);
+        clearInterval(cycle);
         modal.classList.remove('on');
         if (callback) callback();
       }, 600);
