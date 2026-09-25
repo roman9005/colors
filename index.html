@@ -564,7 +564,6 @@ function toggleMusic() {
 }
 
 // ====== MP3 ======
-// ✏️ ИСПРАВЛЕНО: останавливаем hintAudio, если он играл — чтобы не было наложения
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (hintAudio) {
@@ -605,7 +604,6 @@ function playMp3(mp3, fb, cb) {
 }
 
 // ====== HINT MP3 ======
-// ✏️ ИСПРАВЛЕНО: останавливаем currentAudio, чтобы подсказка не наложилась на голос
 function playHintMp3(mp3) {
   if (!soundOn) return;
   if (currentAudio) {
@@ -704,6 +702,16 @@ function startGameFromIntro() {
   const ctx = getCtx();
   if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
+
+  // ✏️ НОВОЕ ИСПРАВЛЕНИЕ: разблокировка hint_*.mp3 внутри клика «Играть»
+  // Браузер (Chrome/Safari) блокирует audio.play() через таймер без клика.
+  // Прогоняем каждый hint-файл на почти нулевой громкости при клике — потом он играет.
+  COLORS.forEach(c => {
+    const a = new Audio('sounds/' + c.hintFile);
+    a.volume = 0.01;
+    a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+  });
+
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
   bearTeleport(20, 140);
@@ -785,8 +793,6 @@ function handleClick(c, btn, e) {
       });
     });
   } else {
-    // ============ НЕПРАВИЛЬНО ============
-    // ✏️ ИСПРАВЛЕНО: играем enc_<правильный цвет>.mp3 — «Ничего страшного! Ищи красный!»
     btn.classList.add('no');
     explode(cx, cy, 'no');
     setTimeout(()=>btn.classList.remove('no'), 500);
@@ -829,7 +835,6 @@ function startHintTimer() {
   }, settings.timeMs);
 }
 
-// ✏️ ИСПРАВЛЕНО: останавливаем hintAudio, чтобы подсказка не «договаривала» после клика
 function stopHint() {
   clearTimeout(hintTimer);
   clearTimeout(thinkTimer);
