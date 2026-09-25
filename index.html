@@ -310,9 +310,6 @@ let audioCtx = null;
 let musicTimer = null;
 let musicGainNode = null;
 
-// ✏️ НОВОЕ: пул аудио-элементов для подсказок (по одному на каждый hint-файл)
-// Эти элементы создаются и «разблокируются» во время клика «Играть»,
-// поэтому браузер разрешает их воспроизведение позже (через 5/10/15 сек).
 const hintAudioPool = {};
 let hintPoolPrimed = false;
 
@@ -569,7 +566,7 @@ function toggleMusic() {
   if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ====== MP3 ======
+// ====== MP3 (ИСПРАВЛЕНО: cb вызывается ровно один раз) ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (hintAudio) {
@@ -582,60 +579,55 @@ function playMp3(mp3, fb, cb) {
   }
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
-  let failed = false;
+
+  // ✏️ Единственное изменение: флаг done, чтобы finish() вызывался ОДИН раз
+  let done = false;
   const restore = () => {
     if (wasMusic && musicOn && !musicTimer) startMusic();
   };
-  const fallback = () => {
-    if(failed) return;
-    failed = true;
+  const finish = () => {
+    if (done) return;
+    done = true;
     restore();
-    if(cb) cb();
+    if (cb) cb();
   };
+
   try {
     const a = new Audio('sounds/'+mp3);
     a.volume = 1.0;
     currentAudio = a;
-    a.onerror = fallback;
-    a.onended = () => { restore(); if(cb) cb(); };
+    a.onerror = finish;
+    a.onended = finish;
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
+      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(finish);
     }
     setTimeout(() => {
-      if (failed) return;
-      if (a.readyState === 0) fallback();
+      if (done) return;
+      if (a.readyState === 0) finish();
     }, 3000);
-  } catch(e) { fallback(); }
+  } catch(e) { finish(); }
 }
 
-// ====== HINT MP3 (исправлено — использует пул разблокированных аудио) ======
+// ====== HINT MP3 ======
 function playHintMp3(mp3) {
   if (!soundOn) return;
-
-  // Останавливаем голос вопроса
   if (currentAudio) {
     try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
     currentAudio = null;
   }
-  // Останавливаем предыдущую подсказку (если это другой файл)
   if (hintAudio && hintAudio !== hintAudioPool[mp3]) {
     try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
     hintAudio = null;
   }
-
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
-
   const resume = () => {
     hintAudio = null;
     if (wasMusic && musicOn && !musicTimer) startMusic();
   };
-
-  // Берём разблокированный элемент из пула
   let a = hintAudioPool[mp3];
   if (!a) {
-    // Фолбэк — если пул не был создан, создаём на лету
     try {
       a = new Audio('sounds/' + mp3);
       a.volume = 1.0;
@@ -643,14 +635,12 @@ function playHintMp3(mp3) {
     } catch (e) { return; }
   }
   hintAudio = a;
-
   a.onended = resume;
   a.onerror = resume;
   try {
     a.currentTime = 0;
     a.volume = 1.0;
   } catch(e) {}
-
   const p = a.play();
   if (p && typeof p.then === 'function') {
     p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(err => {
@@ -726,9 +716,6 @@ function startGameFromIntro() {
   if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
 
-  // ✏️ НОВОЕ ИСПРАВЛЕНИЕ: разблокируем все hint-файлы внутри клика «Играть».
-  // Создаём по одному Audio на каждый hint-файл, играем на 1% громкости и ставим на паузу.
-  // Браузер запоминает эти элементы как «разрешённые» — потом они играют по таймеру.
   if (!hintPoolPrimed) {
     hintPoolPrimed = true;
     COLORS.forEach(c => {
