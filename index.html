@@ -86,6 +86,7 @@
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
   @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
 
+  /* ====== МИШКА ====== */
   #bearRunner {
     position: fixed; width: 100px; height: 120px; z-index: 50;
     pointer-events: none;
@@ -94,8 +95,21 @@
   #bearRunner .pose-img {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: contain; opacity: 0; transition: opacity .18s;
+    display: none;
   }
+  #bearRunner .pose-img.loaded { display: block; }
   #bearRunner .pose-img.active { opacity: 1; }
+
+  /* Эмодзи-заглушка, если картинок нет */
+  #bearEmoji {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; line-height: 1;
+    transition: transform .3s;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,.2));
+  }
+  #bearEmoji.hidden { display: none; }
+
   #bearRunner.falling { animation: fall .4s ease-in; }
   @keyframes fall { from { transform: translateY(-30px) scale(.9); } to { transform: translateY(0) scale(1); } }
   #bearRunner.talking { animation: bob .35s ease infinite; }
@@ -108,6 +122,8 @@
   @keyframes point { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
   #bearRunner.sad { animation: sadShake .6s ease; }
   @keyframes sadShake { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-6px)} }
+  #bearRunner.happy { animation: happyJump .5s ease infinite; }
+  @keyframes happyJump { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
   #bearBubble {
     position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
@@ -116,6 +132,7 @@
     box-shadow: 0 3px 10px rgba(0,0,0,.15);
     white-space: normal; text-align: center; line-height: 1.2;
     max-width: 200px; min-width: 80px;
+    z-index: 2;
   }
   #bearBubble::after {
     content: ''; position: absolute; bottom: -8px; left: 50%;
@@ -232,11 +249,35 @@
 
 <div id="progress"></div>
 <div id="question">Нажми «Старт»</div>
-<div id="shapes" class="shapes g4"></div>
+<div id="shapes" class="shapes g3"></div>
 
+<!-- ================= МИШКА ================= -->
 <div id="bearRunner">
   <div id="bearBubble">Привет!</div>
   <div id="bearSay" style="display:none"></div>
+
+  <!-- Заглушка, если картинок нет -->
+  <div id="bearEmoji">🐻</div>
+
+  <!-- Позы (будут показаны, если файлы найдутся) -->
+  <img class="pose-img" data-pose="idle"     src="images/bear_idle.png"     alt="">
+  <img class="pose-img" data-pose="walk1"    src="images/bear_walk_1.png"   alt="">
+  <img class="pose-img" data-pose="walk2"    src="images/bear_walk_2.png"   alt="">
+  <img class="pose-img" data-pose="happy"    src="images/bear_happy.png"    alt="">
+  <img class="pose-img" data-pose="heart"    src="images/bear_heart.png"    alt="">
+  <img class="pose-img" data-pose="sad"      src="images/bear_sad.png"      alt="">
+  <img class="pose-img" data-pose="sleep"    src="images/bear_sleep.png"    alt="">
+  <img class="pose-img" data-pose="sign"     src="images/bear_sign.png"     alt="">
+  <img class="pose-img" data-pose="honey"    src="images/bear_honey.png"    alt="">
+  <img class="pose-img" data-pose="wave"     src="images/bear_wave.png"     alt="">
+  <img class="pose-img" data-pose="blink"    src="images/bear_blink.png"    alt="">
+  <img class="pose-img" data-pose="dance"    src="images/bear_dance.png"    alt="">
+  <img class="pose-img" data-pose="think"    src="images/bear_think.png"    alt="">
+  <img class="pose-img" data-pose="wow"      src="images/bear_wow.png"      alt="">
+  <img class="pose-img" data-pose="yawn"     src="images/bear_yawn.png"     alt="">
+  <img class="pose-img" data-pose="glasses"  src="images/bear_glasses.png"  alt="">
+  <img class="pose-img" data-pose="backpack" src="images/bear_backpack.png" alt="">
+  <img class="pose-img" data-pose="strong"   src="images/bear_strong.png"   alt="">
 </div>
 
 <div id="status" class="hide"></div>
@@ -382,10 +423,11 @@ let hintRepeatTimer = null;
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
+const bearEmoji = document.getElementById('bearEmoji');
 const BEAR_W = 100, BEAR_H = 120;
 
 // ============================================================
-//  TTS — запасной голос (если MP3 нет)
+//  TTS — запасной голос
 // ============================================================
 function speakFallback(text) {
   if (!soundOn) return;
@@ -402,7 +444,6 @@ function speakFallback(text) {
     speechSynthesis.speak(u);
   } catch (e) {}
 }
-// Подгружаем голоса заранее
 if ('speechSynthesis' in window) {
   speechSynthesis.onvoiceschanged = () => {};
   speechSynthesis.getVoices();
@@ -412,11 +453,46 @@ if ('speechSynthesis' in window) {
 //  АНИМАЦИЯ МИШКИ
 // ============================================================
 function setPose(pose) {
-  if (!bearImages[pose]) return;
+  // Если картинок нет — управляем эмодзи через CSS-класс
+  if (!bearImages[pose]) {
+    // Показываем эмодзи-заглушку с разными "позами" через transform
+    if (bearEmoji && !bearEmoji.classList.contains('hidden')) {
+      applyEmojiPose(pose);
+    }
+    return;
+  }
   bear.querySelectorAll('.pose-img').forEach(img => {
-    img.classList.toggle('active', img.dataset.pose === pose);
+    img.classList.toggle('active', img.dataset.pose === pose && img.classList.contains('loaded'));
   });
 }
+
+function applyEmojiPose(pose) {
+  // Простые визуальные эффекты для эмодзи
+  const map = {
+    idle:     { transform: 'scale(1)',            content: '🐻' },
+    walk1:    { transform: 'scale(1) rotate(-4deg)', content: '🐻' },
+    walk2:    { transform: 'scale(1) rotate(4deg)',  content: '🐻' },
+    happy:    { transform: 'scale(1.15) translateY(-6px)', content: '🐻' },
+    heart:    { transform: 'scale(1.2)',          content: '🐻' },
+    sad:      { transform: 'scale(.95) translateY(4px)', content: '😢' },
+    sleep:    { transform: 'scale(1)',            content: '😴' },
+    sign:     { transform: 'scale(1.1) translateY(-6px)', content: '🐻' },
+    honey:    { transform: 'scale(1.1)',          content: '🍯' },
+    wave:     { transform: 'scale(1.1) rotate(6deg)', content: '🐻' },
+    blink:    { transform: 'scale(1)',            content: '🐻' },
+    dance:    { transform: 'scale(1.1) rotate(-8deg)', content: '🐻' },
+    think:    { transform: 'scale(1) rotate(-6deg)', content: '🤔' },
+    wow:      { transform: 'scale(1.15)',         content: '😲' },
+    yawn:     { transform: 'scale(1.05)',         content: '🥱' },
+    glasses:  { transform: 'scale(1.05)',         content: '😎' },
+    backpack: { transform: 'scale(1.05)',         content: '🎒' },
+    strong:   { transform: 'scale(1.15)',         content: '💪' }
+  };
+  const s = map[pose] || map.idle;
+  bearEmoji.textContent = s.content;
+  bearEmoji.style.transform = s.transform;
+}
+
 function startWalkFrames() {
   stopWalkFrames();
   walkFrameTimer = setInterval(() => {
@@ -498,7 +574,6 @@ function bearPointTo(element) {
     const y = r.top + r.height / 2 - BEAR_H / 2;
     const p = clamp(x, y);
     bearTeleport(p.x, p.y);
-    // Держим позицию рядом с целью, пока идёт подсказка
     window._hintHoldInterval = setInterval(() => {
       if (!isHinting) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; return; }
       bearRunTo(p.x, p.y);
@@ -561,7 +636,7 @@ function bearSadMove() {
   setPose('sad');
   setTimeout(() => {
     bear.classList.remove('sad');
-    if (!isHinting && !locked) { startBearWalk(); startBlinking(); }
+    if (!isHinting && !locked) { setPose('idle'); startBearWalk(); startBlinking(); }
   }, 1200);
 }
 function bearThinkMode() {
@@ -801,7 +876,24 @@ async function findBearImages() {
     return ok ? 1 : 0;
   });
   const results = await Promise.all(checks);
-  return results.reduce((a, b) => a + b, 0);
+  const found = results.reduce((a, b) => a + b, 0);
+
+  // Показываем / скрываем эмодзи-заглушку
+  if (bearEmoji) {
+    if (found > 0) {
+      bearEmoji.classList.add('hidden');
+      // Показываем только реально загруженные картинки
+      bear.querySelectorAll('.pose-img').forEach(img => {
+        const pose = img.dataset.pose;
+        if (bearImages[pose]) img.classList.add('loaded');
+      });
+    } else {
+      // Ни одной картинки — оставляем эмодзи, ставим idle
+      bearEmoji.classList.remove('hidden');
+      applyEmojiPose('idle');
+    }
+  }
+  return found;
 }
 async function checkAllImages() {
   const checks = [];
@@ -833,17 +925,16 @@ function startGameFromIntro() {
   if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
   started = true;
 
+  // Сначала показываем мишку и запускаем падение,
+  // параллельно грузим картинки
+  setPose('idle');
+  bearTeleport(20, 140);
+  bearFallFrom();
+
   findBearImages().then(found => {
     setStatus('🐻 Мишек: ' + found + '/18', found >= 9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
-    if (bearImages.wave) setPose('wave');
-    else setPose('idle');
-    bearTeleport(20, 140);
-    bearFallFrom();
     if (musicOn) setTimeout(() => startMusic(), 250);
   }).catch(() => {
-    setPose('idle');
-    bearTeleport(20, 140);
-    bearFallFrom();
     if (musicOn) setTimeout(() => startMusic(), 250);
   });
 
@@ -900,12 +991,6 @@ function newRound() {
   }, 3000);
 }
 
-function repeatQuestion() {
-  unlockAudio();
-  if (!started || !target) return;
-  playMp3(target.file, 'Найди ' + target.name);
-}
-
 // ============================================================
 //  КЛИК ПО ЦВЕТУ
 // ============================================================
@@ -946,14 +1031,8 @@ function handleClick(c, btn, e) {
 
     const encText = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(encText);
-
-    // Грустит, но пузырь не перебивается
     bearSadMove();
-
-    // Озвучка через TTS — всегда правильный цвет
     speakFallback(encText);
-
-    // Перезапуск таймера подсказки
     startHintTimer();
   }
 }
@@ -973,7 +1052,6 @@ function startHintTimer() {
 function showHint() {
   if (locked || !started || !target || isHinting) return;
 
-  // Ищем кнопку правильного цвета
   const buttons = document.querySelectorAll('#shapes .shape');
   let targetBtn = null;
   buttons.forEach(b => {
@@ -982,7 +1060,6 @@ function showHint() {
   });
   if (!targetBtn) return;
 
-  // Йаун — мишка потягивается, потом указывает
   if (bearImages.yawn) {
     setPose('yawn');
     setTimeout(() => {
@@ -999,17 +1076,13 @@ function runHint(targetBtn) {
   bearPointTo(targetBtn);
   const hint = 'Вот ' + target.name + '! Нажми сюда!';
   bearSays(hint);
-
-  // Озвучка подсказки (MP3 или TTS)
   playHintMp3(target.hintFile, hint);
 
-  // Повтор подсказки каждые 4 секунды, пока не нажмут
   if (hintRepeatTimer) clearInterval(hintRepeatTimer);
   hintRepeatTimer = setInterval(() => {
     if (locked || !isHinting) {
       clearInterval(hintRepeatTimer); hintRepeatTimer = null; return;
     }
-    // Мишка остаётся у цели, повторяем текст
     bearSays(hint);
     playHintMp3(target.hintFile, hint);
   }, 4000);
@@ -1058,38 +1131,46 @@ function showLearn(c, callback) {
   nameEl.style.color = c.hex;
   rhymeEl.textContent = c.rhyme;
 
+  // Мишка в обучающем окне — эмодзи или картинки
   learnBear.innerHTML = '';
-  ['happy','heart','dance','strong','idle'].forEach(p => {
-    if (!bearImages[p]) return;
-    const img = document.createElement('img');
-    img.className = 'pose-img';
-    img.dataset.pose = p;
-    img.src = 'images/bear_' + p + '.png';
-    learnBear.appendChild(img);
-  });
+  const anyBearImg = ['happy','heart','dance','strong','idle'].some(p => bearImages[p]);
+  if (anyBearImg) {
+    ['happy','heart','dance','strong','idle'].forEach(p => {
+      if (!bearImages[p]) return;
+      const img = document.createElement('img');
+      img.className = 'pose-img active';
+      img.src = 'images/bear_' + p + '.png';
+      learnBear.appendChild(img);
+    });
+  } else {
+    const em = document.createElement('div');
+    em.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;';
+    em.textContent = '🐻';
+    learnBear.appendChild(em);
+  }
 
   modal.classList.add('on');
 
   const poses = ['happy','heart','dance','strong'].filter(p => bearImages[p]);
-  if (poses.length === 0) poses.push('idle');
-  let lp = 0;
-  if (poses[0]) {
+  let cycle = null;
+  if (poses.length > 0) {
+    let lp = 0;
     learnBear.querySelectorAll('.pose-img').forEach(img => {
       img.classList.toggle('active', img.dataset.pose === poses[0]);
     });
+    cycle = setInterval(() => {
+      if (!modal.classList.contains('on')) { clearInterval(cycle); return; }
+      lp = (lp + 1) % poses.length;
+      learnBear.querySelectorAll('.pose-img').forEach(img => {
+        img.classList.toggle('active', img.dataset.pose === poses[lp]);
+      });
+    }, 1800);
   }
-  const cycle = setInterval(() => {
-    if (!modal.classList.contains('on')) { clearInterval(cycle); return; }
-    lp = (lp + 1) % poses.length;
-    learnBear.querySelectorAll('.pose-img').forEach(img => {
-      img.classList.toggle('active', img.dataset.pose === poses[lp]);
-    });
-  }, 1800);
 
   setTimeout(() => {
     playMp3(c.rhymeFile, c.rhyme, () => {
       setTimeout(() => {
-        clearInterval(cycle);
+        if (cycle) clearInterval(cycle);
         modal.classList.remove('on');
         if (callback) callback();
       }, 600);
