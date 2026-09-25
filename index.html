@@ -2,436 +2,317 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🐻 Мишка учит цвета</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учим цвета с Мишкой</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0; padding: 0; height: 100%; overflow: hidden;
-    font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
-    background: linear-gradient(160deg, #a8e6ff 0%, #ffe6f7 100%);
-    user-select: none;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:10px;overflow-x:hidden}
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.sun{position:absolute;top:6%;right:8%;font-size:70px;animation:sunPulse 4s ease-in-out infinite}
+@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.cloud{position:absolute;font-size:50px;opacity:.85;animation:cloudDrift linear infinite}
+@keyframes cloudDrift{0%{left:-100px}100%{left:110%}}
+.hill{position:absolute;bottom:0;left:0;right:0;height:120px;background:radial-gradient(ellipse at 30% 100%,#7CB342,#558B2F);border-radius:50% 50% 0 0}
+.butterfly{position:absolute;font-size:28px;animation:fly 14s linear infinite;z-index:999;pointer-events:none}
+@keyframes fly{0%{left:-60px;top:15%}50%{top:35%}100%{left:110%;top:25%}}
 
-  #topbar {
-    position: fixed; top: 0; left: 0; right: 0; height: 56px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 12px; background: rgba(255,255,255,.75);
-    backdrop-filter: blur(8px); z-index: 100;
-    box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  }
-  #topbar .score-box {
-    font-size: 20px; font-weight: 700; color: #6a3ab2;
-    background: #fff; padding: 6px 14px; border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,.1);
-  }
-  #topbar .btns { display: flex; gap: 8px; }
-  #topbar button {
-    font-size: 22px; width: 44px; height: 44px; border: none;
-    border-radius: 50%; background: #fff; cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,.12); transition: transform .15s;
-  }
-  #topbar button:active { transform: scale(.9); }
+.intro{position:fixed;inset:0;z-index:400;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
+.intro.off{display:none}
+.intro .sun{position:absolute;top:5%;right:8%;font-size:80px;animation:sunPulse 4s ease-in-out infinite}
+.intro .bear-big{width:220px;height:250px;margin-bottom:16px;position:relative;animation:introWave 1.5s ease-in-out infinite;z-index:2;filter:drop-shadow(0 15px 25px rgba(60,30,10,.4))}
+.intro .bear-big img{width:100%;height:100%;object-fit:contain;display:block}
+@keyframes introWave{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-6px)}}
+.intro h1{font-size:clamp(28px,7vw,48px);color:#fff;margin-bottom:14px;text-shadow:4px 4px 0 rgba(0,0,0,.15);z-index:2}
+.intro p{font-size:clamp(16px,4vw,22px);color:#fff;margin-bottom:28px;font-weight:700;text-shadow:2px 2px 0 rgba(0,0,0,.15);z-index:2}
+.intro button{padding:22px 56px;font-size:clamp(20px,5vw,28px);font-weight:900;color:#FF3D7F;background:#fff;border:none;border-radius:100px;cursor:pointer;font-family:inherit;box-shadow:0 10px 0 rgba(0,0,0,.2);z-index:2;animation:hb 1.8s ease-in-out infinite;touch-action:manipulation}
+.intro button:active{transform:translateY(5px)}
+@keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 
-  #progress {
-    position: fixed; top: 62px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 2px; z-index: 99;
-  }
-  #progress .star { font-size: 16px; opacity: .25; transition: opacity .3s, transform .3s; }
-  #progress .star.done { opacity: 1; transform: scale(1.15); }
+.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:140px;margin-bottom:20px}
+.progress{display:flex;gap:2px;justify-content:center;margin-bottom:8px;width:100%}
+.progress .star{font-size:18px;filter:grayscale(1) opacity(.25);transition:all .4s}
+.progress .star.done{filter:none;transform:scale(1.2)}
+.top{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
+.score{background:linear-gradient(135deg,#FFD93D,#FFB800);padding:6px 16px;border-radius:30px;font-size:14px;font-weight:800;color:#7A3E00;box-shadow:0 4px 0 #E5A200}
+.top-btns{display:flex;gap:6px}
+.btn-icon{width:40px;height:40px;border-radius:50%;border:none;background:#fff;cursor:pointer;font-size:18px;box-shadow:0 4px 0 rgba(0,0,0,.15);display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation}
+.btn-icon:active{transform:translateY(3px)}
+.bear-say{width:100%;background:linear-gradient(135deg,#FFF9C4,#FFE082);border-radius:20px;padding:10px 16px;margin-bottom:8px;font-size:15px;font-weight:700;color:#7A3E00;text-align:center;box-shadow:0 4px 0 #FFB800;min-height:42px;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.q{font-size:clamp(22px,5vw,32px);font-weight:900;color:#3A1F5C;text-align:center;margin:4px 0 10px;min-height:38px;text-shadow:2px 2px 0 rgba(255,255,255,.9)}
+.repeat{background:linear-gradient(135deg,#4A9EFF,#3ED9C4);color:#fff;border:none;padding:8px 18px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #2A7ECC;margin-bottom:10px;font-family:inherit;touch-action:manipulation}
+.repeat:active{transform:translateY(3px)}
+.shapes{display:grid;gap:12px;width:100%;position:relative;z-index:30}
+.shapes.g2{grid-template-columns:repeat(2,1fr)}
+.shapes.g4{grid-template-columns:repeat(2,1fr)}
+.shapes.g6{grid-template-columns:repeat(3,1fr)}
+.shape{border-radius:24px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .15s,box-shadow .15s;aspect-ratio:1/1;box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),inset 0 -8px 16px rgba(0,0,0,.15),inset 0 8px 16px rgba(255,255,255,.4);overflow:hidden;touch-action:manipulation}
+.shape::before{content:'';position:absolute;top:6%;left:10%;width:35%;height:25%;background:radial-gradient(ellipse,rgba(255,255,255,.6),transparent 70%);border-radius:50%;pointer-events:none}
+.shape:active{transform:translateY(6px)}
+.shape.ok{animation:pulse .7s ease}
+.shape.no{animation:shake .5s ease}
+.shape.hint{animation:hintGlow 1s ease-in-out infinite;z-index:35}
+@keyframes hintGlow{0%,100%{box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25)}50%{box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),0 0 0 6px #FFD700,0 0 30px #FFD700}}
+@keyframes pulse{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.95)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px) rotate(-3deg)}40%{transform:translateX(12px) rotate(3deg)}60%{transform:translateX(-8px) rotate(-2deg)}80%{transform:translateX(8px) rotate(2deg)}}
+.shape .label{position:absolute;bottom:8px;left:0;right:0;font-size:13px;font-weight:900;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.8);text-transform:uppercase;z-index:3;text-align:center;pointer-events:none}
+.shapes.g6 .shape .label{font-size:10px}
 
-  #question {
-    position: fixed; top: 92px; left: 50%; transform: translateX(-50%);
-    font-size: 26px; font-weight: 800; color: #4a2a7a;
-    background: rgba(255,255,255,.9); padding: 10px 26px;
-    border-radius: 30px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
-    z-index: 98; white-space: nowrap;
-  }
+.bear-runner{position:fixed;z-index:20;width:100px;height:120px;pointer-events:none;transform-origin:center bottom;filter:drop-shadow(0 8px 12px rgba(60,30,10,.35));opacity:.95;transition:left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)}
+.bear-runner img{width:100%;height:100%;object-fit:contain;display:block}
+.bear-runner .pose-img{display:none}
+.bear-runner .pose-img.active{display:block}
+.bear-runner.front{z-index:900;opacity:1}
+.bear-runner.idle{animation:bearBreathe2 2.5s ease-in-out infinite}
+@keyframes bearBreathe2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.02)}}
+.bear-runner.walking{animation:bearWalkBob .5s ease-in-out infinite}
+@keyframes bearWalkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.bear-runner.falling{animation:bearFall 1.2s cubic-bezier(.5,.05,.5,1) forwards}
+@keyframes bearFall{0%{transform:translateY(-200vh) rotate(0) scale(.4);opacity:0}15%{opacity:1}40%{transform:translateY(-60vh) rotate(-180deg) scale(.8)}70%{transform:translateY(-15vh) rotate(-360deg) scale(1)}85%{transform:translateY(20px) rotate(-520deg) scale(1.1)}95%{transform:translateY(-15px) rotate(-580deg) scale(1.05)}100%{transform:translateY(0) rotate(-600deg) scale(1)}}
+.bear-runner.landed{animation:bearLand .5s ease}
+@keyframes bearLand{0%{transform:scale(1.2,.7)}50%{transform:scale(.85,1.15)}100%{transform:scale(1)}}
+.bear-runner.pointing{animation:bearPoint .7s ease-in-out infinite;z-index:901}
+@keyframes bearPoint{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+.bear-runner.happy{animation:bearHappyJump 1.2s ease;z-index:901}
+@keyframes bearHappyJump{0%{transform:translateY(0) scale(1)}15%{transform:translateY(-50px) scale(1.2) rotate(-90deg)}30%{transform:translateY(0) rotate(-180deg)}45%{transform:translateY(-40px) scale(1.15) rotate(-270deg)}60%{transform:translateY(0) rotate(-360deg)}100%{transform:translateY(0) rotate(-360deg)}}
+.bear-runner.sad{animation:bearSadAnim 1.2s ease}
+@keyframes bearSadAnim{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-15deg) scale(.9)}50%{transform:rotate(0) scale(.92)}75%{transform:rotate(15deg) scale(.9)}}
+.bear-runner.win{animation:bearWinSpin 1s ease-in-out infinite;z-index:901}
+@keyframes bearWinSpin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(360deg) scale(1.2)}100%{transform:rotate(720deg) scale(1)}}
+.bear-runner.talking{animation:bearTalk .4s ease-in-out infinite}
+@keyframes bearTalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.bear-runner.thinking{animation:bearThink 2s ease-in-out infinite}
+@keyframes bearThink{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.bear-runner.dancing{animation:bearDance 1s ease-in-out infinite;z-index:901}
+@keyframes bearDance{0%{transform:rotate(-10deg) scale(1)}25%{transform:translateY(-15px) rotate(10deg) scale(1.05)}50%{transform:rotate(10deg) scale(1)}75%{transform:translateY(-15px) rotate(-10deg) scale(1.05)}100%{transform:rotate(-10deg) scale(1)}}
+.bear-bubble{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#3A1F5C;padding:6px 14px;border-radius:16px;font-size:14px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transition:opacity .3s;z-index:5}
+.bear-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #fff}
+.bear-runner.talking .bear-bubble{opacity:1}
+.bear-pointer{position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:48px;opacity:0;transition:opacity .3s;animation:pointerDown .6s ease-in-out infinite;z-index:5}
+@keyframes pointerDown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+.bear-runner.pointing .bear-pointer{opacity:1}
 
-  #shapes {
-    position: fixed; inset: 150px 0 120px 0;
-    display: grid; gap: 14px; padding: 16px;
-    align-content: center; justify-content: center;
-  }
-  #shapes.g2 { grid-template-columns: repeat(2, 1fr); }
-  #shapes.g3 { grid-template-columns: repeat(3, 1fr); }
-  #shapes.g4 { grid-template-columns: repeat(2, 1fr); }
-  #shapes.g6 { grid-template-columns: repeat(3, 1fr); }
+.learn{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.learn.on{display:flex}
+.learn-wrap{position:relative;max-width:500px;width:100%;margin-bottom:150px}
+.learn-box{background:#fff;border-radius:32px;padding:22px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.3);position:relative;z-index:10}
+.learn-bear{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);width:120px;height:140px;z-index:510;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));animation:learnBearPose 2s ease-in-out infinite alternate;transform-origin:bottom center;pointer-events:none}
+.learn-bear img{width:100%;height:100%;object-fit:contain;display:block}
+.learn-bear .pose-img{display:none}
+.learn-bear .pose-img.active{display:block}
+@keyframes learnBearPose{0%{transform:translateX(-50%) translateY(0) rotate(-3deg)}100%{transform:translateX(-50%) translateY(-8px) rotate(3deg)}}
+.learn-color-band{width:100%;height:14px;border-radius:8px;margin-bottom:14px}
+.learn-items{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:nowrap}
+.learn-item{flex:1;aspect-ratio:1/1;border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.learn-item img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
+.learn-item .emoji{font-size:70px}
+.learn-name{font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.learn-rhyme{font-size:16px;color:#5a4636;font-weight:700;line-height:1.4;margin-top:8px;padding:10px;background:#fff9e6;border-radius:12px;border:2px dashed #FFB800}
 
-  .shape {
-    position: relative; border: none; cursor: pointer;
-    border-radius: 24px; min-width: 90px; min-height: 90px;
-    width: 100%; height: 100%; max-width: 160px; max-height: 160px;
-    box-shadow: 0 6px 18px rgba(0,0,0,.18), inset 0 -4px 0 rgba(0,0,0,.12);
-    transition: transform .12s, box-shadow .2s;
-    display: flex; align-items: flex-end; justify-content: center;
-    padding-bottom: 6px;
-  }
-  .shape:active { transform: scale(.94); }
-  .shape .label {
-    font-size: 13px; font-weight: 700; color: #fff;
-    text-shadow: 0 1px 3px rgba(0,0,0,.55);
-    background: rgba(0,0,0,.25); padding: 2px 8px; border-radius: 10px;
-  }
-  .shape.ok {
-    animation: pop .5s ease;
-    box-shadow: 0 0 0 6px #4caf50, 0 0 30px #4caf50;
-  }
-  .shape.no { animation: shake .4s ease; }
-  .shape.hint {
-    animation: pulse 1s infinite;
-    box-shadow: 0 0 0 6px #ffd54f, 0 0 30px #ffd54f;
-  }
-  @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
-
-  #bearRunner {
-    position: fixed; width: 100px; height: 120px; z-index: 50;
-    pointer-events: none;
-    transition: left 1.2s cubic-bezier(.34,1.3,.64,1), top 1.2s cubic-bezier(.34,1.3,.64,1);
-  }
-  #bearRunner .pose-img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: contain; opacity: 0; transition: opacity .18s;
-  }
-  #bearRunner .pose-img.active { opacity: 1; }
-  #bearRunner.falling { animation: fall .4s ease-in; }
-  @keyframes fall { from { transform: translateY(-30px) scale(.9); } to { transform: translateY(0) scale(1); } }
-  #bearRunner.talking { animation: bob .35s ease infinite; }
-  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
-  #bearRunner.thinking { animation: think 1.4s ease infinite; }
-  @keyframes think { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-4deg)} 75%{transform:rotate(4deg)} }
-  #bearRunner.dancing { animation: dance .5s ease infinite; }
-  @keyframes dance { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
-  #bearRunner.pointing { animation: point .8s ease infinite; }
-  @keyframes point { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  #bearRunner.sad { animation: sadShake .6s ease; }
-  @keyframes sadShake { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-6px)} }
-  #bearRunner.happy { animation: happyJump .5s ease infinite; }
-  @keyframes happyJump { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-
-  #bearBubble {
-    position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
-    background: #fff; border-radius: 16px; padding: 6px 12px;
-    font-size: 13px; font-weight: 700; color: #4a2a7a;
-    box-shadow: 0 3px 10px rgba(0,0,0,.15);
-    white-space: normal; text-align: center; line-height: 1.2;
-    max-width: 200px; min-width: 80px;
-    z-index: 2;
-  }
-  #bearBubble::after {
-    content: ''; position: absolute; bottom: -8px; left: 50%;
-    transform: translateX(-50%); border: 8px solid transparent;
-    border-top-color: #fff; border-bottom: 0;
-  }
-
-  #status {
-    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,.85); color: #fff; padding: 8px 18px;
-    border-radius: 20px; font-size: 14px; z-index: 200;
-    transition: opacity .3s, transform .3s; pointer-events: none;
-  }
-  #status.hide { opacity: 0; transform: translateX(-50%) translateY(20px); }
-
-  .screen {
-    position: fixed; inset: 0; z-index: 300;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(255,255,255,.95); backdrop-filter: blur(6px);
-    opacity: 0; pointer-events: none; transition: opacity .35s;
-    padding: 20px;
-  }
-  .screen.on { opacity: 1; pointer-events: auto; }
-  .screen.off { opacity: 0; pointer-events: none; }
-
-  .card {
-    background: #fff; border-radius: 28px; padding: 26px 22px;
-    box-shadow: 0 12px 40px rgba(0,0,0,.15);
-    max-width: 480px; width: 100%; text-align: center;
-  }
-  .card h1 { margin: 0 0 8px; font-size: 28px; color: #6a3ab2; }
-  .card p { margin: 6px 0; color: #555; font-size: 15px; line-height: 1.5; }
-  .card .big-btn {
-    margin-top: 18px; font-size: 22px; font-weight: 800;
-    padding: 14px 40px; border: none; border-radius: 40px;
-    background: linear-gradient(135deg, #ff8a3d, #ff5fa2);
-    color: #fff; cursor: pointer; box-shadow: 0 6px 18px rgba(255,95,162,.45);
-    transition: transform .15s;
-  }
-  .card .big-btn:active { transform: scale(.95); }
-
-  .opt-row { margin: 14px 0; text-align: left; }
-  .opt-row > span { display: block; font-size: 14px; font-weight: 700; color: #6a3ab2; margin-bottom: 6px; }
-  .opt-row .opts { display: flex; gap: 8px; flex-wrap: wrap; }
-  .opt-row button {
-    flex: 1; min-width: 60px; padding: 8px 12px; border: 2px solid #ddd;
-    border-radius: 12px; background: #fff; cursor: pointer; font-size: 14px;
-    font-weight: 700; color: #555; transition: all .15s;
-  }
-  .opt-row button.sel { border-color: #6a3ab2; background: #f3e9ff; color: #6a3ab2; }
-
-  #learnModal .card { padding: 0; overflow: hidden; }
-  #learnBand { height: 70px; width: 100%; }
-  #learnName { font-size: 34px; font-weight: 900; margin: 14px 0 4px; }
-  #learnRhyme {
-    font-size: 17px; color: #444; padding: 0 22px 16px; line-height: 1.5;
-    font-style: italic;
-  }
-  #learnItems {
-    display: flex; gap: 10px; justify-content: center; padding: 0 20px 22px;
-  }
-  .learn-item {
-    width: 84px; height: 84px; border-radius: 18px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,.15); overflow: hidden;
-  }
-  .learn-item img { width: 100%; height: 100%; object-fit: cover; }
-  .learn-item .emoji { font-size: 42px; }
-  #learnBear {
-    position: relative; width: 80px; height: 96px; margin: 0 auto 6px;
-  }
-  #learnBear .pose-img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: contain; opacity: 0; transition: opacity .3s;
-  }
-  #learnBear .pose-img.active { opacity: 1; }
-
-  #winScreen .card { background: linear-gradient(160deg, #fff5e6, #ffe6f7); }
-  #winScreen h1 { font-size: 34px; }
-  #winText { font-size: 17px; color: #6a3ab2; font-weight: 700; margin-top: 10px; }
-
-  .particle {
-    position: fixed; font-size: 22px; pointer-events: none; z-index: 250;
-    animation: fly 1.6s ease-out forwards;
-  }
-  @keyframes fly {
-    to { transform: translate(var(--tx), var(--ty)) scale(.3); opacity: 0; }
-  }
-  .salute {
-    position: fixed; font-size: 28px; pointer-events: none; z-index: 260;
-    animation: rise 2s ease-out forwards;
-  }
-  @keyframes rise {
-    to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-  }
-
-  @media (max-width: 520px) {
-    #question { font-size: 20px; padding: 8px 18px; }
-    .card h1 { font-size: 22px; }
-    #learnName { font-size: 26px; }
-  }
+.win{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#FFE66D,#FF6B9D,#C86DD7);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
+.win.on{display:flex}
+.win h2{font-size:clamp(30px,7vw,50px);color:#fff;margin-bottom:12px;text-shadow:4px 4px 0 rgba(0,0,0,.2);z-index:2}
+.win p{font-size:clamp(16px,4vw,22px);color:#fff;font-weight:700;margin-bottom:18px;z-index:2}
+.win button{padding:18px 44px;font-size:20px;font-weight:900;color:#fff;border:none;border-radius:50px;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#FF3D7F,#C13DDB);box-shadow:0 8px 0 #8B1A5C;z-index:2;touch-action:manipulation}
+.win .stars-big{display:flex;gap:8px;margin-bottom:20px;z-index:2}
+.win .stars-big span{font-size:36px;animation:starBounce .8s ease-in-out infinite}
+@keyframes starBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.salute{position:fixed;font-size:34px;pointer-events:none;z-index:9998;animation:saluteFly 2.5s ease-out forwards}
+@keyframes saluteFly{0%{transform:translateY(0) scale(.5);opacity:1}100%{transform:translateY(-110vh) scale(1.6) rotate(900deg);opacity:0}}
+.particle{position:fixed;pointer-events:none;z-index:9999;font-size:24px;animation:particleFly 1.5s ease-out forwards}
+@keyframes particleFly{0%{transform:translate(0,0) scale(.3);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(1.5) rotate(720deg);opacity:0}}
+.settings{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px}
+.settings.on{display:flex}
+.settings-box{background:#fff;border-radius:24px;padding:22px;max-width:400px;width:100%}
+.settings-box h3{color:#3A1F5C;font-size:22px;margin-bottom:14px;text-align:center}
+.settings-box label{display:block;color:#5a4636;font-weight:700;font-size:14px;margin:12px 0 6px}
+.settings-box .opt{display:flex;gap:6px;flex-wrap:wrap}
+.settings-box .opt button{flex:1;padding:10px 6px;border-radius:12px;border:2px solid #e8dcc8;background:#fdfaf5;cursor:pointer;font-weight:700;font-size:12px;color:#5a4636;font-family:inherit;touch-action:manipulation}
+.settings-box .opt button.sel{background:#FF3D7F;color:#fff;border-color:#FF3D7F}
+.settings-box .close{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:#6b4226;color:#fff;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;touch-action:manipulation}
+.status{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 14px;border-radius:16px;font-size:11px;font-family:monospace;z-index:300;max-width:94%;text-align:center;transition:opacity .5s}
+.status.hide{opacity:0;pointer-events:none}
 </style>
 </head>
 <body>
 
-<div id="topbar">
-  <div class="score-box">⭐ <span id="score">0</span></div>
-  <div class="btns">
-    <button id="soundBtn" title="Звук">🔊</button>
-    <button id="musicBtn" title="Музыка">🎵</button>
-    <button id="settingsBtn" title="Настройки">⚙️</button>
-  </div>
+<div class="sky">
+  <div class="sun">☀️</div>
+  <div class="cloud" style="top:8%;animation-duration:30s">☁️</div>
+  <div class="cloud" style="top:22%;animation-duration:40s;animation-delay:5s">☁️</div>
+  <div class="cloud" style="top:45%;animation-duration:35s;animation-delay:12s">☁️</div>
+  <div class="butterfly">🦋</div>
+  <div class="butterfly" style="animation-delay:6s">🦋</div>
+  <div class="hill"></div>
 </div>
 
-<div id="progress"></div>
-<div id="question">Нажми «Старт»</div>
-<div id="shapes" class="shapes g3"></div>
+<div class="intro" id="introScreen">
+  <div class="sun">☀️</div>
+  <div class="bear-big" id="introBear">
+    <img src="images/bear_wave.png" alt="Мишка" onerror="this.src='images/bear_idle.png'">
+  </div>
+  <h1>🌈 Привет!</h1>
+  <p>Я — <b>Мишка</b>!<br>Я учу детей цветам.<br>Давай поиграем вместе!</p>
+  <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
+</div>
 
-<div id="bearRunner">
-  <div id="bearBubble">Привет!</div>
-  <div id="bearSay" style="display:none"></div>
-
-  <img class="pose-img" data-pose="idle"     src="images/bear_idle.png"     alt="">
-  <img class="pose-img" data-pose="walk1"    src="images/bear_walk_1.png"   alt="">
-  <img class="pose-img" data-pose="walk2"    src="images/bear_walk_2.png"   alt="">
-  <img class="pose-img" data-pose="happy"    src="images/bear_happy.png"    alt="">
-  <img class="pose-img" data-pose="heart"    src="images/bear_heart.png"    alt="">
-  <img class="pose-img" data-pose="sad"      src="images/bear_sad.png"      alt="">
-  <img class="pose-img" data-pose="sleep"    src="images/bear_sleep.png"    alt="">
-  <img class="pose-img" data-pose="sign"     src="images/bear_sign.png"     alt="">
-  <img class="pose-img" data-pose="honey"    src="images/bear_honey.png"    alt="">
-  <img class="pose-img" data-pose="wave"     src="images/bear_wave.png"     alt="">
-  <img class="pose-img" data-pose="blink"    src="images/bear_blink.png"    alt="">
-  <img class="pose-img" data-pose="dance"    src="images/bear_dance.png"    alt="">
-  <img class="pose-img" data-pose="think"    src="images/bear_think.png"    alt="">
-  <img class="pose-img" data-pose="wow"      src="images/bear_wow.png"      alt="">
-  <img class="pose-img" data-pose="yawn"     src="images/bear_yawn.png"     alt="">
-  <img class="pose-img" data-pose="glasses"  src="images/bear_glasses.png"  alt="">
+<div class="bear-runner idle" id="bearRunner" style="left:20px;top:140px">
+  <div class="bear-bubble" id="bearBubble">Привет!</div>
+  <div class="bear-pointer">👇</div>
+  <img class="pose-img active" data-pose="idle" src="images/bear_idle.png" alt="">
+  <img class="pose-img" data-pose="walk1" src="images/bear_walk_1.png" alt="">
+  <img class="pose-img" data-pose="walk2" src="images/bear_walk_2.png" alt="">
+  <img class="pose-img" data-pose="happy" src="images/bear_happy.png" alt="">
+  <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
+  <img class="pose-img" data-pose="sad" src="images/bear_sad.png" alt="">
+  <img class="pose-img" data-pose="sleep" src="images/bear_sleep.png" alt="">
+  <img class="pose-img" data-pose="sign" src="images/bear_sign.png" alt="">
+  <img class="pose-img" data-pose="honey" src="images/bear_honey.png" alt="">
+  <img class="pose-img" data-pose="wave" src="images/bear_wave.png" alt="">
+  <img class="pose-img" data-pose="blink" src="images/bear_blink.png" alt="">
+  <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
+  <img class="pose-img" data-pose="think" src="images/bear_think.png" alt="">
+  <img class="pose-img" data-pose="wow" src="images/bear_wow.png" alt="">
+  <img class="pose-img" data-pose="yawn" src="images/bear_yawn.png" alt="">
+  <img class="pose-img" data-pose="glasses" src="images/bear_glasses.png" alt="">
   <img class="pose-img" data-pose="backpack" src="images/bear_backpack.png" alt="">
-  <img class="pose-img" data-pose="strong"   src="images/bear_strong.png"   alt="">
+  <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
 </div>
 
-<div id="status" class="hide"></div>
-
-<div id="introScreen" class="screen on">
-  <div class="card">
-    <h1>🐻 Мишка учит цвета</h1>
-    <p>Помоги мишке найти нужный цвет!</p>
-    <p>Слушай внимательно и нажимай на правильную фигуру.</p>
-    <button class="big-btn" id="startBtn">▶ Старт</button>
-  </div>
-</div>
-
-<div id="settingsScreen" class="screen">
-  <div class="card">
-    <h1>⚙️ Настройки</h1>
-    <div class="opt-row">
-      <span>Сложность</span>
-      <div class="opts" id="optDiff">
-        <button data-n="2">2 цвета</button>
-        <button data-n="3" class="sel">3 цвета</button>
-        <button data-n="4">4 цвета</button>
-        <button data-n="6">6 цветов</button>
-      </div>
+<div class="frame">
+  <div class="progress" id="progress"></div>
+  <div class="top">
+    <div class="score">⭐ Счёт: <span id="score">0</span></div>
+    <div class="top-btns">
+      <button class="btn-icon" id="musicBtn" onclick="toggleMusic()">🎵</button>
+      <button class="btn-icon" id="soundBtn" onclick="toggleSound()">🔊</button>
+      <button class="btn-icon" onclick="openSettings()">⚙</button>
     </div>
-    <div class="opt-row">
-      <span>Подсказка через</span>
-      <div class="opts" id="optTime">
-        <button data-ms="0">Выкл</button>
-        <button data-ms="8000">8 сек</button>
-        <button data-ms="15000" class="sel">15 сек</button>
-        <button data-ms="25000">25 сек</button>
-      </div>
+  </div>
+  <div class="bear-say" id="bearSay">Привет! Я — Мишка!</div>
+  <div class="q" id="question">Нажми ▶ ИГРАТЬ</div>
+  <button class="repeat" onclick="repeatQuestion()">🔁 Повторить</button>
+  <div class="shapes" id="shapes"></div>
+</div>
+
+<div class="learn" id="learnModal">
+  <div class="learn-wrap">
+    <div class="learn-box">
+      <div class="learn-color-band" id="learnBand"></div>
+      <div class="learn-items" id="learnItems"></div>
+      <div class="learn-name" id="learnName">КРАСНЫЙ</div>
+      <div class="learn-rhyme" id="learnRhyme">Стишок</div>
     </div>
-    <div class="opt-row">
-      <span>Громкость музыки</span>
-      <div class="opts" id="optVol">
-        <button data-v="0">🔇</button>
-        <button data-v="0.05">Тихо</button>
-        <button data-v="0.12" class="sel">Средне</button>
-        <button data-v="0.25">Громко</button>
-      </div>
-    </div>
-    <button class="big-btn" id="closeSettingsBtn">Готово</button>
+  </div>
+  <div class="learn-bear" id="learnBear">
+    <img class="pose-img active" data-pose="happy" src="images/bear_happy.png" alt="">
+    <img class="pose-img" data-pose="heart" src="images/bear_heart.png" alt="">
+    <img class="pose-img" data-pose="dance" src="images/bear_dance.png" alt="">
+    <img class="pose-img" data-pose="strong" src="images/bear_strong.png" alt="">
   </div>
 </div>
 
-<div id="learnModal" class="screen">
-  <div class="card">
-    <div id="learnBand"></div>
-    <div id="learnName"></div>
-    <div id="learnRhyme"></div>
-    <div id="learnItems"></div>
-    <div id="learnBear"></div>
+<div class="win" id="winScreen">
+  <h2>МОЛОДЕЦ!</h2>
+  <div class="stars-big"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <p id="winText">Ты выучил все цвета!</p>
+  <button onclick="restartGame()">🎮 Играть снова</button>
+</div>
+
+<div class="settings" id="settingsScreen">
+  <div class="settings-box">
+    <h3>⚙ Настройки</h3>
+    <label>Сложность:</label>
+    <div class="opt" id="optDiff">
+      <button data-val="2" onclick="setDiff(2,this)">Легко (2)</button>
+      <button data-val="4" onclick="setDiff(4,this)" class="sel">Средне (4)</button>
+      <button data-val="6" onclick="setDiff(6,this)">Сложно (6)</button>
+    </div>
+    <label>⏱ Подсказка через:</label>
+    <div class="opt" id="optTime">
+      <button data-val="5000" onclick="setTime(5000,this)">5 сек</button>
+      <button data-val="10000" onclick="setTime(10000,this)" class="sel">10 сек</button>
+      <button data-val="15000" onclick="setTime(15000,this)">15 сек</button>
+    </div>
+    <label>🎵 Громкость музыки:</label>
+    <div class="opt" id="optVol">
+      <button data-val="0" onclick="setVol(0,this)">Выкл</button>
+      <button data-val="0.05" onclick="setVol(0.05,this)">Тихо</button>
+      <button data-val="0.12" onclick="setVol(0.12,this)" class="sel">Средне</button>
+      <button data-val="0.2" onclick="setVol(0.2,this)">Громко</button>
+    </div>
+    <button class="close" onclick="closeSettings()">✕ Закрыть</button>
   </div>
 </div>
 
-<div id="winScreen" class="screen">
-  <div class="card">
-    <h1>🎉 Победа! 🎉</h1>
-    <p>Ты выучил все цвета!</p>
-    <div id="winText"></div>
-    <button class="big-btn" id="restartBtn">Играть ещё</button>
-  </div>
-</div>
+<div class="status" id="status">Готово</div>
 
 <script>
-// ============================================================
-//  ЦВЕТА
-// ============================================================
+const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
+let settings = {...DEFAULTS};
+try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) settings={...DEFAULTS,...s}; } catch(e){}
+function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
+
 const COLORS = [
-  { name:'красный', nameEn:'red', hex:'#E53935', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3',
-    rhyme:'Красная ягода — сладкий секрет, красный помидор — вот это цвет!',
-    items:[{e:'🍓',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🍎',f:'img_red_2.jpg'},{e:'❤️',f:'img_red_3.jpg'}] },
-  { name:'оранжевый', nameEn:'orange', hex:'#FB8C00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', hintFile:'hint_orange.mp3',
-    rhyme:'Оранжевый апельсин — сочный привет, оранжевый лучик — солнечный свет!',
-    items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🥕',f:'img_orange_2.jpg'},{e:'🦊',f:'img_orange_3.jpg'}] },
-  { name:'жёлтый', nameEn:'yellow', hex:'#FDD835', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', hintFile:'hint_yellow.mp3',
-    rhyme:'Жёлтое солнце сияет с небес, жёлтый цыплёнок — маленький лес!',
-    items:[{e:'☀️',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐥',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
-  { name:'зелёный', nameEn:'green', hex:'#43A047', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', hintFile:'hint_green.mp3',
-    rhyme:'Зелёная травка — мягкий ковёр, зелёный кузнечик — ловкий прыгун!',
-    items:[{e:'🌿',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🐸',f:'img_green_2.jpg'},{e:'🥒',f:'img_green_3.jpg'}] },
-  { name:'синий', nameEn:'blue', hex:'#1E88E5', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', hintFile:'hint_blue.mp3',
-    rhyme:'Синее море шумит вдалеке, синяя тучка плывёт в облаке!',
-    items:[{e:'🌊',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🐳',f:'img_blue_2.jpg'},{e:'💙',f:'img_blue_3.jpg'}] },
-  { name:'фиолетовый', nameEn:'purple', hex:'#8E24AA', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', hintFile:'hint_purple.mp3',
-    rhyme:'Фиолетовый виноград — сладкий секрет, фиолетовый баклажан — вот это цвет!',
+  { name:'красный', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3', encFile:'enc_red.mp3',
+    rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
+    items:[{e:'🍎',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🐞',f:'img_red_2.jpg'},{e:'🔥',f:'img_red_3.jpg'}] },
+  { name:'синий', nameEn:'blue', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', hintFile:'hint_blue.mp3', encFile:'enc_blue.mp3',
+    rhyme:'Синее море — ширь без края, синяя волна бежит, играя!',
+    items:[{e:'🎈',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🌌',f:'img_blue_2.jpg'},{e:'🌊',f:'img_blue_3.jpg'}] },
+  { name:'жёлтый', nameEn:'yellow', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', hintFile:'hint_yellow.mp3', encFile:'enc_yellow.mp3',
+    rhyme:'Жёлтое солнце светит нам, жёлтый одуванчик — тут и там!',
+    items:[{e:'🍌',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐤',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
+  { name:'зелёный', nameEn:'green', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', hintFile:'hint_green.mp3', encFile:'enc_green.mp3',
+    rhyme:'Зелёная трава — мягко и свежо, зелёный огурец — вкусно, хорошо!',
+    items:[{e:'🥒',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🌲',f:'img_green_2.jpg'},{e:'🌿',f:'img_green_3.jpg'}] },
+  { name:'оранжевый', nameEn:'orange', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', hintFile:'hint_orange.mp3', encFile:'enc_orange.mp3',
+    rhyme:'Оранжевый апельсин — сочный и яркий, оранжевая морковка — вкусный подарок!',
+    items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🦊',f:'img_orange_2.jpg'},{e:'🥕',f:'img_orange_3.jpg'}] },
+  { name:'фиолетовый', nameEn:'purple', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', hintFile:'hint_purple.mp3', encFile:'enc_purple.mp3',
+    rhyme:'Фиолетовая слива — сладкий секрет, фиолетовый баклажан — вот это цвет!',
     items:[{e:'🍇',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'🍆',f:'img_purple_2.jpg'},{e:'🍑',f:'img_purple_3.jpg'}] },
-  { name:'розовый', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', hintFile:'hint_pink.mp3',
+  { name:'розовый', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', hintFile:'hint_pink.mp3', encFile:'enc_pink.mp3',
     rhyme:'Розовая свинка хрюкает: «Хрю!», розовый бантик — я его люблю!',
     items:[{e:'🌸',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'🐷',f:'img_pink_2.jpg'},{e:'🍡',f:'img_pink_3.jpg'}] },
-  { name:'голубой', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', hintFile:'hint_lightblue.mp3',
+  { name:'голубой', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', hintFile:'hint_lightblue.mp3', encFile:'enc_lightblue.mp3',
     rhyme:'Голубой ручеёк поёт: «Жур-жур!», голубой цветок — как маленький узор!',
     items:[{e:'☕',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'🏞️',f:'img_lightblue_2.jpg'},{e:'💧',f:'img_lightblue_3.jpg'}] },
-  { name:'коричневый', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', hintFile:'hint_brown.mp3',
+  { name:'коричневый', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', hintFile:'hint_brown.mp3', encFile:'enc_brown.mp3',
     rhyme:'Коричневый мишка — плюшевый друг, коричневый шоколад — сладкий вокруг!',
     items:[{e:'🐻',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'🍫',f:'img_brown_2.jpg'},{e:'🍄',f:'img_brown_3.jpg'}] },
-  { name:'чёрный', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', hintFile:'hint_black.mp3',
+  { name:'чёрный', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', hintFile:'hint_black.mp3', encFile:'enc_black.mp3',
     rhyme:'Чёрный пингвин шагает вперёд, чёрный уголёк тихонько ждёт!',
     items:[{e:'🐱',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'🐧',f:'img_black_2.jpg'},{e:'⚫',f:'img_black_3.jpg'}] },
-  { name:'белый', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', hintFile:'hint_white.mp3',
+  { name:'белый', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', hintFile:'hint_white.mp3', encFile:'enc_white.mp3',
     rhyme:'Белый снег кружится — лёгкий полёт, белое молоко — тёплый уют!',
     items:[{e:'🐰',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'🍬',f:'img_white_2.jpg'},{e:'❄️',f:'img_white_3.jpg'}] },
-  { name:'серый', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', hintFile:'hint_gray.mp3',
+  { name:'серый', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', hintFile:'hint_gray.mp3', encFile:'enc_gray.mp3',
     rhyme:'Серый слоник топает: «Топ-топ!», серый зайчонок смотрит: «Оп-оп!»',
     items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
 ];
 
-// ============================================================
-//  НАСТРОЙКИ
-// ============================================================
-const DEFAULT_SETTINGS = { diff: 3, timeMs: 15000, vol: 0.12, soundOn: true, musicOn: true };
-let settings = { ...DEFAULT_SETTINGS };
-try {
-  const saved = localStorage.getItem('bearColorsSettings');
-  if (saved) settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
-} catch (e) {}
-function saveSettings() {
-  try { localStorage.setItem('bearColorsSettings', JSON.stringify(settings)); } catch (e) {}
-}
-
-// ============================================================
-//  СОСТОЯНИЕ
-// ============================================================
 const ROUNDS = 10;
-let score = 0, round = 0, target = null;
-let soundOn = settings.soundOn, musicOn = settings.musicOn;
-let locked = false, started = false;
-let currentAudio = null, imageAvailable = {}, bearImages = {};
-let statusTimer = null, hintTimer = null, runTimer = null;
-let walkFrameTimer = null, blinkTimer = null, thinkTimer = null;
-let walkFrame = 1;
+let score=0, round=0, target=null;
+let soundOn=true, musicOn=true, locked=false, started=false;
+let currentAudio=null, imageAvailable={}, bearImages={};
+let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkTimer=null, thinkTimer=null;
+let walkFrame=1;
 let isHinting = false;
 let atTop = true;
 let hintAudio = null;
 let audioCtx = null;
 let musicTimer = null;
 let musicGainNode = null;
-let musicWatchdog = null;
-let hintRepeatTimer = null;
 
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
 const BEAR_W = 100, BEAR_H = 120;
 
-// ============================================================
-//  TTS — запасной голос
-// ============================================================
-function speakFallback(text) {
-  if (!soundOn) return;
-  if (!('speechSynthesis' in window)) return;
-  try {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ru-RU';
-    u.rate = 0.95;
-    u.pitch = 1.1;
-    const voices = speechSynthesis.getVoices();
-    const ru = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ru'));
-    if (ru) u.voice = ru;
-    speechSynthesis.speak(u);
-  } catch (e) {}
-}
-if ('speechSynthesis' in window) {
-  speechSynthesis.onvoiceschanged = () => {};
-  speechSynthesis.getVoices();
-}
-
-// ============================================================
-//  АНИМАЦИЯ МИШКИ
-// ============================================================
 function setPose(pose) {
   if (!bearImages[pose]) return;
   bear.querySelectorAll('.pose-img').forEach(img => {
@@ -441,11 +322,11 @@ function setPose(pose) {
 function startWalkFrames() {
   stopWalkFrames();
   walkFrameTimer = setInterval(() => {
-    walkFrame = walkFrame === 1 ? 2 : 1;
-    setPose('walk' + walkFrame);
+    walkFrame = walkFrame===1?2:1;
+    setPose('walk'+walkFrame);
   }, 220);
 }
-function stopWalkFrames() { if (walkFrameTimer) { clearInterval(walkFrameTimer); walkFrameTimer = null; } }
+function stopWalkFrames() { if (walkFrameTimer){ clearInterval(walkFrameTimer); walkFrameTimer=null; } }
 function startBlinking() {
   stopBlinking();
   blinkTimer = setInterval(() => {
@@ -454,24 +335,24 @@ function startBlinking() {
     setTimeout(() => { if (!locked && started && !isHinting) setPose('idle'); }, 200);
   }, 4000);
 }
-function stopBlinking() { if (blinkTimer) { clearInterval(blinkTimer); blinkTimer = null; } }
+function stopBlinking() { if (blinkTimer){ clearInterval(blinkTimer); blinkTimer=null; } }
 
 function bearSays(text) {
   bearSay.textContent = '🐻 ' + text;
-  bearBubble.textContent = text.length > 34 ? text.slice(0, 34) + '…' : text;
+  bearBubble.textContent = text.length>20 ? text.slice(0,20)+'…' : text;
   bear.classList.add('talking');
   setTimeout(() => bear.classList.remove('talking'), 2200);
 }
 function bearClearClasses() {
   bear.classList.remove('idle','walking','falling','landed','pointing','happy','sad','win','sleeping','talking','front','thinking','dancing');
 }
-function bearTeleport(x, y) {
-  bear.style.transition = 'none';
-  bear.style.left = x + 'px'; bear.style.top = y + 'px';
+function bearTeleport(x,y) {
+  bear.style.transition='none';
+  bear.style.left=x+'px'; bear.style.top=y+'px';
   void bear.offsetWidth;
-  bear.style.transition = 'left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)';
+  bear.style.transition='left 1.2s cubic-bezier(.34,1.3,.64,1),top 1.2s cubic-bezier(.34,1.3,.64,1)';
 }
-function bearRunTo(x, y) { bear.style.left = x + 'px'; bear.style.top = y + 'px'; }
+function bearRunTo(x,y) { bear.style.left=x+'px'; bear.style.top=y+'px'; }
 
 function clamp(x, y) {
   const w = window.innerWidth, h = window.innerHeight;
@@ -500,7 +381,6 @@ function bearFallFrom() {
   }, 1200);
 }
 
-// ===== ПОДСКАЗКА: мишка идёт к правильному цвету =====
 function bearPointTo(element) {
   isHinting = true;
   stopBearWalk();
@@ -508,19 +388,18 @@ function bearPointTo(element) {
   stopWalkFrames();
   clearTimeout(thinkTimer);
   clearTimeout(runTimer);
-  if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   bearClearClasses();
-  bear.classList.add('pointing', 'front');
+  bear.classList.add('front','pointing');
   setPose('sign');
-
   if (element) {
     const r = element.getBoundingClientRect();
     const x = r.left + r.width / 2 - BEAR_W / 2;
     const y = r.top + r.height / 2 - BEAR_H / 2;
     const p = clamp(x, y);
     bearTeleport(p.x, p.y);
+    if (window._hintHoldInterval) clearInterval(window._hintHoldInterval);
     window._hintHoldInterval = setInterval(() => {
-      if (!isHinting) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; return; }
+      if (!isHinting) { clearInterval(window._hintHoldInterval); return; }
       bearRunTo(p.x, p.y);
     }, 500);
   }
@@ -538,7 +417,7 @@ function bearWalkSpot() {
 }
 
 function startBearWalk() {
-  if (isHinting || !started || locked) return;
+  if (isHinting) return;
   stopBearWalk();
   bearClearClasses();
   bear.classList.add('walking');
@@ -579,10 +458,7 @@ function bearSadMove() {
   bearClearClasses();
   bear.classList.add('sad');
   setPose('sad');
-  setTimeout(() => {
-    bear.classList.remove('sad');
-    if (!isHinting && !locked) { setPose('idle'); startBearWalk(); startBlinking(); }
-  }, 1200);
+  setTimeout(() => { bear.classList.remove('sad'); startBearWalk(); startBlinking(); }, 1200);
 }
 function bearThinkMode() {
   if (!bearImages.think || locked || isHinting) return;
@@ -602,18 +478,19 @@ function bearDanceMove() {
   }, 1300);
 }
 
-// ============================================================
-//  AUDIO
-// ============================================================
+// ====== ЕДИНЫЙ AUDIO CONTEXT ======
 function getCtx() {
   if (audioCtx) return audioCtx;
-  try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(e) { audioCtx = null; }
   return audioCtx;
 }
+
 function unlockAudio() {
   const ctx = getCtx();
   if (!ctx) return;
-  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  if (ctx.state === 'suspended') ctx.resume();
   try {
     const o = ctx.createOscillator();
     const g = ctx.createGain();
@@ -621,30 +498,22 @@ function unlockAudio() {
     o.frequency.value = 220;
     o.connect(g); g.connect(ctx.destination);
     o.start(); o.stop(ctx.currentTime + 0.05);
-  } catch (e) {}
+  } catch(e){}
 }
 
-// ============================================================
-//  МУЗЫКА
-// ============================================================
-const NOTE = { C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880, R:0 };
-const MELODY = [
-  ['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],
-  ['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],
-  ['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],
-  ['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]
-];
+// ====== МУЗЫКА ======
+const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
+const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS = 340;
 
 function ensureMusicGain() {
   const ctx = getCtx();
-  if (!ctx) return;
-  if (!musicGainNode) {
-    musicGainNode = ctx.createGain();
-    musicGainNode.connect(ctx.destination);
-  }
+  if (!ctx || musicGainNode) return;
+  musicGainNode = ctx.createGain();
   musicGainNode.gain.value = settings.vol;
+  musicGainNode.connect(ctx.destination);
 }
+
 function playMusicNote(freq, dur) {
   const ctx = getCtx();
   if (!musicOn || !freq || !ctx) return;
@@ -662,12 +531,11 @@ function playMusicNote(freq, dur) {
   o.connect(g); g.connect(musicGainNode);
   o.start(now); o.stop(now + d);
 }
+
 function startMusic() {
   const ctx = getCtx();
-  if (!ctx) return;
-  if (!musicOn || settings.vol === 0) return;
-  if (musicTimer) return;
-  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  if (!musicOn || musicTimer || !ctx || settings.vol === 0) return;
+  if (ctx.state === 'suspended') ctx.resume();
   ensureMusicGain();
   let i = 0;
   const next = () => {
@@ -678,138 +546,115 @@ function startMusic() {
     i = (i + 1) % MELODY.length;
   };
   next();
-  clearTimeout(musicWatchdog);
-  musicWatchdog = setTimeout(() => {
-    if (musicOn && !musicTimer && started) startMusic();
-  }, 2000);
 }
+
 function pauseMusic() {
   if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
-  clearTimeout(musicWatchdog);
-  musicWatchdog = null;
 }
+
 function toggleMusic() {
   unlockAudio();
   musicOn = !musicOn;
   settings.musicOn = musicOn;
   saveSettings();
   document.getElementById('musicBtn').textContent = musicOn ? '🎵' : '🔕';
-  if (musicOn) setTimeout(() => startMusic(), 50);
-  else pauseMusic();
+  if (musicOn) startMusic(); else pauseMusic();
 }
 
-// ============================================================
-//  MP3 + TTS fallback
-// ============================================================
-function playMp3(mp3, fallbackText, cb) {
+// ====== MP3 ======
+function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
   if (currentAudio) {
-    try { currentAudio.pause(); currentAudio.currentTime = 0; } catch (e) {}
+    try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
     currentAudio = null;
   }
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
-
   let failed = false;
   const restore = () => {
-    if (wasMusic && musicOn && !musicTimer) {
-      setTimeout(() => { if (musicOn && !musicTimer && started) startMusic(); }, 150);
-    }
+    if (wasMusic && musicOn && !musicTimer) startMusic();
   };
-  const doFallback = () => {
-    if (failed) return;
+  const fallback = () => {
+    if(failed) return;
     failed = true;
-    if (fallbackText) speakFallback(fallbackText);
     restore();
-    if (cb) cb();
+    if(cb) cb();
   };
   try {
-    const a = new Audio('sounds/' + mp3);
+    const a = new Audio('sounds/'+mp3);
     a.volume = 1.0;
     currentAudio = a;
-    a.onerror = doFallback;
-    a.onended = () => { restore(); if (cb) cb(); };
+    a.onerror = fallback;
+    a.onended = () => { restore(); if(cb) cb(); };
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(doFallback);
+      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
     }
     setTimeout(() => {
       if (failed) return;
-      if (a.readyState === 0) doFallback();
+      if (a.readyState === 0) fallback();
     }, 3000);
-  } catch (e) { doFallback(); }
+  } catch(e) { fallback(); }
 }
 
-function playHintMp3(mp3, fallbackText) {
+// ====== HINT MP3 ======
+function playHintMp3(mp3) {
   if (!soundOn) return;
   if (hintAudio) {
-    try { hintAudio.pause(); hintAudio.currentTime = 0; } catch (e) {}
+    try { hintAudio.pause(); hintAudio.currentTime = 0; } catch(e){}
     hintAudio = null;
   }
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
-  let failed = false;
-  const resume = () => {
-    hintAudio = null;
-    if (wasMusic && musicOn && !musicTimer) {
-      setTimeout(() => { if (musicOn && !musicTimer && started) startMusic(); }, 150);
-    }
-  };
-  const doFallback = () => {
-    if (failed) return;
-    failed = true;
-    if (fallbackText) speakFallback(fallbackText);
-    resume();
-  };
   try {
     const a = new Audio('sounds/' + mp3);
     a.volume = 1.0;
     hintAudio = a;
-    a.onerror = doFallback;
+    const resume = () => {
+      hintAudio = null;
+      if (wasMusic && musicOn && !musicTimer) startMusic();
+    };
+    a.onerror = () => { console.warn('hint error:', mp3); resume(); };
     a.onended = resume;
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(doFallback);
+      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(e => {
+        console.warn('hint play error:', e);
+        resume();
+      });
     }
-    setTimeout(() => {
-      if (failed) return;
-      if (a.readyState === 0) doFallback();
-    }, 3000);
-  } catch (e) { doFallback(); }
-}
-
-// ============================================================
-//  UI
-// ============================================================
-function setStatus(m, bg, autoHide) {
-  const el = document.getElementById('status');
-  el.textContent = m;
-  el.style.background = bg || 'rgba(0,0,0,.85)';
-  el.classList.remove('hide');
-  if (autoHide) {
-    clearTimeout(statusTimer);
-    statusTimer = setTimeout(() => el.classList.add('hide'), 2500);
+  } catch(e) {
+    console.warn('hint exception:', e);
+    if (wasMusic && musicOn) startMusic();
   }
 }
-function drawProgress() {
-  const p = document.getElementById('progress');
-  p.innerHTML = '';
-  for (let i = 0; i < ROUNDS; i++) {
-    const s = document.createElement('span');
-    s.className = 'star' + (i < round ? ' done' : '');
-    s.textContent = '⭐';
+
+function sayVoiceOnly(text, cb) { if (cb) cb(); }
+
+function setStatus(m,bg,autoHide){
+  const el=document.getElementById('status');
+  el.textContent=m;
+  el.style.background=bg||'rgba(0,0,0,.85)';
+  el.classList.remove('hide');
+  if(autoHide){ clearTimeout(statusTimer); statusTimer=setTimeout(()=>el.classList.add('hide'),2500);}
+}
+function drawProgress(){
+  const p=document.getElementById('progress');
+  p.innerHTML='';
+  for(let i=0;i<ROUNDS;i++){
+    const s=document.createElement('span');
+    s.className='star'+(i<round?' done':'');
+    s.textContent='⭐';
     p.appendChild(s);
   }
 }
-function checkImage(name) {
-  return new Promise(r => {
-    const img = new Image();
-    let done = false;
-    const fin = (v) => { if (done) return; done = true; r(v); };
-    img.onload = () => fin(true);
-    img.onerror = () => fin(false);
-    img.src = 'images/' + name;
-    setTimeout(() => fin(false), 800);
+function checkImage(name){
+  return new Promise(r=>{
+    const img=new Image();
+    img.onload=()=>r(true);
+    img.onerror=()=>r(false);
+    img.src='images/'+name;
+    setTimeout(()=>r(false),400);
   });
 }
 async function findBearImages() {
@@ -821,79 +666,63 @@ async function findBearImages() {
     return ok ? 1 : 0;
   });
   const results = await Promise.all(checks);
-  return results.reduce((a, b) => a + b, 0);
+  return results.reduce((a,b)=>a+b, 0);
 }
 async function checkAllImages() {
   const checks = [];
-  COLORS.forEach(c => c.items.forEach(it => {
-    checks.push(checkImage(it.f).then(ok => { imageAvailable[it.f] = ok; }));
-    if (it.old) checks.push(checkImage(it.old).then(ok => { imageAvailable[it.old] = ok; }));
+  COLORS.forEach(c=>c.items.forEach(it=>{
+    checks.push(checkImage(it.f).then(ok=>{ imageAvailable[it.f]=ok; }));
+    if(it.old) checks.push(checkImage(it.old).then(ok=>{ imageAvailable[it.old]=ok; }));
   }));
   await Promise.all(checks);
 }
-function shuffle(a) {
-  a = [...a];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+function shuffle(a){
+  a=[...a];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
   }
   return a;
 }
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-const PRAISE = ['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 
-// ============================================================
-//  СТАРТ
-// ============================================================
+// ====== СТАРТ ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
-  document.getElementById('introScreen').classList.remove('on');
   unlockAudio();
   const ctx = getCtx();
-  if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
-
+  if (bearImages.wave) setPose('wave');
+  else setPose('idle');
+  bearTeleport(20, 140);
+  bearFallFrom();
+  if (musicOn) {
+    setTimeout(() => { startMusic(); }, 200);
+  }
   findBearImages().then(found => {
-    setStatus('🐻 Мишек: ' + found + '/18', found >= 9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
-    if (bearImages.wave) setPose('wave');
-    else setPose('idle');
-    bearTeleport(20, 140);
-    bearFallFrom();
-    if (musicOn) setTimeout(() => startMusic(), 250);
-  }).catch(() => {
-    setPose('idle');
-    bearTeleport(20, 140);
-    bearFallFrom();
-    if (musicOn) setTimeout(() => startMusic(), 250);
-  });
-
-  checkAllImages().catch(() => {});
-
+    setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
+  }).catch(()=>{});
+  checkAllImages().catch(()=>{});
   const helloText = 'Привет! Я — Мишка! Давай поиграем!';
   bearSays(helloText);
-  playMp3('hello.mp3', helloText, () => {
+  playMp3('hello.mp3', null, () => {
     setTimeout(newRound, 400);
   });
 }
 
-// ============================================================
-//  РАУНД
-// ============================================================
 function newRound() {
   stopHint();
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
-  if (hintRepeatTimer) { clearInterval(hintRepeatTimer); hintRepeatTimer = null; }
   locked = false;
-
-  target = COLORS[Math.floor(Math.random() * COLORS.length)];
-  const count = Math.min(settings.diff, COLORS.length);
-  const others = shuffle(COLORS.filter(c => c.name !== target.name)).slice(0, count - 1);
+  target = COLORS[Math.floor(Math.random()*COLORS.length)];
+  const count = settings.diff;
+  const others = shuffle(COLORS.filter(c=>c.name!==target.name)).slice(0, count-1);
   const opts = shuffle([target, ...others]);
-
   document.getElementById('question').textContent = 'Найди ' + target.name + '!';
   bearSays('Найди ' + target.name + '!');
-
   const box = document.getElementById('shapes');
   box.className = 'shapes g' + count;
   box.innerHTML = '';
@@ -901,40 +730,34 @@ function newRound() {
     const b = document.createElement('button');
     b.className = 'shape';
     b.style.background = c.hex;
-    if (c.name === 'белый') b.style.border = '4px solid #E0E0E0';
+    if (c.name==='белый') b.style.border = '4px solid #E0E0E0';
     b.innerHTML = '<span class="label">' + c.name + '</span>';
     b.onclick = (e) => handleClick(c, b, e);
     box.appendChild(b);
   });
-
-  setTimeout(() => {
-    playMp3(target.file, 'Найди ' + target.name, () => {});
-  }, 300);
-
+  setTimeout(() => playMp3(target.file), 300);
   startHintTimer();
   if (!runTimer && !locked && !isHinting) startBearWalk();
-
   clearTimeout(thinkTimer);
   thinkTimer = setTimeout(() => {
     if (!locked && started && !isHinting) bearThinkMode();
   }, 3000);
 }
 
-// ============================================================
-//  КЛИК ПО ЦВЕТУ
-// ============================================================
+function repeatQuestion() {
+  unlockAudio();
+  if (!started || !target) return;
+  playMp3(target.file);
+}
+
 function handleClick(c, btn, e) {
   if (locked || !started) return;
   stopHint();
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
-  if (hintRepeatTimer) { clearInterval(hintRepeatTimer); hintRepeatTimer = null; }
-
   const rect = btn.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-
+  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
   if (c.name === target.name) {
-    // ============ ПРАВИЛЬНО ============
     locked = true;
     stopBearWalk();
     btn.classList.add('ok');
@@ -945,95 +768,61 @@ function handleClick(c, btn, e) {
     bearHappyMove();
     const praise = pick(['Молодец!','Умничка!','Правильно!']);
     bearSays(praise + ' Это ' + c.name + '!');
-    playMp3(pick(PRAISE), praise + ' Это ' + c.name, () => {
+    playMp3(pick(PRAISE), null, () => {
       showLearn(c, () => {
         if (round >= ROUNDS) showWin();
         else newRound();
       });
     });
   } else {
-    // ============ НЕПРАВИЛЬНО ============
-    // Мишка называет ПРАВИЛЬНЫЙ цвет (target), а не нажатый (c)
     btn.classList.add('no');
     explode(cx, cy, 'no');
-    setTimeout(() => btn.classList.remove('no'), 500);
-
-    const encText = 'Ничего страшного! Ищи ' + target.name + '!';
-    bearSays(encText);
+    setTimeout(()=>btn.classList.remove('no'), 500);
+    if (bearImages.wow && !window._wowShown) {
+      window._wowShown = true;
+      setPose('wow');
+      setTimeout(() => { if (!locked) setPose('idle'); }, 1200);
+    }
     bearSadMove();
-    speakFallback(encText);
-    startHintTimer();
+    const enc = 'Ничего страшного! Ищи ' + target.name + '!';
+    bearSays(enc);
+    // ⬇⬇⬇ ИСПРАВЛЕНИЕ: играем hintFile ПРАВИЛЬНОГО цвета, а не encFile нажатого
+    playMp3(target.hintFile, null, () => {
+      startHintTimer();
+    });
   }
 }
 
-// ============================================================
-//  ПОДСКАЗКА
-// ============================================================
 function startHintTimer() {
   clearTimeout(hintTimer);
   if (!settings.timeMs) return;
   hintTimer = setTimeout(() => {
     if (locked || !started || !target || isHinting) return;
-    showHint();
+    if (bearImages.yawn) setPose('yawn');
+    setTimeout(() => {
+      if (locked) return;
+      const buttons = document.querySelectorAll('#shapes .shape');
+      let targetBtn = null;
+      buttons.forEach(b => {
+        const label = b.querySelector('.label');
+        if (label && label.textContent === target.name) targetBtn = b;
+      });
+      if (targetBtn) {
+        targetBtn.classList.add('hint');
+        bearPointTo(targetBtn);
+        const hint = 'Вот ' + target.name + '! Нажми сюда!';
+        bearSays(hint);
+        playHintMp3(target.hintFile);
+      }
+    }, 700);
   }, settings.timeMs);
 }
-
-function showHint() {
-  if (locked || !started || !target || isHinting) return;
-
-  const buttons = document.querySelectorAll('#shapes .shape');
-  let targetBtn = null;
-  buttons.forEach(b => {
-    const label = b.querySelector('.label');
-    if (label && label.textContent === target.name) targetBtn = b;
-  });
-  if (!targetBtn) return;
-
-  if (bearImages.yawn) {
-    setPose('yawn');
-    setTimeout(() => {
-      if (locked || isHinting) return;
-      runHint(targetBtn);
-    }, 700);
-  } else {
-    runHint(targetBtn);
-  }
-}
-
-function runHint(targetBtn) {
-  targetBtn.classList.add('hint');
-  bearPointTo(targetBtn);
-  const hint = 'Вот ' + target.name + '! Нажми сюда!';
-  bearSays(hint);
-  playHintMp3(target.hintFile, hint);
-
-  if (hintRepeatTimer) clearInterval(hintRepeatTimer);
-  hintRepeatTimer = setInterval(() => {
-    if (locked || !isHinting) {
-      clearInterval(hintRepeatTimer); hintRepeatTimer = null; return;
-    }
-    bearSays(hint);
-    playHintMp3(target.hintFile, hint);
-  }, 4000);
-}
-
 function stopHint() {
   clearTimeout(hintTimer);
   clearTimeout(thinkTimer);
-  if (window._hintHoldInterval) {
-    clearInterval(window._hintHoldInterval);
-    window._hintHoldInterval = null;
-  }
-  if (hintRepeatTimer) {
-    clearInterval(hintRepeatTimer);
-    hintRepeatTimer = null;
-  }
   document.querySelectorAll('#shapes .shape').forEach(b => b.classList.remove('hint'));
 }
 
-// ============================================================
-//  ОБУЧАЮЩИЙ ЭКРАН
-// ============================================================
 function showLearn(c, callback) {
   const modal = document.getElementById('learnModal');
   const band = document.getElementById('learnBand');
@@ -1041,55 +830,36 @@ function showLearn(c, callback) {
   const nameEl = document.getElementById('learnName');
   const rhymeEl = document.getElementById('learnRhyme');
   const learnBear = document.getElementById('learnBear');
-
   band.style.background = c.hex;
   items.innerHTML = '';
   c.items.forEach(it => {
     const box = document.createElement('div');
     box.className = 'learn-item';
     box.style.background = c.hex;
-    if (c.name === 'белый') box.style.border = '3px solid #E0E0E0';
+    if (c.name==='белый') box.style.border = '3px solid #E0E0E0';
     let src = null;
     if (imageAvailable[it.f]) src = it.f;
     else if (it.old && imageAvailable[it.old]) src = it.old;
-    if (src) box.innerHTML = '<img src="images/' + src + '" alt="">';
-    else box.innerHTML = '<span class="emoji">' + it.e + '</span>';
+    if (src) box.innerHTML = '<img src="images/'+src+'" alt="">';
+    else box.innerHTML = '<span class="emoji">'+it.e+'</span>';
     items.appendChild(box);
   });
   nameEl.textContent = c.name.toUpperCase();
   nameEl.style.color = c.hex;
   rhymeEl.textContent = c.rhyme;
-
-  learnBear.innerHTML = '';
-  ['happy','heart','dance','strong','idle'].forEach(p => {
-    if (!bearImages[p]) return;
-    const img = document.createElement('img');
-    img.className = 'pose-img';
-    img.dataset.pose = p;
-    img.src = 'images/bear_' + p + '.png';
-    learnBear.appendChild(img);
-  });
-
   modal.classList.add('on');
-
   const poses = ['happy','heart','dance','strong'].filter(p => bearImages[p]);
   if (poses.length === 0) poses.push('idle');
   let lp = 0;
-  if (poses[0]) {
-    learnBear.querySelectorAll('.pose-img').forEach(img => {
-      img.classList.toggle('active', img.dataset.pose === poses[0]);
-    });
-  }
   const cycle = setInterval(() => {
     if (!modal.classList.contains('on')) { clearInterval(cycle); return; }
-    lp = (lp + 1) % poses.length;
+    lp = (lp+1) % poses.length;
     learnBear.querySelectorAll('.pose-img').forEach(img => {
       img.classList.toggle('active', img.dataset.pose === poses[lp]);
     });
   }, 1800);
-
   setTimeout(() => {
-    playMp3(c.rhymeFile, c.rhyme, () => {
+    playMp3(c.rhymeFile, null, () => {
       setTimeout(() => {
         clearInterval(cycle);
         modal.classList.remove('on');
@@ -1099,9 +869,6 @@ function showLearn(c, callback) {
   }, 300);
 }
 
-// ============================================================
-//  ПОБЕДА
-// ============================================================
 function showWin() {
   stopBearWalk(); stopHint(); stopBlinking();
   isHinting = false;
@@ -1112,148 +879,89 @@ function showWin() {
   const winText = 'Ура! Ты выучил все цвета!';
   document.getElementById('winText').textContent = winText;
   bearSays(winText);
-  playMp3('win.mp3', winText);
+  playMp3('win.mp3');
 }
 
 function restartGame() {
-  score = 0; round = 0;
-  document.getElementById('score').textContent = '0';
+  score=0; round=0;
+  document.getElementById('score').textContent='0';
   document.getElementById('winScreen').classList.remove('on');
   bearClearClasses();
   drawProgress();
   window._wowShown = false;
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
-  if (hintRepeatTimer) { clearInterval(hintRepeatTimer); hintRepeatTimer = null; }
   unlockAudio();
-  if (musicOn && !musicTimer) setTimeout(() => startMusic(), 100);
+  if (musicOn && !musicTimer) startMusic();
   bearTeleport(20, 140);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
   bearSays(rt);
-  playMp3('lets_go.mp3', rt, () => { setTimeout(newRound, 700); });
+  playMp3('lets_go.mp3', null, () => { setTimeout(newRound, 700); });
 }
 
-// ============================================================
-//  КНОПКИ
-// ============================================================
 function toggleSound() {
   soundOn = !soundOn;
   settings.soundOn = soundOn;
   saveSettings();
   document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
   if (!soundOn) {
-    if (currentAudio) { try { currentAudio.pause(); } catch (e) {} }
-    if (hintAudio) { try { hintAudio.pause(); } catch (e) {} }
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (currentAudio) { try{ currentAudio.pause(); }catch(e){} }
+    if (hintAudio) { try{ hintAudio.pause(); }catch(e){} }
   } else unlockAudio();
 }
 
 function explode(x, y, type) {
-  const em = type === 'ok' ? ['⭐','✨','🌟','💫','🎉','❤️'] : ['💨','💧'];
-  const n = type === 'ok' ? 12 : 6;
-  for (let i = 0; i < n; i++) {
+  const em = type==='ok' ? ['⭐','✨','🌟','💫','🎉','❤️'] : ['💨','💧'];
+  const n = type==='ok' ? 12 : 6;
+  for (let i=0;i<n;i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    p.textContent = em[Math.floor(Math.random() * em.length)];
-    const a = (Math.PI * 2 * i) / n + Math.random() * 0.5;
-    const d = 80 + Math.random() * 120;
-    p.style.left = x + 'px'; p.style.top = y + 'px';
-    p.style.setProperty('--tx', Math.cos(a) * d + 'px');
-    p.style.setProperty('--ty', Math.sin(a) * d + 'px');
+    p.textContent = em[Math.floor(Math.random()*em.length)];
+    const a = (Math.PI*2*i)/n + Math.random()*0.5;
+    const d = 80 + Math.random()*120;
+    p.style.left = x+'px'; p.style.top = y+'px';
+    p.style.setProperty('--tx', Math.cos(a)*d+'px');
+    p.style.setProperty('--ty', Math.sin(a)*d+'px');
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 1600);
+    setTimeout(()=>p.remove(), 1600);
   }
 }
 
 function salute() {
   const em = ['⭐','✨','🌟','💫','🎉','🎊','🎈'];
-  for (let i = 0; i < 40; i++) {
+  for (let i=0;i<40;i++) {
     setTimeout(() => {
       const s = document.createElement('div');
       s.className = 'salute';
-      s.textContent = em[Math.floor(Math.random() * em.length)];
-      s.style.left = Math.random() * 100 + 'vw';
+      s.textContent = em[Math.floor(Math.random()*em.length)];
+      s.style.left = Math.random()*100+'vw';
       s.style.bottom = '-60px';
-      s.style.animationDelay = (Math.random() * 0.8) + 's';
-      s.style.animationDuration = (1.8 + Math.random()) + 's';
+      s.style.animationDelay = (Math.random()*0.8)+'s';
+      s.style.animationDuration = (1.8+Math.random())+'s';
       document.body.appendChild(s);
-      setTimeout(() => s.remove(), 4000);
-    }, i * 50);
+      setTimeout(()=>s.remove(), 4000);
+    }, i*50);
   }
 }
 
-// ============================================================
-//  НАСТРОЙКИ UI
-// ============================================================
-function openSettings() { document.getElementById('settingsScreen').classList.add('on'); }
-function closeSettings() { document.getElementById('settingsScreen').classList.remove('on'); saveSettings(); }
-function setDiff(n, btn) {
-  settings.diff = n;
-  document.querySelectorAll('#optDiff button').forEach(b => b.classList.remove('sel'));
+function openSettings(){ document.getElementById('settingsScreen').classList.add('on'); }
+function closeSettings(){ document.getElementById('settingsScreen').classList.remove('on'); saveSettings(); }
+function setDiff(n,btn){ settings.diff=n; document.querySelectorAll('#optDiff button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); }
+function setTime(ms,btn){ settings.timeMs=ms; document.querySelectorAll('#optTime button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); if(started&&!locked) startHintTimer(); }
+function setVol(v,btn){
+  settings.vol=v;
+  if(v===0){ musicOn=false; pauseMusic(); document.getElementById('musicBtn').textContent='🔕'; }
+  else { musicOn=true; if(started) startMusic(); document.getElementById('musicBtn').textContent='🎵'; }
+  document.querySelectorAll('#optVol button').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
-  saveSettings();
-}
-function setTime(ms, btn) {
-  settings.timeMs = ms;
-  document.querySelectorAll('#optTime button').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  saveSettings();
-  if (started && !locked) startHintTimer();
-}
-function setVol(v, btn) {
-  settings.vol = v;
-  if (v === 0) {
-    musicOn = false;
-    pauseMusic();
-    document.getElementById('musicBtn').textContent = '🔕';
-  } else {
-    musicOn = true;
-    if (started) setTimeout(() => startMusic(), 50);
-    document.getElementById('musicBtn').textContent = '🎵';
-  }
-  document.querySelectorAll('#optVol button').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  if (musicGainNode) musicGainNode.gain.value = v;
   saveSettings();
 }
 
-// ============================================================
-//  ИНИЦИАЛИЗАЦИЯ
-// ============================================================
 drawProgress();
 document.getElementById('musicBtn').textContent = settings.musicOn ? '🎵' : '🔕';
 document.getElementById('soundBtn').textContent = settings.soundOn ? '🔊' : '🔇';
-
-document.getElementById('startBtn').onclick = startGameFromIntro;
-document.getElementById('settingsBtn').onclick = openSettings;
-document.getElementById('closeSettingsBtn').onclick = closeSettings;
-document.getElementById('soundBtn').onclick = toggleSound;
-document.getElementById('musicBtn').onclick = toggleMusic;
-document.getElementById('restartBtn').onclick = restartGame;
-
-document.querySelectorAll('#optDiff button').forEach(b => {
-  const n = parseInt(b.dataset.n, 10);
-  if (n === settings.diff) b.classList.add('sel'); else b.classList.remove('sel');
-  b.onclick = () => setDiff(n, b);
-});
-document.querySelectorAll('#optTime button').forEach(b => {
-  const ms = parseInt(b.dataset.ms, 10);
-  if (ms === settings.timeMs) b.classList.add('sel'); else b.classList.remove('sel');
-  b.onclick = () => setTime(ms, b);
-});
-document.querySelectorAll('#optVol button').forEach(b => {
-  const v = parseFloat(b.dataset.v);
-  if (Math.abs(v - settings.vol) < 0.001) b.classList.add('sel'); else b.classList.remove('sel');
-  b.onclick = () => setVol(v, b);
-});
-
-['click','touchstart','keydown'].forEach(ev => {
-  document.addEventListener(ev, function once() {
-    unlockAudio();
-    document.removeEventListener(ev, once);
-  }, { once: true });
-});
 </script>
+
 </body>
 </html>
