@@ -140,28 +140,28 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 <body>
 
 <div class="sky">
-  <div class="sun">☀️</div>
-  <div class="cloud" style="top:8%;animation-duration:30s">☁️</div>
-  <div class="cloud" style="top:22%;animation-duration:40s;animation-delay:5s">☁️</div>
-  <div class="cloud" style="top:45%;animation-duration:35s;animation-delay:12s">☁️</div>
-  <div class="butterfly">🦋</div>
-  <div class="butterfly" style="animation-delay:6s">🦋</div>
+  <div class="sun">&#x2600;&#xFE0F;</div>
+  <div class="cloud" style="top:8%;animation-duration:30s">&#x2601;&#xFE0F;</div>
+  <div class="cloud" style="top:22%;animation-duration:40s;animation-delay:5s">&#x2601;&#xFE0F;</div>
+  <div class="cloud" style="top:45%;animation-duration:35s;animation-delay:12s">&#x2601;&#xFE0F;</div>
+  <div class="butterfly">&#x1F98B;</div>
+  <div class="butterfly" style="animation-delay:6s">&#x1F98B;</div>
   <div class="hill"></div>
 </div>
 
 <div class="intro" id="introScreen">
-  <div class="sun">☀️</div>
+  <div class="sun">&#x2600;&#xFE0F;</div>
   <div class="bear-big" id="introBear">
-    <img src="images/bear_wave.png" alt="Мишка" onerror="this.src='images/bear_idle.png'">
+    <img src="images/bear_wave.png" alt="&#x41C;&#x438;&#x448;&#x43A;&#x430;" onerror="this.src='images/bear_idle.png'">
   </div>
-  <h1>🌈 Привет!</h1>
-  <p>Я — <b>Мишка</b>!<br>Я учу детей цветам.<br>Давай поиграем вместе!</p>
-  <button onclick="startGameFromIntro()">▶ ИГРАТЬ</button>
+  <h1>&#x1F308; &#x41F;&#x440;&#x438;&#x432;&#x435;&#x442;!</h1>
+  <p>&#x42F; &mdash; <b>&#x41C;&#x438;&#x448;&#x43A;&#x430;</b>!<br>&#x42F; &#x443;&#x447;&#x443; &#x434;&#x435;&#x442;&#x435;&#x439; &#x446;&#x432;&#x435;&#x442;&#x430;&#x43C;.<br>&#x414;&#x430;&#x432;&#x430;&#x439; &#x43F;&#x43E;&#x438;&#x433;&#x440;&#x430;&#x435;&#x43C; &#x432;&#x43C;&#x435;&#x441;&#x442;&#x435;!</p>
+  <button onclick="startGameFromIntro()">&#x25B6; &#x418;&#x413;&#x420;&#x410;&#x422;&#x42C;</button>
 </div>
 
 <div class="bear-runner idle" id="bearRunner" style="left:20px;top:140px">
-  <div class="bear-bubble" id="bearBubble">Привет!</div>
-  <div class="bear-pointer">👇</div>
+  <div class="bear-bubble" id="bearBubble">&#x41F;&#x440;&#x438;&#x432;&#x435;&#x442;!</div>
+  <div class="bear-pointer">&#x1F447;</div>
   <img class="pose-img active" data-pose="idle" src="images/bear_idle.png" alt="">
   <img class="pose-img" data-pose="walk1" src="images/bear_walk_1.png" alt="">
   <img class="pose-img" data-pose="walk2" src="images/bear_walk_2.png" alt="">
@@ -185,16 +185,16 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 <div class="frame">
   <div class="progress" id="progress"></div>
   <div class="top">
-    <div class="score">⭐ Счёт: <span id="score">0</span></div>
+    <div class="score">&#x2B50; &#x421;&#x447;&#x451;&#x442;: <span id="score">0</span></div>
     <div class="top-btns">
-      <button class="btn-icon" id="musicBtn" onclick="toggleMusic()">🎵</button>
-      <button class="btn-icon" id="soundBtn" onclick="toggleSound()">🔊</button>
-      <button class="btn-icon" onclick="openSettings()">⚙</button>
+      <button class="btn-icon" id="musicBtn" onclick="toggleMusic()">&#x1F3B5;</button>
+      <button class="btn-icon" id="soundBtn" onclick="toggleSound()">&#x1F50A;</button>
+      <button class="btn-icon" onclick="openSettings()">&#x2699;</button>
     </div>
   </div>
-  <div class="bear-say" id="bearSay">Привет! Я — Мишка!</div>
-  <div class="q" id="question">Нажми ▶ ИГРАТЬ</div>
-  <button class="repeat" onclick="repeatQuestion()">🔁 Повторить</button>
+  <div class="bear-say" id="bearSay">&#x41F;&#x440;&#x438;&#x432;&#x435;&#x442;! &#x42F; &mdash; &#x41C;&#x438;&#x448;&#x43A;&#x430;!</div>
+  <div class="q" id="question">&#x41D;&#x430;&#x436;&#x43C;&#x438; &#x25B6; &#x418;&#x413;&#x420;&#x410;&#x422;&#x42C;</div>
+  <button class="repeat" onclick="repeatQuestion()">&#x1F501; &#x41F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x438;&#x442;&#x44C;</button>
   <div class="shapes" id="shapes"></div>
 </div>
 
@@ -203,8 +203,8 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
     <div class="learn-box">
       <div class="learn-color-band" id="learnBand"></div>
       <div class="learn-items" id="learnItems"></div>
-      <div class="learn-name" id="learnName">КРАСНЫЙ</div>
-      <div class="learn-rhyme" id="learnRhyme">Стишок</div>
+      <div class="learn-name" id="learnName">&#x41A;&#x420;&#x410;&#x421;&#x41D;&#x42B;&#x419;</div>
+      <div class="learn-rhyme" id="learnRhyme">&#x421;&#x442;&#x438;&#x448;&#x43E;&#x43A;</div>
     </div>
   </div>
   <div class="learn-bear" id="learnBear">
@@ -216,39 +216,39 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 </div>
 
 <div class="win" id="winScreen">
-  <h2>МОЛОДЕЦ!</h2>
-  <div class="stars-big"><span>⭐</span><span>⭐</span><span>⭐</span></div>
-  <p id="winText">Ты выучил все цвета!</p>
-  <button onclick="restartGame()">🎮 Играть снова</button>
+  <h2>&#x41C;&#x41E;&#x41B;&#x41E;&#x414;&#x415;&#x426;!</h2>
+  <div class="stars-big"><span>&#x2B50;</span><span>&#x2B50;</span><span>&#x2B50;</span></div>
+  <p id="winText">&#x422;&#x44B; &#x432;&#x44B;&#x443;&#x447;&#x438;&#x43B; &#x432;&#x441;&#x435; &#x446;&#x432;&#x435;&#x442;&#x430;!</p>
+  <button onclick="restartGame()">&#x1F3AE; &#x418;&#x433;&#x440;&#x430;&#x442;&#x44C; &#x441;&#x43D;&#x43E;&#x432;&#x430;</button>
 </div>
 
 <div class="settings" id="settingsScreen">
   <div class="settings-box">
-    <h3>⚙ Настройки</h3>
-    <label>Сложность:</label>
+    <h3>&#x2699; &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;</h3>
+    <label>&#x421;&#x43B;&#x43E;&#x436;&#x43D;&#x43E;&#x441;&#x442;&#x44C;:</label>
     <div class="opt" id="optDiff">
-      <button data-val="2" onclick="setDiff(2,this)">Легко (2)</button>
-      <button data-val="4" onclick="setDiff(4,this)" class="sel">Средне (4)</button>
-      <button data-val="6" onclick="setDiff(6,this)">Сложно (6)</button>
+      <button data-val="2" onclick="setDiff(2,this)">&#x41B;&#x435;&#x433;&#x43A;&#x43E; (2)</button>
+      <button data-val="4" onclick="setDiff(4,this)" class="sel">&#x421;&#x440;&#x435;&#x434;&#x43D;&#x435; (4)</button>
+      <button data-val="6" onclick="setDiff(6,this)">&#x421;&#x43B;&#x43E;&#x436;&#x43D;&#x43E; (6)</button>
     </div>
-    <label>⏱ Подсказка через:</label>
+    <label>&#x23F1; &#x41F;&#x43E;&#x434;&#x441;&#x43A;&#x430;&#x437;&#x43A;&#x430; &#x447;&#x435;&#x440;&#x435;&#x437;:</label>
     <div class="opt" id="optTime">
-      <button data-val="5000" onclick="setTime(5000,this)">5 сек</button>
-      <button data-val="10000" onclick="setTime(10000,this)" class="sel">10 сек</button>
-      <button data-val="15000" onclick="setTime(15000,this)">15 сек</button>
+      <button data-val="5000" onclick="setTime(5000,this)">5 &#x441;&#x435;&#x43A;</button>
+      <button data-val="10000" onclick="setTime(10000,this)" class="sel">10 &#x441;&#x435;&#x43A;</button>
+      <button data-val="15000" onclick="setTime(15000,this)">15 &#x441;&#x435;&#x43A;</button>
     </div>
-    <label>🎵 Громкость музыки:</label>
+    <label>&#x1F3B5; &#x413;&#x440;&#x43E;&#x43C;&#x43A;&#x43E;&#x441;&#x442;&#x44C; &#x43C;&#x443;&#x437;&#x44B;&#x43A;&#x438;:</label>
     <div class="opt" id="optVol">
-      <button data-val="0" onclick="setVol(0,this)">Выкл</button>
-      <button data-val="0.05" onclick="setVol(0.05,this)">Тихо</button>
-      <button data-val="0.12" onclick="setVol(0.12,this)" class="sel">Средне</button>
-      <button data-val="0.2" onclick="setVol(0.2,this)">Громко</button>
+      <button data-val="0" onclick="setVol(0,this)">&#x412;&#x44B;&#x43A;&#x43B;</button>
+      <button data-val="0.05" onclick="setVol(0.05,this)">&#x422;&#x438;&#x445;&#x43E;</button>
+      <button data-val="0.12" onclick="setVol(0.12,this)" class="sel">&#x421;&#x440;&#x435;&#x434;&#x43D;&#x435;</button>
+      <button data-val="0.2" onclick="setVol(0.2,this)">&#x413;&#x440;&#x43E;&#x43C;&#x43A;&#x43E;</button>
     </div>
-    <button class="close" onclick="closeSettings()">✕ Закрыть</button>
+    <button class="close" onclick="closeSettings()">&#x2715; &#x417;&#x430;&#x43A;&#x440;&#x44B;&#x442;&#x44C;</button>
   </div>
 </div>
 
-<div class="status" id="status">Готово</div>
+<div class="status" id="status">&#x413;&#x43E;&#x442;&#x43E;&#x432;&#x43E;</div>
 
 <script>
 const DEFAULTS = { diff: 4, timeMs: 10000, vol: 0.12, musicOn: true, soundOn: true };
@@ -257,47 +257,50 @@ try { const s = JSON.parse(localStorage.getItem('igra_nastr')||'null'); if(s) se
 function saveSettings(){ try{ localStorage.setItem('igra_nastr', JSON.stringify(settings)); }catch(e){} }
 
 const COLORS = [
-  { name:'красный', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3', encFile:'enc_red.mp3',
-    rhyme:'Красный помидор — яркий взор, красная божья коровка — чудесный узор!',
-    items:[{e:'🍎',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'🐞',f:'img_red_2.jpg'},{e:'🔥',f:'img_red_3.jpg'}] },
-  { name:'синий', nameEn:'blue', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', hintFile:'hint_blue.mp3', encFile:'enc_blue.mp3',
-    rhyme:'Синее море — ширь без края, синяя волна бежит, играя!',
-    items:[{e:'🎈',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'🌌',f:'img_blue_2.jpg'},{e:'🌊',f:'img_blue_3.jpg'}] },
-  { name:'жёлтый', nameEn:'yellow', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', hintFile:'hint_yellow.mp3', encFile:'enc_yellow.mp3',
-    rhyme:'Жёлтое солнце светит нам, жёлтый одуванчик — тут и там!',
-    items:[{e:'🍌',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'🐤',f:'img_yellow_2.jpg'},{e:'🍋',f:'img_yellow_3.jpg'}] },
-  { name:'зелёный', nameEn:'green', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', hintFile:'hint_green.mp3', encFile:'enc_green.mp3',
-    rhyme:'Зелёная трава — мягко и свежо, зелёный огурец — вкусно, хорошо!',
-    items:[{e:'🥒',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'🌲',f:'img_green_2.jpg'},{e:'🌿',f:'img_green_3.jpg'}] },
-  { name:'оранжевый', nameEn:'orange', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', hintFile:'hint_orange.mp3', encFile:'enc_orange.mp3',
-    rhyme:'Оранжевый апельсин — сочный и яркий, оранжевая морковка — вкусный подарок!',
-    items:[{e:'🍊',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'🦊',f:'img_orange_2.jpg'},{e:'🥕',f:'img_orange_3.jpg'}] },
-  { name:'фиолетовый', nameEn:'purple', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', hintFile:'hint_purple.mp3', encFile:'enc_purple.mp3',
-    rhyme:'Фиолетовая слива — сладкий секрет, фиолетовый баклажан — вот это цвет!',
-    items:[{e:'🍇',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'🍆',f:'img_purple_2.jpg'},{e:'🍑',f:'img_purple_3.jpg'}] },
-  { name:'розовый', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', hintFile:'hint_pink.mp3', encFile:'enc_pink.mp3',
-    rhyme:'Розовая свинка хрюкает: «Хрю!», розовый бантик — я его люблю!',
-    items:[{e:'🌸',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'🐷',f:'img_pink_2.jpg'},{e:'🍡',f:'img_pink_3.jpg'}] },
-  { name:'голубой', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', hintFile:'hint_lightblue.mp3', encFile:'enc_lightblue.mp3',
-    rhyme:'Голубой ручеёк поёт: «Жур-жур!», голубой цветок — как маленький узор!',
-    items:[{e:'☕',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'🏞️',f:'img_lightblue_2.jpg'},{e:'💧',f:'img_lightblue_3.jpg'}] },
-  { name:'коричневый', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', hintFile:'hint_brown.mp3', encFile:'enc_brown.mp3',
-    rhyme:'Коричневый мишка — плюшевый друг, коричневый шоколад — сладкий вокруг!',
-    items:[{e:'🐻',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'🍫',f:'img_brown_2.jpg'},{e:'🍄',f:'img_brown_3.jpg'}] },
-  { name:'чёрный', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', hintFile:'hint_black.mp3', encFile:'enc_black.mp3',
-    rhyme:'Чёрный пингвин шагает вперёд, чёрный уголёк тихонько ждёт!',
-    items:[{e:'🐱',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'🐧',f:'img_black_2.jpg'},{e:'⚫',f:'img_black_3.jpg'}] },
-  { name:'белый', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', hintFile:'hint_white.mp3', encFile:'enc_white.mp3',
-    rhyme:'Белый снег кружится — лёгкий полёт, белое молоко — тёплый уют!',
-    items:[{e:'🐰',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'🍬',f:'img_white_2.jpg'},{e:'❄️',f:'img_white_3.jpg'}] },
-  { name:'серый', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', hintFile:'hint_gray.mp3', encFile:'enc_gray.mp3',
-    rhyme:'Серый слоник топает: «Топ-топ!», серый зайчонок смотрит: «Оп-оп!»',
-    items:[{e:'🐘',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'🐺',f:'img_gray_2.jpg'},{e:'🐭',f:'img_gray_3.jpg'}] }
+  { name:'\u043A\u0440\u0430\u0441\u043D\u044B\u0439', nameEn:'red', hex:'#FF1744', file:'q_red.mp3', rhymeFile:'rhyme_red.mp3', hintFile:'hint_red.mp3', encFile:'enc_red.mp3',
+    rhyme:'\u041A\u0440\u0430\u0441\u043D\u044B\u0439 \u043F\u043E\u043C\u0438\u0434\u043E\u0440 \u2014 \u044F\u0440\u043A\u0438\u0439 \u0432\u0437\u043E\u0440, \u043A\u0440\u0430\u0441\u043D\u0430\u044F \u0431\u043E\u0436\u044C\u044F \u043A\u043E\u0440\u043E\u0432\u043A\u0430 \u2014 \u0447\u0443\u0434\u0435\u0441\u043D\u044B\u0439 \u0443\u0437\u043E\u0440!',
+    items:[{e:'\u{1F34E}',f:'img_red_1.jpg',old:'img_red.jpg'},{e:'\u{1F41E}',f:'img_red_2.jpg'},{e:'\u{1F525}',f:'img_red_3.jpg'}] },
+  { name:'\u0441\u0438\u043D\u0438\u0439', nameEn:'blue', hex:'#1565FF', file:'q_blue.mp3', rhymeFile:'rhyme_blue.mp3', hintFile:'hint_blue.mp3', encFile:'enc_blue.mp3',
+    rhyme:'\u0421\u0438\u043D\u0435\u0435 \u043C\u043E\u0440\u0435 \u2014 \u0448\u0438\u0440\u044C \u0431\u0435\u0437 \u043A\u0440\u0430\u044F, \u0441\u0438\u043D\u044F\u044F \u0432\u043E\u043B\u043D\u0430 \u0431\u0435\u0436\u0438\u0442, \u0438\u0433\u0440\u0430\u044F!',
+    items:[{e:'\u{1F388}',f:'img_blue_1.jpg',old:'img_blue.jpg'},{e:'\u{1F30C}',f:'img_blue_2.jpg'},{e:'\u{1F30A}',f:'img_blue_3.jpg'}] },
+  { name:'\u0436\u0451\u043B\u0442\u044B\u0439', nameEn:'yellow', hex:'#FFD600', file:'q_yellow.mp3', rhymeFile:'rhyme_yellow.mp3', hintFile:'hint_yellow.mp3', encFile:'enc_yellow.mp3',
+    rhyme:'\u0416\u0451\u043B\u0442\u043E\u0435 \u0441\u043E\u043B\u043D\u0446\u0435 \u0441\u0432\u0435\u0442\u0438\u0442 \u043D\u0430\u043C, \u0436\u0451\u043B\u0442\u044B\u0439 \u043E\u0434\u0443\u0432\u0430\u043D\u0447\u0438\u043A \u2014 \u0442\u0443\u0442 \u0438 \u0442\u0430\u043C!',
+    items:[{e:'\u{1F34C}',f:'img_yellow_1.jpg',old:'img_yellow.jpg'},{e:'\u{1F424}',f:'img_yellow_2.jpg'},{e:'\u{1F34B}',f:'img_yellow_3.jpg'}] },
+  { name:'\u0437\u0435\u043B\u0451\u043D\u044B\u0439', nameEn:'green', hex:'#00C853', file:'q_green.mp3', rhymeFile:'rhyme_green.mp3', hintFile:'hint_green.mp3', encFile:'enc_green.mp3',
+    rhyme:'\u0417\u0435\u043B\u0451\u043D\u0430\u044F \u0442\u0440\u0430\u0432\u0430 \u2014 \u043C\u044F\u0433\u043A\u043E \u0438 \u0441\u0432\u0435\u0436\u043E, \u0437\u0435\u043B\u0451\u043D\u044B\u0439 \u043E\u0433\u0443\u0440\u0435\u0446 \u2014 \u0432\u043A\u0443\u0441\u043D\u043E, \u0445\u043E\u0440\u043E\u0448\u043E!',
+    items:[{e:'\u{1F952}',f:'img_green_1.jpg',old:'img_green.jpg'},{e:'\u{1F332}',f:'img_green_2.jpg'},{e:'\u{1F33F}',f:'img_green_3.jpg'}] },
+  { name:'\u043E\u0440\u0430\u043D\u0436\u0435\u0432\u044B\u0439', nameEn:'orange', hex:'#FF6D00', file:'q_orange.mp3', rhymeFile:'rhyme_orange.mp3', hintFile:'hint_orange.mp3', encFile:'enc_orange.mp3',
+    rhyme:'\u041E\u0440\u0430\u043D\u0436\u0435\u0432\u044B\u0439 \u0430\u043F\u0435\u043B\u044C\u0441\u0438\u043D \u2014 \u0441\u043E\u0447\u043D\u044B\u0439 \u0438 \u044F\u0440\u043A\u0438\u0439, \u043E\u0440\u0430\u043D\u0436\u0435\u0432\u0430\u044F \u043C\u043E\u0440\u043A\u043E\u0432\u043A\u0430 \u2014 \u0432\u043A\u0443\u0441\u043D\u044B\u0439 \u043F\u043E\u0434\u0430\u0440\u043E\u043A!',
+    items:[{e:'\u{1F34A}',f:'img_orange_1.jpg',old:'img_orange.jpg'},{e:'\u{1F98A}',f:'img_orange_2.jpg'},{e:'\u{1F955}',f:'img_orange_3.jpg'}] },
+  { name:'\u0444\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u044B\u0439', nameEn:'purple', hex:'#9C27FF', file:'q_purple.mp3', rhymeFile:'rhyme_purple.mp3', hintFile:'hint_purple.mp3', encFile:'enc_purple.mp3',
+    rhyme:'\u0424\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u0430\u044F \u0441\u043B\u0438\u0432\u0430 \u2014 \u0441\u043B\u0430\u0434\u043A\u0438\u0439 \u0441\u0435\u043A\u0440\u0435\u0442, \u0444\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u044B\u0439 \u0431\u0430\u043A\u043B\u0430\u0436\u0430\u043D \u2014 \u0432\u043E\u0442 \u044D\u0442\u043E \u0446\u0432\u0435\u0442!',
+    items:[{e:'\u{1F347}',f:'img_purple_1.jpg',old:'img_purple.jpg'},{e:'\u{1F346}',f:'img_purple_2.jpg'},{e:'\u{1F351}',f:'img_purple_3.jpg'}] },
+  { name:'\u0440\u043E\u0437\u043E\u0432\u044B\u0439', nameEn:'pink', hex:'#FF1493', file:'q_pink.mp3', rhymeFile:'rhyme_pink.mp3', hintFile:'hint_pink.mp3', encFile:'enc_pink.mp3',
+    rhyme:'\u0420\u043E\u0437\u043E\u0432\u0430\u044F \u0441\u0432\u0438\u043D\u043A\u0430 \u0445\u0440\u044E\u043A\u0430\u0435\u0442: \u00AB\u0425\u0440\u044E!\u00BB, \u0440\u043E\u0437\u043E\u0432\u044B\u0439 \u0431\u0430\u043D\u0442\u0438\u043A \u2014 \u044F \u0435\u0433\u043E \u043B\u044E\u0431\u043B\u044E!',
+    items:[{e:'\u{1F338}',f:'img_pink_1.jpg',old:'img_pink.jpg'},{e:'\u{1F437}',f:'img_pink_2.jpg'},{e:'\u{1F361}',f:'img_pink_3.jpg'}] },
+  { name:'\u0433\u043E\u043B\u0443\u0431\u043E\u0439', nameEn:'lightblue', hex:'#00B0FF', file:'q_lightblue.mp3', rhymeFile:'rhyme_lightblue.mp3', hintFile:'hint_lightblue.mp3', encFile:'enc_lightblue.mp3',
+    rhyme:'\u0413\u043E\u043B\u0443\u0431\u043E\u0439 \u0440\u0443\u0447\u0435\u0439\u043A \u043F\u043E\u0451\u0442: \u00AB\u0416\u0443\u0440-\u0436\u0443\u0440!\u00BB, \u0433\u043E\u043B\u0443\u0431\u043E\u0439 \u0446\u0432\u0435\u0442\u043E\u043A \u2014 \u043A\u0430\u043A \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u0443\u0437\u043E\u0440!',
+    items:[{e:'\u2615',f:'img_lightblue_1.jpg',old:'img_lightblue.jpg'},{e:'\u{1F3DE}\uFE0F',f:'img_lightblue_2.jpg'},{e:'\u{1F4A7}',f:'img_lightblue_3.jpg'}] },
+  { name:'\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439', nameEn:'brown', hex:'#8D4A22', file:'q_brown.mp3', rhymeFile:'rhyme_brown.mp3', hintFile:'hint_brown.mp3', encFile:'enc_brown.mp3',
+    rhyme:'\u041A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439 \u043C\u0438\u0448\u043A\u0430 \u2014 \u043F\u043B\u044E\u0448\u0435\u0432\u044B\u0439 \u0434\u0440\u0443\u0433, \u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439 \u0448\u043E\u043A\u043E\u043B\u0430\u0434 \u2014 \u0441\u043B\u0430\u0434\u043A\u0438\u0439 \u0432\u043E\u043A\u0440\u0443\u0433!',
+    items:[{e:'\u{1F43B}',f:'img_brown_1.jpg',old:'img_brown.jpg'},{e:'\u{1F36E}',f:'img_brown_2.jpg'},{e:'\u{1F344}',f:'img_brown_3.jpg'}] },
+  { name:'\u0447\u0451\u0440\u043D\u044B\u0439', nameEn:'black', hex:'#111111', file:'q_black.mp3', rhymeFile:'rhyme_black.mp3', hintFile:'hint_black.mp3', encFile:'enc_black.mp3',
+    rhyme:'\u0427\u0451\u0440\u043D\u044B\u0439 \u043F\u0438\u043D\u0433\u0432\u0438\u043D \u0448\u0430\u0433\u0430\u0435\u0442 \u0432\u043F\u0435\u0440\u0451\u0434, \u0447\u0451\u0440\u043D\u044B\u0439 \u0443\u0433\u043E\u043B\u0451\u043A \u0442\u0438\u0445\u043E\u043D\u044C\u043A\u043E \u0436\u0434\u0451\u0442!',
+    items:[{e:'\u{1F431}',f:'img_black_1.jpg',old:'img_black.jpg'},{e:'\u{1F427}',f:'img_black_2.jpg'},{e:'\u26AB',f:'img_black_3.jpg'}] },
+  { name:'\u0431\u0435\u043B\u044B\u0439', nameEn:'white', hex:'#FFFFFF', file:'q_white.mp3', rhymeFile:'rhyme_white.mp3', hintFile:'hint_white.mp3', encFile:'enc_white.mp3',
+    rhyme:'\u0411\u0435\u043B\u044B\u0439 \u0441\u043D\u0435\u0433 \u043A\u0440\u0443\u0436\u0438\u0442\u0441\u044F \u2014 \u043B\u0451\u0433\u043A\u0438\u0439 \u043F\u043E\u043B\u0451\u0442, \u0431\u0435\u043B\u043E\u0435 \u043C\u043E\u043B\u043E\u043A\u043E \u2014 \u0442\u0451\u043F\u043B\u044B\u0439 \u0443\u044E\u0442!',
+    items:[{e:'\u{1F430}',f:'img_white_1.jpg',old:'img_white.jpg'},{e:'\u{1F36C}',f:'img_white_2.jpg'},{e:'\u2744\uFE0F',f:'img_white_3.jpg'}] },
+  { name:'\u0441\u0435\u0440\u044B\u0439', nameEn:'gray', hex:'#757575', file:'q_gray.mp3', rhymeFile:'rhyme_gray.mp3', hintFile:'hint_gray.mp3', encFile:'enc_gray.mp3',
+    rhyme:'\u0421\u0435\u0440\u044B\u0439 \u0441\u043B\u043E\u043D\u0438\u043A \u0442\u043E\u043F\u0430\u0435\u0442: \u00AB\u0422\u043E\u043F-\u0442\u043E\u043F!\u00BB, \u0441\u0435\u0440\u044B\u0439 \u0437\u0430\u0439\u0447\u043E\u043D\u043E\u043A \u0441\u043C\u043E\u0442\u0440\u0438\u0442: \u00AB\u041E\u043F-\u043E\u043F!\u00BB',
+    items:[{e:'\u{1F418}',f:'img_gray_1.jpg',old:'img_gray.jpg'},{e:'\u{1F43A}',f:'img_gray_2.jpg'},{e:'\u{1F42D}',f:'img_gray_3.jpg'}] }
 ];
 
 const ROUNDS = 10;
 let score=0, round=0, target=null;
-let soundOn=true, musicOn=true, locked=false, started=false;
+// --- ИСПРАВЛЕНИЕ: синхронизируем переменные с сохранёнными настройками ---
+let soundOn = settings.soundOn !== undefined ? settings.soundOn : true;
+let musicOn = settings.musicOn !== undefined ? settings.musicOn : true;
+let locked=false, started=false;
 let currentAudio=null, imageAvailable={}, bearImages={};
 let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkTimer=null, thinkTimer=null;
 let walkFrame=1;
@@ -338,8 +341,8 @@ function startBlinking() {
 function stopBlinking() { if (blinkTimer){ clearInterval(blinkTimer); blinkTimer=null; } }
 
 function bearSays(text) {
-  bearSay.textContent = '🐻 ' + text;
-  bearBubble.textContent = text.length>20 ? text.slice(0,20)+'…' : text;
+  bearSay.textContent = '\u{1F43B} ' + text;
+  bearBubble.textContent = text.length>20 ? text.slice(0,20)+'\u2026' : text;
   bear.classList.add('talking');
   setTimeout(() => bear.classList.remove('talking'), 2200);
 }
@@ -478,7 +481,7 @@ function bearDanceMove() {
   }, 1300);
 }
 
-// ====== ЕДИНЫЙ AUDIO CONTEXT ======
+// ====== AUDIO CONTEXT ======
 function getCtx() {
   if (audioCtx) return audioCtx;
   try {
@@ -501,7 +504,7 @@ function unlockAudio() {
   } catch(e){}
 }
 
-// ====== МУЗЫКА ======
+// ====== MUSIC ======
 const NOTE = {C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,R:0};
 const MELODY = [['C5',0.5],['E5',0.5],['G5',0.5],['E5',0.5],['F5',0.5],['D5',0.5],['C5',1.0],['D5',0.5],['F5',0.5],['A5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.0],['E5',0.5],['G5',0.5],['C5',0.5],['G5',0.5],['A5',0.5],['F5',0.5],['D5',1.0],['C5',0.5],['D5',0.5],['E5',0.5],['F5',0.5],['G5',0.5],['E5',0.5],['C5',1.5],['R',0.5]];
 const BEAT_MS = 340;
@@ -557,7 +560,7 @@ function toggleMusic() {
   musicOn = !musicOn;
   settings.musicOn = musicOn;
   saveSettings();
-  document.getElementById('musicBtn').textContent = musicOn ? '🎵' : '🔕';
+  document.getElementById('musicBtn').textContent = musicOn ? '\u{1F3B5}' : '\u{1F515}';
   if (musicOn) startMusic(); else pauseMusic();
 }
 
@@ -588,7 +591,7 @@ function playMp3(mp3, fb, cb) {
     a.onended = () => { restore(); if(cb) cb(); };
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
+      p.then(() => setStatus('\u25B6 '+mp3, 'rgba(0,120,0,.9)', true)).catch(fallback);
     }
     setTimeout(() => {
       if (failed) return;
@@ -614,17 +617,15 @@ function playHintMp3(mp3) {
       hintAudio = null;
       if (wasMusic && musicOn && !musicTimer) startMusic();
     };
-    a.onerror = () => { console.warn('hint error:', mp3); resume(); };
+    a.onerror = () => { resume(); };
     a.onended = resume;
     const p = a.play();
     if (p && typeof p.then === 'function') {
-      p.then(() => setStatus('▶ ' + mp3, 'rgba(0,120,0,.9)', true)).catch(e => {
-        console.warn('hint play error:', e);
+      p.then(() => setStatus('\u25B6 ' + mp3, 'rgba(0,120,0,.9)', true)).catch(e => {
         resume();
       });
     }
   } catch(e) {
-    console.warn('hint exception:', e);
     if (wasMusic && musicOn) startMusic();
   }
 }
@@ -644,7 +645,7 @@ function drawProgress(){
   for(let i=0;i<ROUNDS;i++){
     const s=document.createElement('span');
     s.className='star'+(i<round?' done':'');
-    s.textContent='⭐';
+    s.textContent='\u2B50';
     p.appendChild(s);
   }
 }
@@ -687,7 +688,7 @@ function shuffle(a){
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 
-// ====== СТАРТ ======
+// ====== START ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
   unlockAudio();
@@ -702,10 +703,10 @@ function startGameFromIntro() {
     setTimeout(() => { startMusic(); }, 200);
   }
   findBearImages().then(found => {
-    setStatus('🐻 Мишек: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
+    setStatus('\u{1F43B} \u041C\u0438\u0448\u0435\u043A: '+found+'/18', found>=9 ? 'rgba(0,120,0,.9)' : 'rgba(180,120,0,.9)', true);
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
-  const helloText = 'Привет! Я — Мишка! Давай поиграем!';
+  const helloText = '\u041F\u0440\u0438\u0432\u0435\u0442! \u042F \u2014 \u041C\u0438\u0448\u043A\u0430! \u0414\u0430\u0432\u0430\u0439 \u043F\u043E\u0438\u0433\u0440\u0430\u0435\u043C!';
   bearSays(helloText);
   playMp3('hello.mp3', null, () => {
     setTimeout(newRound, 400);
@@ -721,8 +722,8 @@ function newRound() {
   const count = settings.diff;
   const others = shuffle(COLORS.filter(c=>c.name!==target.name)).slice(0, count-1);
   const opts = shuffle([target, ...others]);
-  document.getElementById('question').textContent = 'Найди ' + target.name + '!';
-  bearSays('Найди ' + target.name + '!');
+  document.getElementById('question').textContent = '\u041D\u0430\u0439\u0434\u0438 ' + target.name + '!';
+  bearSays('\u041D\u0430\u0439\u0434\u0438 ' + target.name + '!');
   const box = document.getElementById('shapes');
   box.className = 'shapes g' + count;
   box.innerHTML = '';
@@ -730,7 +731,7 @@ function newRound() {
     const b = document.createElement('button');
     b.className = 'shape';
     b.style.background = c.hex;
-    if (c.name==='белый') b.style.border = '4px solid #E0E0E0';
+    if (c.name==='\u0431\u0435\u043B\u044B\u0439') b.style.border = '4px solid #E0E0E0';
     b.innerHTML = '<span class="label">' + c.name + '</span>';
     b.onclick = (e) => handleClick(c, b, e);
     box.appendChild(b);
@@ -766,8 +767,8 @@ function handleClick(c, btn, e) {
     document.getElementById('score').textContent = score;
     drawProgress();
     bearHappyMove();
-    const praise = pick(['Молодец!','Умничка!','Правильно!']);
-    bearSays(praise + ' Это ' + c.name + '!');
+    const praise = pick(['\u041C\u043E\u043B\u043E\u0434\u0435\u0446!','\u0423\u043C\u043D\u0438\u0447\u043A\u0430!','\u041F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E!']);
+    bearSays(praise + ' \u042D\u0442\u043E ' + c.name + '!');
     playMp3(pick(PRAISE), null, () => {
       showLearn(c, () => {
         if (round >= ROUNDS) showWin();
@@ -784,9 +785,8 @@ function handleClick(c, btn, e) {
       setTimeout(() => { if (!locked) setPose('idle'); }, 1200);
     }
     bearSadMove();
-    const enc = 'Ничего страшного! Ищи ' + target.name + '!';
+    const enc = '\u041D\u0438\u0447\u0435\u0433\u043E \u0441\u0442\u0440\u0430\u0448\u043D\u043E\u0433\u043E! \u0418\u0449\u0438 ' + target.name + '!';
     bearSays(enc);
-    // ⬇⬇⬇ ИСПРАВЛЕНИЕ: играем hintFile ПРАВИЛЬНОГО цвета, а не encFile нажатого
     playMp3(target.hintFile, null, () => {
       startHintTimer();
     });
@@ -810,7 +810,7 @@ function startHintTimer() {
       if (targetBtn) {
         targetBtn.classList.add('hint');
         bearPointTo(targetBtn);
-        const hint = 'Вот ' + target.name + '! Нажми сюда!';
+        const hint = '\u0412\u043E\u0442 ' + target.name + '! \u041D\u0430\u0436\u043C\u0438 \u0441\u044E\u0434\u0430!';
         bearSays(hint);
         playHintMp3(target.hintFile);
       }
@@ -836,7 +836,7 @@ function showLearn(c, callback) {
     const box = document.createElement('div');
     box.className = 'learn-item';
     box.style.background = c.hex;
-    if (c.name==='белый') box.style.border = '3px solid #E0E0E0';
+    if (c.name==='\u0431\u0435\u043B\u044B\u0439') box.style.border = '3px solid #E0E0E0';
     let src = null;
     if (imageAvailable[it.f]) src = it.f;
     else if (it.old && imageAvailable[it.old]) src = it.old;
@@ -876,7 +876,7 @@ function showWin() {
   document.getElementById('winScreen').classList.add('on');
   salute();
   bearDanceMove();
-  const winText = 'Ура! Ты выучил все цвета!';
+  const winText = '\u0423\u0440\u0430! \u0422\u044B \u0432\u044B\u0443\u0447\u0438\u043B \u0432\u0441\u0435 \u0446\u0432\u0435\u0442\u0430!';
   document.getElementById('winText').textContent = winText;
   bearSays(winText);
   playMp3('win.mp3');
@@ -895,7 +895,7 @@ function restartGame() {
   if (musicOn && !musicTimer) startMusic();
   bearTeleport(20, 140);
   bearFallFrom();
-  const rt = 'Молодец! Играем ещё раз!';
+  const rt = '\u041C\u043E\u043B\u043E\u0434\u0435\u0446! \u0418\u0433\u0440\u0430\u0435\u043C \u0435\u0449\u0451 \u0440\u0430\u0437!';
   bearSays(rt);
   playMp3('lets_go.mp3', null, () => { setTimeout(newRound, 700); });
 }
@@ -904,7 +904,7 @@ function toggleSound() {
   soundOn = !soundOn;
   settings.soundOn = soundOn;
   saveSettings();
-  document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundBtn').textContent = soundOn ? '\u{1F50A}' : '\u{1F507}';
   if (!soundOn) {
     if (currentAudio) { try{ currentAudio.pause(); }catch(e){} }
     if (hintAudio) { try{ hintAudio.pause(); }catch(e){} }
@@ -912,7 +912,7 @@ function toggleSound() {
 }
 
 function explode(x, y, type) {
-  const em = type==='ok' ? ['⭐','✨','🌟','💫','🎉','❤️'] : ['💨','💧'];
+  const em = type==='ok' ? ['\u2B50','\u2728','\u{1F31F}','\u{1F4AB}','\u{1F389}','\u2764\uFE0F'] : ['\u{1F4A8}','\u{1F4A7}'];
   const n = type==='ok' ? 12 : 6;
   for (let i=0;i<n;i++) {
     const p = document.createElement('div');
@@ -929,7 +929,7 @@ function explode(x, y, type) {
 }
 
 function salute() {
-  const em = ['⭐','✨','🌟','💫','🎉','🎊','🎈'];
+  const em = ['\u2B50','\u2728','\u{1F31F}','\u{1F4AB}','\u{1F389}','\u{1F38A}','\u{1F388}'];
   for (let i=0;i<40;i++) {
     setTimeout(() => {
       const s = document.createElement('div');
@@ -949,18 +949,41 @@ function openSettings(){ document.getElementById('settingsScreen').classList.add
 function closeSettings(){ document.getElementById('settingsScreen').classList.remove('on'); saveSettings(); }
 function setDiff(n,btn){ settings.diff=n; document.querySelectorAll('#optDiff button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); }
 function setTime(ms,btn){ settings.timeMs=ms; document.querySelectorAll('#optTime button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); if(started&&!locked) startHintTimer(); }
+
+// --- ИСПРАВЛЕНИЕ: setVol не включает музыку принудительно ---
 function setVol(v,btn){
   settings.vol=v;
-  if(v===0){ musicOn=false; pauseMusic(); document.getElementById('musicBtn').textContent='🔕'; }
-  else { musicOn=true; if(started) startMusic(); document.getElementById('musicBtn').textContent='🎵'; }
+  if(musicGainNode) musicGainNode.gain.value=v;
+  if(v===0){
+    pauseMusic();
+    document.getElementById('musicBtn').textContent='\u{1F515}';
+  } else {
+    if(musicOn && started) startMusic();
+    document.getElementById('musicBtn').textContent = musicOn ? '\u{1F3B5}' : '\u{1F515}';
+  }
   document.querySelectorAll('#optVol button').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   saveSettings();
 }
 
+// --- ИСПРАВЛЕНИЕ: инициализация кнопок настроек при загрузке ---
+function initSettingsUI() {
+  document.querySelectorAll('#optDiff button').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.val) === settings.diff);
+  });
+  document.querySelectorAll('#optTime button').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.val) === settings.timeMs);
+  });
+  document.querySelectorAll('#optVol button').forEach(b => {
+    b.classList.toggle('sel', Math.abs(parseFloat(b.dataset.val) - settings.vol) < 0.001);
+  });
+}
+
 drawProgress();
-document.getElementById('musicBtn').textContent = settings.musicOn ? '🎵' : '🔕';
-document.getElementById('soundBtn').textContent = settings.soundOn ? '🔊' : '🔇';
+// --- ИСПРАВЛЕНИЕ: синхронизируем кнопки и переменные с сохранёнными настройками ---
+initSettingsUI();
+document.getElementById('musicBtn').textContent = musicOn ? '\u{1F3B5}' : '\u{1F515}';
+document.getElementById('soundBtn').textContent = soundOn ? '\u{1F50A}' : '\u{1F507}';
 </script>
 
 </body>
