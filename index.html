@@ -582,16 +582,34 @@ function playMp3(mp3, fb, cb) {
   }
   const wasMusic = !!musicTimer;
   if (wasMusic) pauseMusic();
-  let failed = false;
+
+  let done = false;
   const restore = () => {
     if (wasMusic && musicOn && !musicTimer) startMusic();
   };
-  const fallback = () => {
-    if(failed) return;
-    failed = true;
+  const finish = () => {
+    if (done) return;
+    done = true;
     restore();
-    if(cb) cb();
+    if (cb) cb();
   };
+
+  try {
+    const a = new Audio('sounds/'+mp3);
+    a.volume = 1.0;
+    currentAudio = a;
+    a.onerror = finish;
+    a.onended = finish;
+    const p = a.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => setStatus('▶ '+mp3, 'rgba(0,120,0,.9)', true)).catch(finish);
+    }
+    setTimeout(() => {
+      if (done) return;
+      if (a.readyState === 0) finish();
+    }, 3000);
+  } catch(e) { finish(); }
+}
   try {
     const a = new Audio('sounds/'+mp3);
     a.volume = 1.0;
