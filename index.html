@@ -9,8 +9,11 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:10px;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-gradient(180deg,#87CEEB 0%,#FFD9A0 60%,#FFE5B4 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:10px}
+button{outline:none !important;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;appearance:none}
+button:focus,button:focus-visible,button:active{outline:none !important}
 .sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .sun{position:absolute;top:6%;right:8%;font-size:70px;animation:sunPulse 4s ease-in-out infinite}
 @keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
@@ -32,7 +35,11 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .intro button:active{transform:translateY(5px)}
 @keyframes hb{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 
-.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:140px;margin-bottom:20px}
+.frame{width:100%;max-width:540px;background:rgba(255,255,255,.94);border-radius:32px;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.3),0 0 0 5px rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;position:relative;z-index:10;margin-top:120px;margin-bottom:8px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;overscroll-behavior:contain}
+.frame::-webkit-scrollbar{width:6px}
+.frame::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:3px}
+.frame::-webkit-scrollbar-track{background:transparent}
+
 .progress{display:flex;gap:2px;justify-content:center;margin-bottom:8px;width:100%}
 .progress .star{font-size:18px;filter:grayscale(1) opacity(.25);transition:all .4s}
 .progress .star.done{filter:none;transform:scale(1.2)}
@@ -49,7 +56,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .shapes.g2{grid-template-columns:repeat(2,1fr)}
 .shapes.g4{grid-template-columns:repeat(2,1fr)}
 .shapes.g6{grid-template-columns:repeat(3,1fr)}
-.shape{border-radius:24px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .15s,box-shadow .15s;aspect-ratio:1/1;box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),inset 0 -8px 16px rgba(0,0,0,.15),inset 0 8px 16px rgba(255,255,255,.4);overflow:hidden;touch-action:manipulation}
+.shape{border-radius:24px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .15s,box-shadow .15s;aspect-ratio:1/1;box-shadow:0 10px 0 rgba(0,0,0,.3),0 14px 28px rgba(0,0,0,.25),inset 0 -8px 16px rgba(0,0,0,.15),inset 0 8px 16px rgba(255,255,255,.4);overflow:hidden;touch-action:manipulation;outline:none !important}
 .shape::before{content:'';position:absolute;top:6%;left:10%;width:35%;height:25%;background:radial-gradient(ellipse,rgba(255,255,255,.6),transparent 70%);border-radius:50%;pointer-events:none}
 .shape:active{transform:translateY(6px)}
 .shape.ok{animation:pulse .7s ease}
@@ -133,6 +140,17 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
 .settings-box .opt button{flex:1;padding:10px 6px;border-radius:12px;border:2px solid #e8dcc8;background:#fdfaf5;cursor:pointer;font-weight:700;font-size:12px;color:#5a4636;font-family:inherit;touch-action:manipulation}
 .settings-box .opt button.sel{background:#FF3D7F;color:#fff;border-color:#FF3D7F}
 .settings-box .close{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:#6b4226;color:#fff;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;touch-action:manipulation}
+
+/* ===== ПАУЗА ===== */
+.pause{position:fixed;inset:0;z-index:1500;background:rgba(20,10,40,.65);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.pause.on{display:flex}
+.pause-box{background:#fff;border-radius:28px;padding:26px 34px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.pause-box .ic{font-size:52px;line-height:1;margin-bottom:6px}
+.pause-box h2{color:#3A1F5C;font-size:26px;margin-bottom:8px}
+.pause-box p{color:#7a6a5a;font-weight:700;margin-bottom:18px}
+.pause-box button{padding:14px 32px;border:none;border-radius:50px;background:linear-gradient(135deg,#4A9EFF,#3ED9C4);color:#fff;font-weight:900;font-size:18px;cursor:pointer;font-family:inherit;box-shadow:0 6px 0 #2A7ECC;touch-action:manipulation}
+.pause-box button:active{transform:translateY(4px)}
+
 .status{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 14px;border-radius:16px;font-size:11px;font-family:monospace;z-index:300;max-width:94%;text-align:center;transition:opacity .5s}
 .status.hide{opacity:0;pointer-events:none}
 </style>
@@ -194,7 +212,7 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
   </div>
   <div class="bear-say" id="bearSay">Привет! Я — Мишка!</div>
   <div class="q" id="question">Нажми &#x25B6; ИГРАТЬ</div>
-  <button class="repeat" onclick="repeatQuestion()">&#x1F501; Повторить</button>
+  <button class="repeat" id="repeatBtn" style="display:none" onclick="repeatQuestion()">&#x1F501; Повторить</button>
   <div class="shapes" id="shapes"></div>
 </div>
 
@@ -245,6 +263,15 @@ body{font-family:'Comic Sans MS','Segoe UI',Arial,sans-serif;background:linear-g
       <button data-val="0.2" onclick="setVol(0.2,this)">Громко</button>
     </div>
     <button class="close" onclick="closeSettings()">&#x2715; Закрыть</button>
+  </div>
+</div>
+
+<div class="pause" id="pauseScreen">
+  <div class="pause-box">
+    <div class="ic">&#x23F8;</div>
+    <h2>Пауза</h2>
+    <p>Мишка отдыхает…</p>
+    <button onclick="resumeApp()">&#x25B6; Продолжить</button>
   </div>
 </div>
 
@@ -300,6 +327,7 @@ let score=0, round=0, target=null;
 let soundOn = settings.soundOn !== undefined ? settings.soundOn : true;
 let musicOn = settings.musicOn !== undefined ? settings.musicOn : true;
 let locked=false, started=false;
+let busy=false, paused=false, pausedAudio=[], busyTimer=null, repeatLock=false;
 let currentAudio=null, imageAvailable={}, bearImages={};
 let statusTimer=null, hintTimer=null, runTimer=null, walkFrameTimer=null, blinkTimer=null, thinkTimer=null;
 let walkFrame=1;
@@ -316,6 +344,7 @@ let hintPoolPrimed = false;
 const bear = document.getElementById('bearRunner');
 const bearBubble = document.getElementById('bearBubble');
 const bearSay = document.getElementById('bearSay');
+const repeatBtn = document.getElementById('repeatBtn');
 const BEAR_W = 100, BEAR_H = 120;
 
 function setPose(pose) {
@@ -563,10 +592,10 @@ function toggleMusic() {
   settings.musicOn = musicOn;
   saveSettings();
   document.getElementById('musicBtn').textContent = musicOn ? '🎵' : '🔕';
-  if (musicOn) startMusic(); else pauseMusic();
+  if (musicOn && !paused) startMusic(); else pauseMusic();
 }
 
-// ====== MP3 (Audio из пула + снятие muted) ======
+// ====== MP3 ======
 function playMp3(mp3, fb, cb) {
   if (!soundOn) { if (cb) cb(); return; }
 
@@ -584,7 +613,7 @@ function playMp3(mp3, fb, cb) {
 
   let done = false;
   const restore = () => {
-    if (wasMusic && musicOn && !musicTimer) startMusic();
+    if (wasMusic && musicOn && !musicTimer && !paused) startMusic();
   };
   const finish = () => {
     if (done) return;
@@ -631,7 +660,7 @@ function playHintMp3(mp3) {
   if (wasMusic) pauseMusic();
   const resume = () => {
     hintAudio = null;
-    if (wasMusic && musicOn && !musicTimer) startMusic();
+    if (wasMusic && musicOn && !musicTimer && !paused) startMusic();
   };
   let a = hintAudioPool[mp3];
   if (!a) {
@@ -658,8 +687,6 @@ function playHintMp3(mp3) {
     });
   }
 }
-
-function sayVoiceOnly(text, cb) { if (cb) cb(); }
 
 function setStatus(m,bg,autoHide){
   const el=document.getElementById('status');
@@ -717,6 +744,52 @@ function shuffle(a){
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 const PRAISE=['praise_1.mp3','praise_2.mp3','praise_3.mp3','praise_4.mp3'];
 
+// ====== БЛОКИРОВКА ВВОДА ======
+function releaseBusy(){
+  clearTimeout(busyTimer);
+  busyTimer = null;
+  busy = false;
+}
+
+// ====== ПАУЗА ======
+function pauseApp(){
+  if (!started || paused) return;
+  paused = true;
+  clearTimeout(hintTimer); hintTimer = null;
+  clearTimeout(thinkTimer); thinkTimer = null;
+  pauseMusic();
+  pausedAudio = [];
+  if (currentAudio) pausedAudio.push(currentAudio);
+  if (hintAudio && hintAudio !== currentAudio) pausedAudio.push(hintAudio);
+  pausedAudio.forEach(a => { try { a.pause(); } catch(e){} });
+  document.getElementById('pauseScreen').classList.add('on');
+}
+function resumeApp(){
+  if (!paused) return;
+  paused = false;
+  document.getElementById('pauseScreen').classList.remove('on');
+  unlockAudio();
+  const list = pausedAudio; pausedAudio = [];
+  if (list.length) {
+    list.forEach(a => {
+      try {
+        const p = a.play();
+        if (p && p.catch) p.catch(()=>{});
+      } catch(e){}
+    });
+  } else if (musicOn && !musicTimer && settings.vol > 0 && started) {
+    startMusic();
+  }
+  if (started && !locked && !busy) startHintTimer();
+}
+function onWindowBlur(){ pauseApp(); }
+function onWindowFocus(){ setTimeout(resumeApp, 350); }
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseApp(); else onWindowFocus();
+});
+window.addEventListener('blur', onWindowBlur);
+window.addEventListener('focus', onWindowFocus);
+
 // ====== START ======
 function startGameFromIntro() {
   document.getElementById('introScreen').classList.add('off');
@@ -724,6 +797,34 @@ function startGameFromIntro() {
   const ctx = getCtx();
   if (ctx && ctx.state === 'suspended') ctx.resume();
   started = true;
+
+  // Прогрев всех звуков — muted=true гарантирует тишину
+  if (!hintPoolPrimed) {
+    hintPoolPrimed = true;
+    const allSounds = [];
+    COLORS.forEach(c => {
+      allSounds.push(c.file, c.hintFile, c.rhymeFile, c.encFile);
+    });
+    PRAISE.forEach(p => allSounds.push(p));
+    allSounds.push('hello.mp3', 'win.mp3', 'lets_go.mp3');
+
+    allSounds.forEach(f => {
+      try {
+        const a = new Audio();
+        a.preload = 'auto';
+        a.src = 'sounds/' + f;
+        a.muted = true;
+        hintAudioPool[f] = a;
+        const p = a.play();
+        if (p && typeof p.then === 'function') {
+          p.then(() => {
+            a.pause();
+            a.currentTime = 0;
+          }).catch(() => {});
+        }
+      } catch(e) {}
+    });
+  }
 
   if (bearImages.wave) setPose('wave');
   else setPose('idle');
@@ -735,55 +836,23 @@ function startGameFromIntro() {
   }).catch(()=>{});
   checkAllImages().catch(()=>{});
 
-  // ✏️ Мишка здоровается СРАЗУ — без setTimeout, без задержки
-  const helloText = 'Привет! Я — Мишка! Давай поиграем!';
-  bearSays(helloText);
-  playMp3('hello.mp3', null, () => {
-    if (musicOn) startMusic();
-    setTimeout(newRound, 400);
-  });
-
-  // ✏️ Прогрев звуков — ПОРЦИЯМИ по 4 файла каждые 40 мс,
-  // чтобы не блокировать главный поток и не тормозить hello.mp3
-  if (!hintPoolPrimed) {
-    hintPoolPrimed = true;
-    const allSounds = [];
-    COLORS.forEach(c => {
-      allSounds.push(c.file, c.hintFile, c.rhymeFile, c.encFile);
+  setTimeout(() => {
+    const helloText = 'Привет! Я — Мишка! Давай поиграем!';
+    bearSays(helloText);
+    playMp3('hello.mp3', null, () => {
+      if (musicOn && !paused) startMusic();
+      setTimeout(newRound, 400);
     });
-    PRAISE.forEach(p => allSounds.push(p));
-    allSounds.push('win.mp3', 'lets_go.mp3');
-
-    let idx = 0;
-    function prime() {
-      const end = Math.min(idx + 4, allSounds.length);
-      for (; idx < end; idx++) {
-        try {
-          const a = new Audio();
-          a.preload = 'auto';
-          a.src = 'sounds/' + allSounds[idx];
-          a.muted = true;
-          hintAudioPool[allSounds[idx]] = a;
-          const p = a.play();
-          if (p && typeof p.then === 'function') {
-            p.then(() => {
-              a.pause();
-              a.currentTime = 0;
-            }).catch(() => {});
-          }
-        } catch(e) {}
-      }
-      if (idx < allSounds.length) setTimeout(prime, 40);
-    }
-    prime();
-  }
+  }, 500);
 }
 
 function newRound() {
   stopHint();
   isHinting = false;
+  releaseBusy();
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   locked = false;
+  repeatBtn.style.display = 'inline-block';
   target = COLORS[Math.floor(Math.random()*COLORS.length)];
   const count = settings.diff;
   const others = shuffle(COLORS.filter(c=>c.name!==target.name)).slice(0, count-1);
@@ -802,23 +871,25 @@ function newRound() {
     b.onclick = (e) => handleClick(c, b, e);
     box.appendChild(b);
   });
-  setTimeout(() => playMp3(target.file), 300);
+  setTimeout(() => { if (!paused) playMp3(target.file); }, 300);
   startHintTimer();
   if (!runTimer && !locked && !isHinting) startBearWalk();
   clearTimeout(thinkTimer);
   thinkTimer = setTimeout(() => {
-    if (!locked && started && !isHinting) bearThinkMode();
+    if (!locked && started && !isHinting && !paused) bearThinkMode();
   }, 3000);
 }
 
 function repeatQuestion() {
+  if (!started || !target || paused || repeatLock) return;
+  repeatLock = true;
+  setTimeout(() => { repeatLock = false; }, 800);
   unlockAudio();
-  if (!started || !target) return;
   playMp3(target.file);
 }
 
 function handleClick(c, btn, e) {
-  if (locked || !started) return;
+  if (locked || !started || busy || paused) return;
   stopHint();
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
@@ -826,6 +897,7 @@ function handleClick(c, btn, e) {
   const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
   if (c.name === target.name) {
     locked = true;
+    busy = true;                       // страховка до конца раунда
     stopBearWalk();
     btn.classList.add('ok');
     explode(cx, cy, 'ok');
@@ -842,6 +914,10 @@ function handleClick(c, btn, e) {
       });
     });
   } else {
+    // КУЛДАУН: одна ошибка = одна реакция, без «дискотеки»
+    busy = true;
+    clearTimeout(busyTimer);
+    busyTimer = setTimeout(releaseBusy, 4000);  // страховка
     btn.classList.add('no');
     explode(cx, cy, 'no');
     setTimeout(()=>btn.classList.remove('no'), 500);
@@ -854,19 +930,21 @@ function handleClick(c, btn, e) {
     const enc = 'Ничего страшного! Ищи ' + target.name + '!';
     bearSays(enc);
     playMp3(target.encFile, null, () => {
-      startHintTimer();
+      clearTimeout(busyTimer);
+      busyTimer = setTimeout(releaseBusy, 600);
+      if (!locked && started && !paused) startHintTimer();
     });
   }
 }
 
 function startHintTimer() {
   clearTimeout(hintTimer);
-  if (!settings.timeMs) return;
+  if (!settings.timeMs || paused) return;
   hintTimer = setTimeout(() => {
-    if (locked || !started || !target || isHinting) return;
+    if (locked || !started || !target || isHinting || busy || paused) return;
     if (bearImages.yawn) setPose('yawn');
     setTimeout(() => {
-      if (locked) return;
+      if (locked || paused) return;
       const buttons = document.querySelectorAll('#shapes .shape');
       let targetBtn = null;
       buttons.forEach(b => {
@@ -955,6 +1033,7 @@ function showWin() {
 
 function restartGame() {
   score=0; round=0;
+  releaseBusy();
   document.getElementById('score').textContent='0';
   document.getElementById('winScreen').classList.remove('on');
   bearClearClasses();
@@ -963,7 +1042,7 @@ function restartGame() {
   isHinting = false;
   if (window._hintHoldInterval) { clearInterval(window._hintHoldInterval); window._hintHoldInterval = null; }
   unlockAudio();
-  if (musicOn && !musicTimer) startMusic();
+  if (musicOn && !musicTimer && !paused) startMusic();
   bearTeleport(20, 140);
   bearFallFrom();
   const rt = 'Молодец! Играем ещё раз!';
@@ -1019,7 +1098,7 @@ function salute() {
 function openSettings(){ document.getElementById('settingsScreen').classList.add('on'); }
 function closeSettings(){ document.getElementById('settingsScreen').classList.remove('on'); saveSettings(); }
 function setDiff(n,btn){ settings.diff=n; document.querySelectorAll('#optDiff button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); }
-function setTime(ms,btn){ settings.timeMs=ms; document.querySelectorAll('#optTime button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); if(started&&!locked) startHintTimer(); }
+function setTime(ms,btn){ settings.timeMs=ms; document.querySelectorAll('#optTime button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); saveSettings(); if(started&&!locked&&!paused&&!busy) startHintTimer(); }
 
 function setVol(v,btn){
   settings.vol=v;
@@ -1028,7 +1107,7 @@ function setVol(v,btn){
     pauseMusic();
     document.getElementById('musicBtn').textContent='🔕';
   } else {
-    if(musicOn && started) startMusic();
+    if(musicOn && started && !paused) startMusic();
     document.getElementById('musicBtn').textContent = musicOn ? '🎵' : '🔕';
   }
   document.querySelectorAll('#optVol button').forEach(b=>b.classList.remove('sel'));
